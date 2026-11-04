@@ -1,0 +1,13 @@
+{
+  "name": "Ghazaouet Calamar Live",
+  "short_name": "Calamar Live",
+  "description": "Les meilleurs jours et heures pour pêcher le calamar au port de Ghazaouet (Tlemcen, Algérie) : lune, périodes solunaires, météo et état de la mer en direct.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050e1a",
+  "theme_color": "#050e1a",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

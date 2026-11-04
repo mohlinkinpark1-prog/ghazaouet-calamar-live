@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ghazaouet Calamar Live — Meilleurs jours &amp; heures pour pêcher le calamar</title>
+<meta name="description" content="App pro en direct pour la pêche du calamar (encornet) au port de Ghazaouet (Tlemcen, Algérie) : Indice Calamar sur 100, phases lunaires, périodes solunaires majeures et mineures, marée, météo et état de la mer temps réel, calendrier des meilleures journées.">
+<meta name="theme-color" content="#050e1a">
+<meta name="author" content="Ghazaouet Calamar Live">
+<link rel="icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GHAZAOUET CALAMAR LIVE — Design system
+   ============================================================ */
+:root{
+  --bg0:#040c16;
+  --bg1:#07182b;
+  --bg2:#0a1f33;
+  --panel:rgba(14,32,52,.66);
+  --panel-solid:#0e2033;
+  --panel-2:#12263c;
+  --line:rgba(130,190,225,.14);
+  --line-strong:rgba(130,190,225,.28);
+  --text:#e9eff6;
+  --muted:#8ba6bc;
+  --muted-2:#5f7d94;
+  --gold:#f0b429;
+  --gold-2:#ffd970;
+  --gold-deep:#b97f10;
+  --sea:#34c6dd;
+  --sea-2:#8cebfa;
+  --green:#3ddc84;
+  --red:#ff7a52;
+  --amber:#ffc247;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 24px 60px rgba(0,0,0,.45);
+  --font-display:'Fraunces',Georgia,serif;
+  --font-ui:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --sidebar-w:288px;
+  --topbar-h:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-ui);
+  background:
+    radial-gradient(1200px 800px at 85% -10%, rgba(52,198,221,.14), transparent 55%),
+    radial-gradient(900px 700px at -10% 110%, rgba(240,180,41,.10), transparent 55%),
+    linear-gradient(180deg,var(--bg1),var(--bg0) 60%);
+  color:var(--text);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic-xs{width:14px;height:14px;stroke-width:2}
+.ic-sea{color:var(--sea)}
+.ic-gold{color:var(--gold)}
+.is-hidden{display:none !important}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+button{font-family:inherit;cursor:pointer}
+
+/* ═══════════ SIDEBAR ═══════════ */
+.sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);z-index:40;
+  display:flex;flex-direction:column;gap:18px;
+  padding:22px 20px 18px;
+  background:linear-gradient(178deg,#0b1d30 0%,#060f1c 100%);
+  border-right:1px solid var(--line);
+  overflow-y:auto;overflow-x:hidden;
+}
+.brand{display:flex;gap:14px;align-items:center;padding:6px 6px 14px;border-bottom:1px solid var(--line)}
+.brand-logo{width:52px;height:52px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));border-radius:14px}
+.brand-kicker{display:block;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sea);opacity:.85;margin-bottom:2px}
+.brand-name{font-family:var(--font-display);font-weight:600;font-size:22px;line-height:1.05;color:#f4f8fc;letter-spacing:.01em}
+.brand-name em{display:block;font-style:normal;color:var(--gold);font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.brand-tag{display:block;font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic}
+
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav-item{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:11px 12px;border:1px solid transparent;border-radius:var(--radius-sm);
+  background:transparent;color:var(--muted);
+  font-size:13.5px;font-weight:500;text-align:left;
+  transition:all .18s ease;
+}
+.nav-item .ic{width:19px;height:19px;opacity:.9}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--text);transform:translateX(3px)}
+.nav-item.is-active{
+  background:linear-gradient(90deg,rgba(240,180,41,.16),rgba(240,180,41,.02));
+  color:var(--gold-2);border-color:rgba(240,180,41,.35);
+  box-shadow:inset 3px 0 0 var(--gold);
+}
+
+.side-clock{
+  margin-top:auto;
+  background:linear-gradient(160deg,rgba(52,198,221,.10),rgba(52,198,221,.02));
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 14px 12px;
+}
+.side-clock-head{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sea-2)}
+.live-dot{width:9px;height:9px;border-radius:50%;background:#ff5a3c;box-shadow:0 0 0 0 rgba(255,90,60,.7);animation:pulse 1.6s infinite;flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,60,.55)}70%{box-shadow:0 0 0 9px rgba(255,90,60,0)}100%{box-shadow:0 0 0 0 rgba(255,90,60,0)}}
+.side-clock-time{font-family:var(--font-mono);font-weight:700;font-size:38px;letter-spacing:.04em;color:#fff;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.side-clock-date{font-size:12.5px;color:var(--muted);text-transform:capitalize}
+.side-clock-meta{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.chip-sea{color:var(--sea-2);border-color:rgba(52,198,221,.4);background:rgba(52,198,221,.08)}
+.chip-gold{color:var(--gold-2);border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.08)}
+.chip-ghost{color:var(--muted);border-color:var(--line-strong);background:transparent}
+.chip-red{color:#ffb199;border-color:rgba(255,122,82,.45);background:rgba(255,122,82,.1)}
+.side-harbour{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sea-2);text-decoration:none;padding:8px 10px;border-radius:10px;border:1px dashed rgba(52,198,221,.35);transition:background .15s}
+.side-harbour:hover{background:rgba(52,198,221,.1)}
+.side-foot p{font-size:10px;color:var(--muted-2);line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+
+.sidebar-overlay{position:fixed;inset:0;background:rgba(2,8,16,.6);backdrop-filter:blur(3px);z-index:39;opacity:0;pointer-events:none;transition:opacity .25s}
+.sidebar-overlay.is-on{opacity:1;pointer-events:auto}
+
+/* ═══════════ TOPBAR ═══════════ */
+.topbar{
+  position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);z-index:30;
+  display:flex;align-items:center;gap:14px;padding:0 22px;
+  background:rgba(6,15,28,.72);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-menu{display:none}
+.topbar-loc{display:flex;align-items:center;gap:12px;min-width:0}
+.topbar-loc .ic{width:26px;height:26px;color:var(--gold)}
+.topbar-loc-text{display:flex;flex-direction:column;min-width:0}
+.topbar-loc-text strong{font-size:13px;letter-spacing:.02em;white-space:nowrap}
+.topbar-loc-text span{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.live-pill{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;color:#ffb0a0;padding:8px 14px;border:1px solid rgba(255,90,60,.35);border-radius:999px;background:rgba(255,90,60,.07)}
+.live-pill-sep{color:rgba(255,255,255,.25)}
+.live-pill span#lastUpdate{color:#ffd0c4;letter-spacing:.05em}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;border:1px solid var(--line-strong);background:rgba(255,255,255,.03);color:var(--text);transition:all .15s}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold-2);transform:translateY(-1px)}
+.icon-btn.is-spinning .ic{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════ MAIN / VIEWS ═══════════ */
+.main{position:relative;z-index:1;margin-left:var(--sidebar-w);padding:calc(var(--topbar-h) + 22px) 26px 0;max-width:1560px}
+.view{display:none;animation:viewIn .45s ease}
+.view.is-active{display:block}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.view-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px;flex-wrap:wrap}
+.view-kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--sea-2);margin-bottom:6px}
+.view-title{font-family:var(--font-display);font-weight:600;font-size:clamp(26px,3.4vw,40px);letter-spacing:-.01em;line-height:1.05}
+.view-sub{max-width:760px;color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:8px}
+
+/* ═══════════ CARTES ═══════════ */
+.card{
+  background:linear-gradient(165deg,var(--panel),rgba(10,24,40,.55));
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;position:relative;overflow:hidden;
+  backdrop-filter:blur(10px);
+  box-shadow:0 10px 34px rgba(0,0,0,.28);
+  transition:transform .25s,border-color .25s;
+}
+.card::after{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(140,235,250,.35),transparent)}
+.card:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card-kicker{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.card-title{font-family:var(--font-display);font-weight:600;font-size:19px;line-height:1.15;letter-spacing:.005em}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:12px;margin-top:14px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.link-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;color:var(--gold-2);font-size:12px;font-weight:600;padding:4px 2px}
+.link-btn:hover{color:var(--gold)}
+.note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:12px;border-left:3px solid rgba(52,198,221,.35);padding-left:12px}
+
+/* ═══════════ DASHBOARD GRID ═══════════ */
+.dash-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card-gauge{grid-column:span 7}
+.card-moon{grid-column:span 5}
+.card-meteo{grid-column:span 4}
+.card-mer{grid-column:span 4}
+.card-solunaire{grid-column:span 4}
+.card-reco{grid-column:span 5}
+.card-chart{grid-column:span 7}
+
+/* Gauge */
+.gauge-body{display:flex;gap:18px;align-items:center}
+.gauge-canvas-wrap{position:relative;flex:0 0 auto}
+#gaugeCanvas{display:block;width:280px;height:198px}
+.gauge-center{position:absolute;left:0;right:0;bottom:26px;text-align:center;pointer-events:none}
+.gauge-value{font-family:var(--font-display);font-weight:700;font-size:56px;line-height:1;color:#fff;text-shadow:0 4px 24px rgba(240,180,41,.35);font-variant-numeric:tabular-nums}
+.gauge-max{font-family:var(--font-mono);font-size:10px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+.gauge-side{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}
+.rating-pill{align-self:flex-start;font-family:var(--font-display);font-weight:600;font-size:17px;padding:8px 18px;border-radius:999px;border:1px solid;letter-spacing:.02em}
+.rating-pill[data-level="low"]{color:#ffb0a0;border-color:rgba(255,122,82,.5);background:rgba(255,122,82,.08)}
+.rating-pill[data-level="mid"]{color:#ffd98a;border-color:rgba(255,194,71,.45);background:rgba(255,194,71,.08)}
+.rating-pill[data-level="good"]{color:#b8f5cf;border-color:rgba(61,220,132,.4);background:rgba(61,220,132,.08)}
+.rating-pill[data-level="great"]{color:#8cebfa;border-color:rgba(52,198,221,.45);background:rgba(52,198,221,.1)}
+.rating-pill[data-level="epic"]{color:#ffe9a8;border-color:rgba(240,180,41,.6);background:linear-gradient(90deg,rgba(240,180,41,.22),rgba(240,180,41,.06));box-shadow:0 0 30px rgba(240,180,41,.22)}
+.best-window{border:1px solid rgba(240,180,41,.35);background:radial-gradient(120% 160% at 20% 0%,rgba(240,180,41,.16),transparent);border-radius:var(--radius-sm);padding:10px 14px}
+.best-window-label{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2)}
+.best-window strong{display:block;font-family:var(--font-mono);font-size:26px;letter-spacing:.03em;color:#fff;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.best-window-sub{font-size:11px;color:var(--muted)}
+.factors{list-style:none;display:flex;flex-direction:column;gap:7px}
+.factor{display:grid;grid-template-columns:86px 1fr 40px;align-items:center;gap:10px;font-size:11px}
+.factor small{color:var(--muted);font-family:var(--font-mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.factor-track{height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.factor-fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--sea),var(--gold));transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.factor-val{font-family:var(--font-mono);font-size:10px;color:var(--sea-2);text-align:right}
+
+/* Moon card */
+.moon-body{display:flex;gap:16px;align-items:center}
+#moonCanvas{width:128px;height:128px;flex:none}
+.moon-side{min-width:0}
+.moon-illum{font-family:var(--font-display);font-weight:600;font-size:44px;line-height:1;color:#fff}
+.moon-illum small{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.moon-age{font-size:11px;color:var(--muted);margin-top:8px}
+.moon-age strong{color:var(--text)}
+.moon-next{margin-top:8px;font-size:11.5px;color:var(--gold-2);border-left:2px solid var(--gold);padding-left:8px;line-height:1.45}
+.moon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px}
+.moon-cell{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius-sm);padding:9px 11px}
+.moon-cell .ic{color:var(--sea-2);width:18px;height:18px}
+.moon-cell small{display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.moon-cell strong{font-family:var(--font-mono);font-size:15px;color:#fff;font-variant-numeric:tabular-nums}
+.moon-note{font-size:10px;color:var(--muted-2);line-height:1.5;margin-top:12px}
+
+/* Météo */
+.wx-icon{width:34px;height:34px;color:var(--sea-2)}
+.wx-now{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.wx-temp{font-family:var(--font-display);font-weight:600;font-size:64px;line-height:.9;color:#fff;font-variant-numeric:tabular-nums}
+.wx-unit{font-size:22px;color:var(--muted);margin-left:4px}
+.wx-feel{font-size:11.5px;color:var(--muted)}
+.wx-grid{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.wx-grid li{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.03);border:1px solid var(--line);padding:8px 10px;border-radius:var(--radius-sm);min-width:0}
+.wx-grid .ic{width:18px;height:18px;color:var(--sea-2)}
+.wx-grid small{display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wx-grid strong{font-size:12.5px;color:#fff;font-variant-numeric:tabular-nums}
+.wx-grid em{font-style:normal;color:var(--muted);font-size:10px}
+.wind-arrow{display:inline-block;transition:transform .4s;color:var(--sea-2)}
+.wind-arrow-li{margin-left:auto}
+
+/* Mer */
+.sea-hero{display:flex;align-items:center;gap:18px;margin-bottom:12px}
+.sea-big span{font-family:var(--font-display);font-weight:700;font-size:58px;line-height:.9;color:#fff}
+.sea-big small{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.sea-meta{display:flex;gap:14px;flex-wrap:wrap}
+.sea-meta small{display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.sea-meta strong{font-family:var(--font-mono);font-size:14.5px;color:#fff}
+.sea-bar{position:relative;height:10px;border-radius:99px;background:linear-gradient(90deg,#123a4d,#155a72,#a3541f,#8f2f1b);overflow:visible}
+.sea-bar-fill{position:absolute;top:-4px;bottom:-4px;width:4px;background:#fff;border-radius:2px;left:10%;box-shadow:0 0 8px rgba(255,255,255,.6);transition:left .8s}
+.sea-bar-mark{position:absolute;top:-3px;bottom:-3px;width:1px;background:rgba(255,255,255,.45)}
+.sea-scale{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:8.5px;color:var(--muted);margin-top:6px}
+.sea-sst{display:flex;align-items:center;gap:12px;margin-top:14px;padding:10px 12px;border:1px solid rgba(52,198,221,.3);border-radius:var(--radius-sm);background:rgba(52,198,221,.06)}
+.sea-sst .ic{color:var(--sea-2)}
+.sea-sst small{display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.sea-sst strong{font-family:var(--font-mono);font-size:19px;color:#fff}
+.sea-sst .chip{margin-left:auto}
+.sea-note{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:12px}
+
+/* Solunaire */
+.sol-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.sol-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);background:rgba(255,255,255,.02)}
+.sol-item-major{border-color:rgba(240,180,41,.35);background:linear-gradient(90deg,rgba(240,180,41,.08),transparent)}
+.sol-badge{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.2em;padding:4px 8px;border-radius:6px;flex:none}
+.sol-badge-major{color:#1a1206;background:var(--gold);font-weight:700}
+.sol-badge-minor{color:var(--sea-2);border:1px solid rgba(52,198,221,.45)}
+.sol-time{font-family:var(--font-mono);font-size:14px;color:#fff;letter-spacing:.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sol-tag{margin-left:auto;font-size:10px;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.sol-tag-night{color:#cdd6ff;background:rgba(110,130,255,.16);border:1px solid rgba(140,160,255,.35)}
+.sol-tag-day{color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.sol-item.is-skeleton{color:var(--muted);font-size:12px;justify-content:center;padding:22px}
+
+/* Reco */
+.reco-list{list-style:none;display:flex;flex-direction:column;gap:9px;counter-reset:reco}
+.reco-item{display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.5;color:#dfe9f0;background:rgba(255,255,255,.02);border:1px solid var(--line);border-left:3px solid var(--sea);border-radius:var(--radius-sm);padding:11px 13px}
+.reco-item strong{color:#fff}
+.reco-item .ic{color:var(--sea-2);margin-top:1px}
+.reco-item.reco-gold{border-left-color:var(--gold)}
+.reco-item.reco-gold .ic{color:var(--gold)}
+.reco-item.reco-warn{border-left-color:var(--red)}
+.reco-item.reco-warn .ic{color:var(--red)}
+.reco-item.is-skeleton{color:var(--muted);justify-content:center}
+
+/* Chart */
+.card-chart .chart-wrap{position:relative;height:230px}
+#activityChart{width:100%;height:100%;display:block}
+.chart-legend{display:flex;gap:14px;align-items:center}
+.lg{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lg::before{content:"";width:16px;height:0;border-top:2px solid}
+.lg-activity::before{border-color:var(--sea)}
+.lg-night::before{border-color:rgba(120,140,255,.6);border-top-style:dashed}
+.lg-now::before{border-color:var(--gold)}
+.chart-foot{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;font-family:var(--font-mono);font-size:11px;color:var(--sea-2);letter-spacing:.02em;display:flex;gap:14px;flex-wrap:wrap}
+.chart-foot b{color:#fff;font-weight:600}
+
+/* Alert strip */
+.alert-strip{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 16px;border-radius:var(--radius-sm);border:1px solid rgba(255,122,82,.5);background:linear-gradient(90deg,rgba(255,122,82,.18),rgba(255,122,82,.05));color:#ffc9b8;font-size:13px;font-weight:600}
+.alert-strip .ic{color:var(--red);flex:none}
+
+/* ═══════════ PRÉVISIONS ═══════════ */
+.legend-scale{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.legend-bar{width:220px;height:10px;border-radius:99px;background:linear-gradient(90deg,#3a2a20,#7a3a1c,#a3541f,#c98a12,#f0b429,#ffe9a8)}
+.forecast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
+.f-card{position:relative;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 12px 11px;display:flex;flex-direction:column;gap:8px;color:var(--text);transition:transform .2s,border-color .2s,box-shadow .2s;overflow:hidden}
+.f-card:hover{transform:translateY(-3px);border-color:var(--line-strong);box-shadow:var(--shadow)}
+.f-card.is-selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 18px 40px rgba(240,180,41,.18)}
+.f-card.is-today{outline:1px dashed rgba(240,180,41,.5);outline-offset:-6px}
+.f-day{display:flex;justify-content:space-between;align-items:baseline}
+.f-day b{font-family:var(--font-display);font-size:16px;text-transform:capitalize}
+.f-day span{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.08em}
+.f-moon-row{display:flex;align-items:center;gap:8px}
+.f-moon-row canvas{width:44px;height:44px}
+.f-moon-meta small{display:block;font-size:8px;color:var(--muted);font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.f-moon-meta span{font-size:10px;color:#d9e4ec}
+.f-score{display:flex;align-items:baseline;gap:6px;margin-top:auto}
+.f-score b{font-family:var(--font-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.f-score small{font-family:var(--font-mono);font-size:9px;color:var(--muted)}
+.f-bar{height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.f-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--sea),var(--gold))}
+.f-rows{display:flex;flex-direction:column;gap:3px;font-family:var(--font-mono);font-size:9px;color:var(--muted)}
+.f-rows div{display:flex;align-items:center;gap:6px}
+.f-rows .ic{width:12px;height:12px;color:var(--sea-2)}
+.f-window{font-size:9.5px;color:var(--gold-2);border-top:1px solid var(--line);padding-top:7px;min-height:26px;line-height:1.35}
+.f-window em{color:var(--muted);font-style:normal}
+.f-tag{position:absolute;top:10px;right:-28px;transform:rotate(45deg);background:var(--gold);color:#241600;font-family:var(--font-mono);font-size:8px;font-weight:700;letter-spacing:.2em;padding:2px 30px}
+
+.day-detail{margin-top:18px;background:var(--panel-solid);border:1px solid rgba(240,180,41,.35);border-radius:var(--radius);padding:20px;animation:viewIn .35s}
+.day-detail-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:14px}
+.day-detail h3{font-family:var(--font-display);font-size:24px}
+.day-detail-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.dd-block{grid-column:span 4;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.dd-block h4{font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.dd-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+
+/* ═══════════ CALENDRIER ═══════════ */
+.cal-nav{display:flex;gap:10px;align-items:center}
+.cal-layout{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+.cal-board{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;backdrop-filter:blur(10px)}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:8px}
+.cal-weekdays span{text-align:center;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cal-cell{position:relative;min-height:96px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:6px 7px;display:flex;flex-direction:column;background:rgba(255,255,255,.02);transition:all .18s;overflow:hidden}
+.cal-cell:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+.cal-cell.is-out{opacity:.28}
+.cal-cell.is-today{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.cal-daynum{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:12px;color:var(--text)}
+.cal-daynum em{font-style:normal;font-size:8px;color:var(--muted)}
+.cal-cell canvas{width:34px;height:34px;margin:2px auto}
+.cal-score{text-align:center;font-family:var(--font-display);font-weight:600;font-size:17px;line-height:1}
+.cal-score small{display:block;font-family:var(--font-mono);font-size:7px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-top:1px}
+.cal-cell[data-band="low"]{background:rgba(255,122,82,.05)}
+.cal-cell[data-band="mid"]{background:rgba(255,194,71,.05)}
+.cal-cell[data-band="good"]{background:rgba(61,220,132,.06)}
+.cal-cell[data-band="great"]{background:rgba(52,198,221,.09)}
+.cal-cell[data-band="epic"]{background:linear-gradient(160deg,rgba(240,180,41,.25),rgba(240,180,41,.05));border-color:rgba(240,180,41,.5)}
+.cal-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cal-legend-dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px}
+.d-low{background:rgba(255,122,82,.55)}.d-mid{background:rgba(255,194,71,.55)}.d-good{background:rgba(61,220,132,.55)}.d-great{background:rgba(52,198,221,.6)}.d-epic{background:var(--gold)}
+.cal-side{display:flex;flex-direction:column;gap:14px}
+.mini-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;backdrop-filter:blur(8px)}
+.mini-card-kicker{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--sea-2);margin-bottom:10px}
+.top-days{list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:top}
+.top-days li{display:flex;align-items:center;gap:10px;font-size:12px}
+.top-days .rank{font-family:var(--font-display);font-weight:700;color:var(--gold);width:20px}
+.top-days b{margin-left:auto;font-family:var(--font-mono);color:#fff}
+.syzygy-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.syzygy-list li{display:flex;gap:10px;align-items:center;font-size:12px}
+.syzygy-list svg{width:18px;height:18px;color:var(--gold-2)}
+.syzygy-list small{display:block;color:var(--muted);font-size:10px}
+.mini-card-note p{font-size:12px;color:var(--muted);line-height:1.6}
+.mini-card-note strong{color:var(--gold-2)}
+
+/* ═══════════ GUIDE ═══════════ */
+.fact-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}
+.fact{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.fact small{display:block;font-family:var(--font-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fact strong{font-size:13.5px;color:#fff}
+.guide-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-12{grid-column:span 12}
+
+.season-bars{display:flex;flex-direction:column;gap:6px}
+.season-row{display:grid;grid-template-columns:44px 1fr 34px;align-items:center;gap:10px;font-family:var(--font-mono);font-size:10px}
+.season-row span:first-child{color:var(--muted);letter-spacing:.1em}
+.season-track{height:14px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.season-fill{height:100%;background:linear-gradient(90deg,#164e63,var(--sea) 45%,var(--gold) 80%,#ffe9a8);border-radius:4px;width:0%;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.season-row.is-top .season-fill{box-shadow:0 0 12px rgba(240,180,41,.45)}
+.season-row b{text-align:right;color:var(--sea-2);font-variant-numeric:tabular-nums}
+
+.hour-slots{list-style:none;display:flex;flex-direction:column;gap:10px}
+.hour-slots li{display:grid;grid-template-columns:78px 1fr;gap:6px 12px;align-items:center}
+.hs-time{font-family:var(--font-mono);font-size:11px;color:#fff;white-space:nowrap}
+.hs-bar{height:12px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden;grid-column:2}
+.hs-bar div{height:100%;background:linear-gradient(90deg,#1d4e5f,var(--sea));border-radius:99px}
+.hs-bar.is-good div{background:linear-gradient(90deg,#155a72,var(--sea-2))}
+.hs-bar.is-peak div{background:linear-gradient(90deg,var(--gold-deep),var(--gold),#ffe9a8);box-shadow:0 0 16px rgba(240,180,41,.4)}
+.hs-bar.is-low div{background:#33424f}
+.hs-note{grid-column:2;font-size:10.5px;color:var(--muted);margin-top:-4px}
+
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tech{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;background:rgba(255,255,255,.02)}
+.tech-num{font-family:var(--font-display);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(140,235,250,.55);font-size:34px;line-height:1}
+.tech h4{font-size:13.5px;margin:6px 0 6px;color:#fff}
+.tech p{font-size:11.5px;color:var(--muted);line-height:1.55}
+.tech-pro{margin-top:8px;border-top:1px dashed var(--line-strong);padding-top:8px;color:var(--gold-2) !important}
+
+.spot-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.spot-list li{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px}
+.spot-rank{font-family:var(--font-display);font-weight:700;font-size:22px;color:var(--gold);border:1px solid rgba(240,180,41,.4);border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none}
+.spot-body strong{display:block;font-size:13px;color:#fff}
+.spot-body span{font-size:11px;color:var(--muted);line-height:1.5}
+.safety-box{display:flex;gap:12px;margin-top:12px;border:1px solid rgba(255,122,82,.4);background:rgba(255,122,82,.06);border-radius:var(--radius-sm);padding:12px 14px}
+.safety-box .ic{color:var(--red);width:26px;height:26px}
+.safety-box strong{color:#ffc9b8;font-size:12px}
+.safety-box ul{margin:6px 0 0 16px;font-size:11px;color:#d9c1b8;line-height:1.6}
+
+.table-wrap{overflow-x:auto}
+.gear-table{width:100%;border-collapse:collapse;font-size:12px;min-width:640px}
+.gear-table th,.gear-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+.gear-table thead th{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line-strong)}
+.gear-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.gear-table td:first-child{color:var(--gold-2);font-weight:600}
+
+.faq{display:flex;flex-direction:column}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item:first-child{border-top:1px solid var(--line)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;background:transparent;border:0;color:var(--text);text-align:left;padding:16px 6px;font-size:14.5px;font-weight:600}
+.faq-q .ic{transition:transform .3s;color:var(--sea-2)}
+.faq-item.is-open .faq-q .ic{transform:rotate(45deg);color:var(--gold)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-item.is-open .faq-a{max-height:400px}
+.faq-a-inner{padding:0 6px 16px;color:var(--muted);font-size:12.5px;line-height:1.7;border-left:2px solid rgba(52,198,221,.3);margin-left:6px;padding-left:14px}
+
+/* ═══════════ MÉTHODE ═══════════ */
+.methode-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.method-list{list-style:none;counter-reset:m;display:flex;flex-direction:column;gap:10px}
+.method-item{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;background:rgba(255,255,255,.02)}
+.method-item::before{counter-increment:m;content:"0" counter(m);font-family:var(--font-display);font-weight:700;color:var(--sea-2);font-size:22px}
+.method-item h4{font-size:13px;color:#fff}
+.method-item p{font-size:11px;color:var(--muted);line-height:1.5;margin-top:3px}
+.method-weight{font-family:var(--font-mono);color:var(--gold-2);font-size:15px;text-align:right}
+.method-weight small{display:block;font-size:8px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.setting-row:last-child{border-bottom:0}
+.setting-row strong{font-size:13.5px}
+.setting-row small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.segmented{display:flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden}
+.seg-btn{background:transparent;border:0;color:var(--muted);font-family:var(--font-mono);font-size:12px;padding:9px 16px;transition:all .15s}
+.seg-btn.is-active{background:var(--gold);color:#241600;font-weight:700}
+
+.source-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.source-list li{border-left:2px solid rgba(52,198,221,.4);padding-left:12px}
+.source-list strong{display:block;font-size:12.5px;color:#fff}
+.source-list span{font-size:11.5px;color:var(--muted);line-height:1.6}
+.warn-box{border:1px solid rgba(255,194,71,.4);background:rgba(255,194,71,.06);border-radius:var(--radius-sm);padding:14px;display:flex;gap:12px}
+.warn-box .ic{color:var(--amber);flex:none;margin-top:2px}
+.warn-box ul{margin-left:16px;font-size:11.5px;color:#e7d9b0;line-height:1.65}
+.version-box{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.version-box p{font-size:10.5px;color:var(--muted);line-height:1.7}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:600;transition:all .15s}
+.btn-gold{background:linear-gradient(180deg,var(--gold-2),var(--gold) 60%,#d9a117);color:#241600;box-shadow:0 8px 22px rgba(240,180,41,.35),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(240,180,41,.4),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--line-strong)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-2)}
+
+/* ═══════════ FOOTER ═══════════ */
+.footer{margin-top:40px;border-top:1px solid var(--line);padding:22px 4px 30px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:28px;color:var(--muted);font-size:11.5px}
+.footer-col{display:flex;flex-direction:column;gap:8px;line-height:1.6}
+.footer-brand{flex-direction:row;align-items:center;gap:12px}
+.footer-brand strong{display:block;color:var(--text);font-size:13px}
+.footer-brand span{color:var(--muted)}
+.footer-title{font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--sea-2);margin-bottom:2px}
+.footer-col a{color:var(--sea-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;width:max-content}
+.footer-col a:hover{color:var(--sea-2);text-decoration:underline}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width:1240px){
+  .card-gauge{grid-column:span 12}
+  .card-moon{grid-column:span 6}
+  .card-meteo{grid-column:span 6}
+  .card-mer{grid-column:span 6}
+  .card-solunaire{grid-column:span 6}
+  .card-reco{grid-column:span 12}
+  .card-chart{grid-column:span 12}
+  .span-7,.span-6,.span-5{grid-column:span 12}
+  .cal-layout{grid-template-columns:1fr}
+  .fact-strip{grid-template-columns:repeat(3,1fr)}
+  .footer{grid-template-columns:1fr}
+  .dd-block{grid-column:span 6}
+}
+@media (max-width:1024px){
+  :root{--sidebar-w:0px}
+  .sidebar{transform:translateX(-105%);width:290px;transition:transform .3s ease;box-shadow:var(--shadow)}
+  .sidebar.is-open{transform:none}
+  .topbar{left:0}
+  .main{margin-left:0;padding-left:14px;padding-right:14px}
+  .topbar-menu{display:inline-flex}
+  .topbar-loc-text span{display:none}
+  .live-pill{display:none}
+  .gauge-body{flex-direction:column;align-items:stretch}
+  .gauge-canvas-wrap{align-self:center}
+  .moon-body{flex-direction:column;text-align:center}
+  .moon-next{text-align:left}
+  .tech-grid{grid-template-columns:1fr}
+  .fact-strip{grid-template-columns:repeat(2,1fr)}
+  .dd-block{grid-column:span 12}
+  .cal-grid{gap:6px}
+  .cal-cell{min-height:84px}
+}
+@media print{
+  .sidebar,.topbar,.view:not(#view-dashboard),.alert-strip,.card-chart,.card-reco,.footer,.no-print{display:none !important}
+  body{background:#fff;color:#000}
+  .main{margin:0;padding:0}
+  .view#view-dashboard{display:block}
+  .card{box-shadow:none;border:1px solid #ccc;background:#fff;break-inside:avoid}
+  .card-title,.gauge-value,.moon-illum,.wx-temp{color:#000 !important}
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SPRITE D'ICÔNES (SVG, stroke = currentColor) ═══════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.2"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.2 13.6A8.5 8.5 0 1 1 10.4 3.8a7 7 0 0 0 9.8 9.8z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M20 17v4H6.5A2.5 2.5 0 0 1 4 18.5"/><path d="M9 7.5h6M9 11h4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.2h.01"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 3v6h-6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4.6 4.6 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
+    <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.2h8.5a2.6 2.6 0 1 0-2.6-2.6M3 12.4h13a2.8 2.8 0 1 1-2.8 2.8M3 16.6h7a2.2 2.2 0 1 1-2.2 2.2"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6.2 6.7 6.2 11.1a6.2 6.2 0 0 1-12.4 0C5.8 9.7 12 3 12 3z"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 14.5a8 8 0 1 1 16 0"/><path d="M12 14.5l4.2-4.2"/><circle cx="12" cy="14.5" r="1.4"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.8 18.5a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/></symbol>
+    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M6.8 15a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/><path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2"/></symbol>
+    <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 3v5M8.8 6.6l1.4 1.4M15.2 6.6 13.8 8"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/><path d="M12 8.5l-2-2M12 8.5l2-2"/></symbol>
+    <symbol id="i-sunset" viewBox="0 0 24 24"><path d="M12 9V4M8.8 5.6l1.4 1.4M15.2 5.6 13.8 7"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/><path d="M12 3.5l-2 2M12 3.5l2 2"/></symbol>
+    <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 8.5q2.5-2.4 5 0t5 0 5 0 5 0M2 13q2.5-2.4 5 0t5 0 5 0 5 0M2 17.5q2.5-2.4 5 0t5 0 5 0 5 0"/></symbol>
+    <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4V21M8.5 11h7M4 14.5c0 4 3.6 6.5 8 6.5s8-2.5 8-6.5M2 15h3M19 15h3"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6 7-11.4A7 7 0 1 0 5 10.1c0 5.4 7 11.4 7 11.4z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19L12 3.5z"/><path d="M12 9.5V14M12 17h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 8V3.5h10V8M7 17.5H4.5a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H17"/><path d="M7 14h10v6.5H7z"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M10 6H5.5a1 1 0 0 0-1 1v12.5a1 1 0 0 0 1 1H18a1 1 0 0 0 1-1V14"/></symbol>
+    <symbol id="i-squid" viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 4.4 2.1 4.4 5L15 12H9l-1.4-4.8C7.6 4.3 9.3 2.2 12 2.2z"/><path d="M9.3 12v5.4M12 12v6.2M14.7 12v5.4M8 12.2C6.4 14.4 6.2 16.6 8 19M16 12.2c1.6 2.2 1.8 4.4 0 6.8"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.5 6v6c0 4.6 3 8.4 7.5 10 4.5-1.6 7.5-5.4 7.5-10V6L12 2.8z"/><path d="m9.5 12 2 2 3.5-4"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.6l1.2-6.5L2.5 9.5l6.6-.9 2.9-6z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar" id="sidebar" aria-label="Navigation principale">
+  <div class="brand">
+    <img class="brand-logo" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="Logo Ghazaouet Calamar Live" width="52" height="52">
+    <div class="brand-text">
+      <span class="brand-kicker">الغزوات · Tlemcen · Algérie</span>
+      <h1 class="brand-name">Ghazaouet <em>Calamar&nbsp;Live</em></h1>
+      <span class="brand-tag">Le calamar, minute après minute.</span>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Sections">
+    <button class="nav-item is-active" data-nav="dashboard"><svg class="ic"><use href="#i-grid"/></svg><span>Tableau de bord</span></button>
+    <button class="nav-item" data-nav="previsions"><svg class="ic"><use href="#i-cal"/></svg><span>Prévisions 14 jours</span></button>
+    <button class="nav-item" data-nav="calendrier"><svg class="ic"><use href="#i-moon"/></svg><span>Calendrier lunaire</span></button>
+    <button class="nav-item" data-nav="guide"><svg class="ic"><use href="#i-book"/></svg><span>Guide du pêcheur</span></button>
+    <button class="nav-item" data-nav="methode"><svg class="ic"><use href="#i-info"/></svg><span>Méthode &amp; sources</span></button>
+  </nav>
+
+  <div class="side-clock">
+    <div class="side-clock-head">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Heure locale — Port de Ghazaouet</span>
+    </div>
+    <div class="side-clock-time" id="sideClock">--:--:--</div>
+    <div class="side-clock-date" id="sideDate">—</div>
+    <div class="side-clock-meta"><span class="chip chip-sea">UTC+1 · Africa/Algiers</span><span class="chip chip-ghost" id="mzCoord">35.096°N · 1.860°W</span></div>
+    <a class="side-harbour" href="https://www.google.com/maps?q=35.096,-1.860" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg> Voir sur la carte <svg class="ic ic-xs"><use href="#i-external"/></svg></a>
+  </div>
+
+  <div class="side-foot">
+    <p>Indice Calamar™ v1.0 — outil d'aide à la décision. La mer reste imprévisible&nbsp;; naviguez avec prudence.</p>
+  </div>
+</aside>
+<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+<!-- ═══════════ TOPBAR ═══════════ -->
+<header class="topbar">
+  <button class="icon-btn topbar-menu" id="btnMenu" aria-label="Ouvrir le menu"><svg class="ic"><use href="#i-menu"/></svg></button>
+  <div class="topbar-loc">
+    <svg class="ic ic-sea"><use href="#i-anchor"/></svg>
+    <div class="topbar-loc-text">
+      <strong>Port de Ghazaouet</strong>
+      <span id="topbarSub">Tlemcen · Algérie · chargement…</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-pill"><span class="live-dot"></span> EN DIRECT <span class="live-pill-sep">·</span> MAJ <span id="lastUpdate">--:--</span></div>
+    <button class="icon-btn" id="btnRefresh" aria-label="Actualiser les données"><svg class="ic" id="refreshIcon"><use href="#i-refresh"/></svg></button>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- ═══════════ VUE 1 — TABLEAU DE BORD ═══════════ -->
+<section class="view is-active" id="view-dashboard" aria-label="Tableau de bord">
+
+  <div class="alert-strip is-hidden" id="stormAlert" role="alert">
+    <svg class="ic"><use href="#i-alert"/></svg>
+    <span id="stormAlertText">Alerte</span>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- Jauge Indice Calamar -->
+    <article class="card card-gauge" aria-label="Indice Calamar du jour">
+      <header class="card-head">
+        <div>
+          <span class="card-kicker">Indice Calamar™</span>
+          <h2 class="card-title">Aujourd'hui au port</h2>
+        </div>
+        <span class="chip chip-gold" id="gaugeDateChip">—</span>
+      </header>
+      <div class="gauge-body">
+        <div class="gauge-canvas-wrap">
+          <canvas id="gaugeCanvas" width="300" height="212" role="img" aria-label="Jauge de l'indice calamar"></canvas>
+          <div class="gauge-center">
+            <div class="gauge-value" id="gaugeValue">--</div>
+            <div class="gauge-max">/ 100</div>
+          </div>
+        </div>
+        <div class="gauge-side">
+          <div class="rating-pill" id="ratingPill" data-level="mid">—</div>
+          <div class="best-window">
+            <span class="best-window-label"><svg class="ic ic-xs"><use href="#i-squid"/></svg> Fenêtre optimale</span>
+            <strong id="bestWindow">—</strong>
+            <span class="best-window-sub" id="bestWindowSub">Calcul en cours…</span>
+          </div>
+          <ul class="factors" id="factorList" aria-label="Décomposition de l'indice"></ul>
+        </div>
+      </div>
+      <footer class="card-foot">
+        <span>Indice composite : lune 35 · solunaire 25 · saison 20 · mer 12 · pression 8.</span>
+        <button class="link-btn" data-nav="methode">Comment c'est calculé ? <svg class="ic ic-xs"><use href="#i-arrow-r"/></svg></button>
+      </footer>
+    </article>
+
+    <!-- Carte Lune -->
+    <article class="card card-moon" aria-label="Phase lunaire et marée">
+      <header class="card-head">
+        <div>
+          <span class="card-kicker">Lune &amp; marée</span>
+          <h2 class="card-title" id="moonPhaseName">—</h2>
+        </div>
+        <span class="chip chip-ghost" id="moonWaxChip">—</span>
+      </header>
+      <div class="moon-body">
+        <canvas id="moonCanvas" width="150" height="150" role="img" aria-label="Rendu de la phase lunaire"></canvas>
+        <div class="moon-side">
+          <div class="moon-illum"><span id="moonIllum">–</span><small>% éclairée</small></div>
+          <div class="moon-age">Âge : <strong id="moonAge">–</strong> · Élongation <strong id="moonElong">–</strong></div>
+          <div class="moon-next" id="moonNext">—</div>
+        </div>
+      </div>
+      <div class="moon-grid">
+        <div class="moon-cell"><svg class="ic"><use href="#i-sunrise"/></svg><div><small>Lever</small><strong id="moonRise">–</strong></div></div>
+        <div class="moon-cell"><svg class="ic"><use href="#i-sunset"/></svg><div><small>Coucher</small><strong id="moonSet">–</strong></div></div>
+        <div class="moon-cell"><svg class="ic"><use href="#i-clock"/></svg><div><small>Culmination</small><strong id="moonTransit">–</strong></div></div>
+        <div class="moon-cell"><svg class="ic"><use href="#i-gauge"/></svg><div><small>Coef. marée *</small><strong id="tideCoef">–</strong></div></div>
+      </div>
+      <p class="moon-note">* Coefficient estimé (syzygie ≈ 95–100 · quadrature ≈ 45–55). Méditerranée : amplitude &lt; 0,4 m — la lune agit surtout via les courants et le solunaire, pas via la hauteur d'eau.</p>
+    </article>
+
+    <!-- Météo actuelle -->
+    <article class="card card-meteo" aria-label="Météo actuelle">
+      <header class="card-head">
+        <div>
+          <span class="card-kicker">Météo — maintenant</span>
+          <h2 class="card-title" id="wxDesc">—</h2>
+        </div>
+        <svg class="wx-icon ic" id="wxIcon"><use href="#i-cloud"/></svg>
+      </header>
+      <div class="wx-now">
+        <div class="wx-temp"><span id="wxTemp">–</span><span class="wx-unit" id="wxUnit">°C</span></div>
+        <div class="wx-feel">Ressenti <strong id="wxFeel">–</strong> · <span id="wxMinMax">– / –</span></div>
+      </div>
+      <ul class="wx-grid">
+        <li><svg class="ic"><use href="#i-wind"/></svg><div><small>Vent</small><strong><span id="wxWind">–</span> <em id="wxWindDir">–</em></strong></div><span class="wind-arrow" id="windArrow" aria-hidden="true">↑</span></li>
+        <li><svg class="ic"><use href="#i-wind"/></svg><div><small>Rafales</small><strong id="wxGusts">–</strong></div></li>
+        <li><svg class="ic"><use href="#i-drop"/></svg><div><small>Humidité</small><strong id="wxHumidity">–</strong></div></li>
+        <li><svg class="ic"><use href="#i-gauge"/></svg><div><small>Pression</small><strong><span id="wxPressure">–</span> <em id="wxPressureTrend">–</em></strong></div></li>
+        <li><svg class="ic"><use href="#i-cloud"/></svg><div><small>Nuages</small><strong id="wxClouds">–</strong></div></li>
+        <li><svg class="ic"><use href="#i-rain"/></svg><div><small>Précip. (24 h)</small><strong id="wxPrecip">–</strong></div></li>
+      </ul>
+    </article>
+
+    <!-- État de la mer -->
+    <article class="card card-mer" aria-label="État de la mer">
+      <header class="card-head">
+        <div>
+          <span class="card-kicker">État de la mer</span>
+          <h2 class="card-title">Vagues &amp; température</h2>
+        </div>
+        <svg class="ic ic-sea wx-icon"><use href="#i-waves"/></svg>
+      </header>
+      <div class="sea-hero">
+        <div class="sea-big"><span id="waveHeight">–</span><small>m de vagues</small></div>
+        <div class="sea-meta">
+          <div><small>Direction</small><strong><span id="waveDir">–</span> <span class="wind-arrow" id="waveArrow">↑</span></strong></div>
+          <div><small>Période</small><strong id="wavePeriod">–</strong></div>
+          <div><small>Houle</small><strong id="swellHeight">–</strong></div>
+        </div>
+      </div>
+      <div class="sea-bar" aria-hidden="true"><div class="sea-bar-fill" id="waveBar"></div><span class="sea-bar-mark" style="left:33.3%"></span><span class="sea-bar-mark" style="left:66.6%"></span></div>
+      <div class="sea-scale"><span>0 m</span><span>0,5</span><span>1,0</span><span>1,5 m +</span></div>
+      <div class="sea-sst">
+        <svg class="ic"><use href="#i-thermo"/></svg>
+        <div><small>Température de l'eau</small><strong><span id="sstValue">–</span>°C</strong></div>
+        <span class="chip chip-sea" id="sstVerdict">—</span>
+      </div>
+      <p class="sea-note" id="seaNote">Chargement des données marines…</p>
+    </article>
+
+    <!-- Périodes solunaires -->
+    <article class="card card-solunaire" aria-label="Périodes solunaires du jour">
+      <header class="card-head">
+        <div>
+          <span class="card-kicker">Solunaire — aujourd'hui</span>
+          <h2 class="card-title">Quand ça mord</h2>
+        </div>
+        <span class="chip chip-gold" id="solRating">–</span>
+      </header>
+      <ol class="sol-list" id="solList"><li class="sol-item is-skeleton">Calcul des passages de la lune…</li></ol>
+      <footer class="card-foot">
+        <span>Majeures = lune au zénith/nadir · Mineures = mi-chemin. Nuit = enjeu n°1 pour le calamar.</span>
+        <button class="link-btn" data-nav="calendrier">Tout le mois <svg class="ic ic-xs"><use href="#i-arrow-r"/></svg></button>
+      </footer>
+    </article>
+
+    <!-- Recommandations live -->
+    <article class="card card-reco" aria-label="Recommandations">
+      <header class="card-head">
+        <div><span class="card-kicker">Recommandation live</span><h2 class="card-title">Le plan de pêche</h2></div>
+        <svg class="ic ic-gold wx-icon"><use href="#i-squid"/></svg>
+      </header>
+      <ol class="reco-list" id="recoList"><li class="reco-item is-skeleton">Analyse croisée lune × météo × mer…</li></ol>
+    </article>
+
+    <!-- Courbe d'activité 24h -->
+    <article class="card card-chart" aria-label="Activité du calamar sur 24 heures">
+      <header class="card-head">
+        <div><span class="card-kicker">Courbe d'activité — 24 h</span><h2 class="card-title">La nuit en détail</h2></div>
+        <div class="chart-legend"><span class="lg lg-activity">Activité</span><span class="lg lg-night">Nuit</span><span class="lg lg-now">Maintenant</span></div>
+      </header>
+      <div class="chart-wrap"><canvas id="activityChart" role="img" aria-label="Courbe de probabilité de touche du calamar par heure"></canvas></div>
+      <div class="chart-foot" id="chartFoot">—</div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══════════ VUE 2 — PRÉVISIONS 14 JOURS ═══════════ -->
+<section class="view" id="view-previsions" aria-label="Prévisions sur 14 jours">
+  <header class="view-head">
+    <div>
+      <span class="view-kicker"><svg class="ic ic-xs"><use href="#i-cal"/></svg> Prévisions</span>
+      <h2 class="view-title">Les 14 prochains jours</h2>
+      <p class="view-sub">Indice Calamar™ jour par jour : touchez une carte pour la fiche complète (périodes, décomposition, fenêtres de nuit). Au-delà de 16 jours, la météo n'est pas encore prévisible — l'indice devient « lune + saison ».</p>
+    </div>
+    <div class="legend-scale" aria-label="Échelle de l'indice"><span>Faible</span><div class="legend-bar"></div><span>Exceptionnel</span></div>
+  </header>
+  <div class="forecast-grid" id="forecastGrid"></div>
+  <article class="day-detail is-hidden" id="dayDetail" aria-live="polite"></article>
+</section>
+
+<!-- ═══════════ VUE 3 — CALENDRIER LUNAIRE ═══════════ -->
+<section class="view" id="view-calendrier" aria-label="Calendrier lunaire du mois">
+  <header class="view-head">
+    <div>
+      <span class="view-kicker"><svg class="ic ic-xs"><use href="#i-moon"/></svg> Calendrier du mois</span>
+      <h2 class="view-title" id="calMonthTitle">—</h2>
+      <p class="view-sub">Chaque jour : phase lunaire réelle et Indice Calamar™. Les cases dorées sont vos meilleures sorties. * au-delà de 16 jours : indice lune + saison uniquement.</p>
+    </div>
+    <div class="cal-nav">
+      <button class="icon-btn" id="calPrev" aria-label="Mois précédent"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+      <button class="btn btn-ghost" id="calToday">Aujourd'hui</button>
+      <button class="icon-btn" id="calNext" aria-label="Mois suivant"><svg class="ic"><use href="#i-chev-r"/></svg></button>
+    </div>
+  </header>
+
+  <div class="cal-layout">
+    <div class="cal-board">
+      <div class="cal-weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend"><span class="cal-legend-dot d-low"></span>&lt;40 faible <span class="cal-legend-dot d-mid"></span>40–59 correct <span class="cal-legend-dot d-good"></span>60–74 bon <span class="cal-legend-dot d-great"></span>75–89 excellent <span class="cal-legend-dot d-epic"></span>90+ exceptionnel</div>
+    </div>
+    <aside class="cal-side">
+      <div class="mini-card">
+        <span class="mini-card-kicker">Top du mois</span>
+        <ol class="top-days" id="topDaysList"><li>—</li></ol>
+      </div>
+      <div class="mini-card">
+        <span class="mini-card-kicker">Syzygies (lune forte)</span>
+        <ul class="syzygy-list" id="syzygyList"><li>—</li></ul>
+      </div>
+      <div class="mini-card mini-card-note">
+        <span class="mini-card-kicker">Lecture rapide</span>
+        <p>Les nuits de <strong>nouvelle</strong> et <strong>pleine lune</strong> (± 2 jours) concentrent l'activité. Les quartiers sont plus calmes : privilégiez alors les heures encadrant la culmination lunaire.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════ VUE 4 — GUIDE DU PÊCHEUR ═══════════ -->
+<section class="view" id="view-guide" aria-label="Guide du pêcheur de calamar">
+  <header class="view-head">
+    <div>
+      <span class="view-kicker"><svg class="ic ic-xs"><use href="#i-book"/></svg> Guide expert</span>
+      <h2 class="view-title">Pêcher le calamar à Ghazaouet</h2>
+      <p class="view-sub">Tout ce qu'il faut savoir : espèce cible (<em>Loligo vulgaris</em>, « calamar commun » / encornet), saisons, heures, techniques, spots, matériel et sécurité.</p>
+    </div>
+  </header>
+
+  <div class="fact-strip" aria-label="Fiche espèce">
+    <div class="fact"><small>Espèce</small><strong>Loligo vulgaris</strong></div>
+    <div class="fact"><small>Profondeur</small><strong>20 – 250 m</strong></div>
+    <div class="fact"><small>Eau idéale</small><strong>13 – 20 °C</strong></div>
+    <div class="fact"><small>Moment</small><strong>Nuit</strong></div>
+    <div class="fact"><small>Fonds</small><strong>Sable &amp; vase</strong></div>
+    <div class="fact"><small>Activité</small><strong>Crépuscule → aube</strong></div>
+  </div>
+
+  <div class="guide-grid">
+
+    <article class="card span-7">
+      <header class="card-head"><div><span class="card-kicker">Calendrier saisonnier</span><h3 class="card-title">Quand sortir, mois par mois</h3></div></header>
+      <div class="season-bars" id="seasonBars" aria-label="Qualité de la pêche par mois"></div>
+      <p class="note">Migration côtière des plus gros sujets dès janvier–février ; petites tailles en été ; ponte majeure en début d'été et début d'automne ; recrutement (jeunes) février–mars et juillet–septembre. Automne–début d'hiver = le meilleur de l'année à Ghazaouet. (Sources : FAO / AdriaMed, SeaLifeBase.)</p>
+    </article>
+
+    <article class="card span-5">
+      <header class="card-head"><div><span class="card-kicker">Les bonnes heures</span><h3 class="card-title">Le rythme d'une nuit</h3></div></header>
+      <ul class="hour-slots">
+        <li><span class="hs-time">17h – 19h</span><div class="hs-bar"><div style="width:55%"></div></div><span class="hs-note">Crépuscule — premiers mouvements</span></li>
+        <li><span class="hs-time">19h – 22h</span><div class="hs-bar is-peak"><div style="width:96%"></div></div><span class="hs-note">Prime time — turlutte &amp; lumière</span></li>
+        <li><span class="hs-time">22h – 02h</span><div class="hs-bar is-good"><div style="width:78%"></div></div><span class="hs-note">Pleine nuit — activité soutenue</span></li>
+        <li><span class="hs-time">02h – 04h</span><div class="hs-bar is-good"><div style="width:60%"></div></div><span class="hs-note">Second souffle — calme plat souvent</span></li>
+        <li><span class="hs-time">04h – 07h</span><div class="hs-bar"><div style="width:30%"></div></div><span class="hs-note">Aube — touches sporadiques</span></li>
+        <li><span class="hs-time">07h – 17h</span><div class="hs-bar is-low"><div style="width:8%"></div></div><span class="hs-note">Journée — calamar redescend (20–250 m)</span></li>
+      </ul>
+    </article>
+
+    <article class="card span-6">
+      <header class="card-head"><div><span class="card-kicker">Techniques</span><h3 class="card-title">4 façons de le prendre</h3></div></header>
+      <div class="tech-grid">
+        <div class="tech"><div class="tech-num">01</div><h4>Turlutte (turlutte) de nuit</h4><p>Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.</p><p class="tech-pro">Conseil : tailles 2.0–3.5 · coloris rose/orange/blanc phosphorescent · fond sableux 20–60 m.</p></div>
+        <div class="tech"><div class="tech-num">02</div><h4>Pêche au lamparo</h4><p>Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.</p><p class="tech-pro">Conseil : nouvelle lune &gt; pleine lune pour le lamparo — le contraste lumineux attire plus.</p></div>
+        <div class="tech"><div class="tech-num">03</div><h4>Dérive sur les chasses</h4><p>Repérer les chasses de thons/dorades ou les zones de courant (cassures, pointes). Dérive lente, turlutte profonde. Calamars en chasse active.</p><p class="tech-pro">Conseil : eaux 13–20 °C, mer formée légère (houle &lt; 0,5 m) = activité maximale.</p></div>
+        <div class="tech"><div class="tech-num">04</div><h4>Pêche du bord (digue/jetée)</h4><p>Depuis la digue du port ou le môle : lampes, seiches/calamars montent vers les points lumineux. Petits leurres, fil fin, épuisette longue.</p><p class="tech-pro">Conseil : évitez les soirs de grosse houle d'ouest — le port est exposé nord-ouest.</p></div>
+      </div>
+    </article>
+
+    <article class="card span-6">
+      <header class="card-head"><div><span class="card-kicker">Spots locaux</span><h3 class="card-title">Où chercher autour de Ghazaouet</h3></div></header>
+      <ul class="spot-list">
+        <li><div class="spot-rank">A</div><div class="spot-body"><strong>Jetée ouest &amp; digue du phare « Les Deux Frères »</strong><span>Accès à pied · 5–15 m de fond · lampes du port · idéal lamparo par nuit calme. Attention aux glissades.</span></div></li>
+        <li><div class="spot-rank">B</div><div class="spot-body"><strong>Le large du port (cassure 30 → 80 m)</strong><span>En barque · fonds 30–80 m sur la pente du plateau · dérive sur chasses · meilleur secteur automne–hiver.</span></div></li>
+        <li><div class="spot-rank">C</div><div class="spot-body"><strong>Baie de Honaïne (10 km à l'ouest)</strong><span>Fonds sableux 15–40 m · abritée de la houle d'ouest · très bonne densité en octobre–décembre.</span></div></li>
+        <li><div class="spot-rank">D</div><div class="spot-body"><strong>Marsa Ben M'Hidi (à l'est, frontière)</strong><span>Spot historique · vérifier les zones autorisées et la réglementation locale avant toute sortie.</span></div></li>
+      </ul>
+      <div class="safety-box"><svg class="ic"><use href="#i-shield"/></svg><div><strong>Sécurité avant tout</strong><ul><li>Gilet + 2 moyens de communication (téléphone chargé / VHF) ; prévenez un proche de l'heure de retour.</li><li>Jamais de sortie par alerte orage / mer formée (voir bandeau d'alerte du tableau de bord).</li><li>Bulletin météo marine de l'ONM / Météo Algérie avant de prendre la mer.</li><li>Nuit = plus de risque : feux de navigation obligatoires en barque.</li></ul></div></div>
+    </article>
+
+    <article class="card span-12">
+      <header class="card-head"><div><span class="card-kicker">Matériel conseillé</span><h3 class="card-title">La caisse du pêcheur de calamar</h3></div></header>
+      <div class="table-wrap">
+        <table class="gear-table">
+          <thead><tr><th>Élément</th><th>Recommandation</th><th>Budget indicatif</th></tr></thead>
+          <tbody>
+            <tr><td>Canne</td><td>Turlutte / spinning 2,4–3,0 m · action médium-fast · 80–150 g</td><td>€€</td></tr>
+            <tr><td>Moulinet</td><td>4000–5000 · frein fin · 200 m de tresse PE 0.8–1.2</td><td>€€</td></tr>
+            <tr><td>Leader</td><td>Fluorocarbone 0,25–0,35 mm · 1,5 m · discret sous l'eau claire</td><td>€</td></tr>
+            <tr><td>Turluttes</td><td>N° 2.0 à 3.5 · coloris rose, orange, blanc, phosphorescent (nuit)</td><td>€</td></tr>
+            <tr><td>Émerillons</td><td>Agrafe + émerillon baril (change rapide de turlutte)</td><td>€</td></tr>
+            <tr><td>Lampe</td><td>Frontale rouge (préserve la vision nocturne) + projecteur 12 V à bord</td><td>€ – €€</td></tr>
+            <tr><td>Divers</td><td>Épuisette longue · seau à couvercle · chiffon · couteau · eau douce</td><td>€</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="card span-12">
+      <header class="card-head"><div><span class="card-kicker">FAQ</span><h3 class="card-title">Les questions des habitués</h3></div></header>
+      <div class="faq" id="faqList"></div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══════════ VUE 5 — MÉTHODE & SOURCES ═══════════ -->
+<section class="view" id="view-methode" aria-label="Méthode et sources">
+  <header class="view-head">
+    <div>
+      <span class="view-kicker"><svg class="ic ic-xs"><use href="#i-info"/></svg> Transparence</span>
+      <h2 class="view-title">Méthode, données &amp; limites</h2>
+      <p class="view-sub">Comment l'Indice Calamar™ est calculé, d'où viennent les données, et pourquoi aucune prévision ne garantit une capture.</p>
+    </div>
+    <button class="btn btn-gold" id="btnPrint"><svg class="ic"><use href="#i-printer"/></svg> Imprimer la fiche du jour</button>
+  </header>
+
+  <div class="methode-grid">
+    <article class="card span-7">
+      <header class="card-head"><div><span class="card-kicker">L'Indice Calamar™</span><h3 class="card-title">5 facteurs, 100 points</h3></div></header>
+      <ol class="method-list" id="methodList"></ol>
+      <p class="note">Le solunaire est pondéré par la présence des périodes majeures/mineures dans la nuit locale (coucher → lever). Les conditions « mer » chutent dès 0,6 m de vagues ; la pression privilégie les régimes anticycloniques ou en hausse. L'indice est recalculé à chaque actualisation (toutes les 10 min).</p>
+    </article>
+
+    <article class="card span-5">
+      <header class="card-head"><div><span class="card-kicker">Réglages</span><h3 class="card-title">Affichage &amp; unités</h3></div></header>
+      <div class="setting-row">
+        <div><strong>Unités de vent</strong><small>Kilomètres/heure ou nœuds marins</small></div>
+        <div class="segmented" role="group" aria-label="Unité de vent"><button class="seg-btn is-active" data-unit-wind="kmh">km/h</button><button class="seg-btn" data-unit-wind="kn">nœuds</button></div>
+      </div>
+      <div class="setting-row">
+        <div><strong>Température</strong><small>Celsius ou Fahrenheit</small></div>
+        <div class="segmented" role="group" aria-label="Unité de température"><button class="seg-btn is-active" data-unit-temp="c">°C</button><button class="seg-btn" data-unit-temp="f">°F</button></div>
+      </div>
+      <div class="setting-row">
+        <div><strong>Données en direct</strong><small id="dataFreshNote">Actualisation automatique toutes les 10 minutes.</small></div>
+        <button class="btn btn-ghost" id="btnRefresh2"><svg class="ic"><use href="#i-refresh"/></svg> Actualiser</button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Vue par défaut</strong><small>Le tableau de bord au démarrage ; navigation ensuite via les ancres (#calendrier…).</small></div>
+        <a class="btn btn-ghost" href="#dashboard">#dashboard</a>
+      </div>
+    </article>
+
+    <article class="card span-7">
+      <header class="card-head"><div><span class="card-kicker">Sources</span><h3 class="card-title">D'où viennent les chiffres</h3></div></header>
+      <ul class="source-list">
+        <li><strong>Météo &amp; mer temps réel</strong><span>Open-Meteo Forecast &amp; Marine API (ECMWF / ICON, CC BY 4.0) — vent, pression, nuages, houle, vagues, température de surface.</span></li>
+        <li><strong>Astronomie locale</strong><span>Calculs dans votre navigateur (algorithmes basés sur Meeus, <em>Astronomical Algorithms</em>) : phase, fraction éclairée, lever/coucher, culminations — précision ± 5 min.</span></li>
+        <li><strong>Théorie solunaire</strong><span>John Alden Knight (1926) — périodes majeures (lune au zénith/nadir) et mineures (mi-course), renforcées aux syzygies.</span></li>
+        <li><strong>Biologie de l'espèce</strong><span>FAO / AdriaMed &amp; SeaLifeBase — <em>Loligo vulgaris</em> : distribution méditerranéenne, 20–250 m, 13–20 °C, migrations côtières hiver/printemps, pontes été/automne.</span></li>
+        <li><strong>Port de Ghazaouet</strong><span>35.096° N · 1.860° W · UTC+1 · ouverture nord-ouest sur la Méditerranée — consultez aussi les bulletins ONM / Météo Algérie.</span></li>
+      </ul>
+    </article>
+
+    <article class="card span-5">
+      <header class="card-head"><div><span class="card-kicker">Limites</span><h3 class="card-title">À lire avant de sortir</h3></div></header>
+      <div class="warn-box">
+        <svg class="ic"><use href="#i-alert"/></svg>
+        <ul>
+          <li>Aucune application ne « garantit » une touche : l'indice hiérarchise les <em>probabilités</em>, pas les certitudes.</li>
+          <li>Houle d'ouest, orages et grains soudains sont la règle en Méditerranée d'automne — quand le tableau de bord affiche une alerte, restez à quai.</li>
+          <li>Réglementation : renseignez-vous auprès de la <strong>Direction de la Pêche &amp; de l'Aquaculture de Tlemcen</strong> (tailles minimales, repos biologique estival, zones autorisées, permis).</li>
+          <li>Ne naviguez jamais seul la nuit ; signalez votre sortie ; VHF canal 16 en détresse.</li>
+        </ul>
+      </div>
+      <div class="version-box">
+        <span class="mini-card-kicker">Version</span>
+        <p>Ghazaouet Calamar Live v1.0 · Novembre 2026 · Conçu pour les pêcheurs du port de Ghazaouet.<br>Données © Open-Meteo (CC BY 4.0). Icônes : sprite interne. Police : Fraunces / Inter / JetBrains Mono.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-col footer-brand">
+    <img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="" width="40" height="40">
+    <div><strong>Ghazaouet Calamar Live</strong><span>La météo du calamar, en direct du port.</span></div>
+  </div>
+  <div class="footer-col"><span class="footer-title">Données</span><a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.fao.org/fishery/species/918/en" target="_blank" rel="noopener">FAO — Loligo vulgaris <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.meteo.dz" target="_blank" rel="noopener">Météo Algérie (ONM) <svg class="ic ic-xs"><use href="#i-external"/></svg></a></div>
+  <div class="footer-col"><span class="footer-title">Légal</span><p>Information indicative, sans garantie de résultat. La mer est imprévisible : la sécurité prime sur la pêche. Toute pêche doit respecter la réglementation algérienne en vigueur.</p></div>
+</footer>
+
+</main>
+
+<script>
+/* ============================================================
+   GHAZAOUET CALAMAR LIVE — Moteur astronomique & solunaire
+   Phases lunaires, levées/couchers, passages (culminations),
+   périodes solunaires et Indice Calamar.
+   Précision : ~0,3° sur la longitude lunaire → erreur < 5 min
+   sur les heures de lever/coucher. Approximatif, sans garantie.
+   ============================================================ */
+'use strict';
+
+const Astro = (() => {
+  const RAD = Math.PI / 180;
+  const DEG = 180 / Math.PI;
+  const norm360 = d => ((d % 360) + 360) % 360;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const SYNODIC = 29.530588853;
+  const NEW_MOON_EPOCH_JD = 2451550.26; // 6 janvier 2000, 18:14 UTC
+
+  const jdFromDate = date => date.getTime() / 86400000 + 2440587.5;
+
+  /* ---------- Soleil ---------- */
+  function sunCoords(date) {
+    const T = (jdFromDate(date) - 2451545.0) / 36525;
+    const L0 = norm360(280.46646 + 36000.76983 * T);
+    const M = norm360(357.52911 + 35999.05029 * T) * RAD;
+    const C = 1.914602 * Math.sin(M) + 0.019993 * Math.sin(2 * M) + 0.000289 * Math.sin(3 * M);
+    const omega = 125.04 - 1934.136 * T;
+    const lambda = norm360(L0 + C - 0.00569 - 0.00478 * Math.sin(omega * RAD));
+    return { lambda };
+  }
+
+  /* ---------- Lune ---------- */
+  function moonCoords(date) {
+    const T = (jdFromDate(date) - 2451545.0) / 36525;
+    const Lp = norm360(218.3164477 + 481267.88123421 * T);
+    const D = norm360(297.8501921 + 445267.1114034 * T) * RAD;
+    const M = norm360(357.5291092 + 35999.0502909 * T) * RAD;
+    const Mp = norm360(134.9633964 + 477198.8675055 * T) * RAD;
+    const F = norm360(93.2720950 + 483202.0175233 * T) * RAD;
+    const E = 1 - 0.002516 * T - 0.0000074 * T * T;
+
+    const lon = norm360(
+      Lp
+      + 6.289 * Math.sin(Mp)
+      + 1.274 * Math.sin(2 * D - Mp)
+      + 0.658 * Math.sin(2 * D)
+      + 0.214 * Math.sin(2 * Mp)
+      - 0.186 * E * Math.sin(M)
+      - 0.114 * Math.sin(2 * F)
+      + 0.059 * Math.sin(2 * D - 2 * Mp)
+      + 0.057 * Math.sin(2 * D - M - Mp)
+      + 0.053 * Math.sin(2 * D + Mp)
+      + 0.046 * Math.sin(2 * D - M)
+      - 0.041 * Math.sin(Mp - M)
+      - 0.035 * Math.sin(D)
+      - 0.031 * E * Math.sin(Mp + M)
+      + 0.015 * Math.sin(2 * F - 2 * D)
+      + 0.011 * Math.sin(Mp - 4 * D)
+    );
+    // Latitude écliptique (terme principal — largement suffisant ici)
+    return { lambda: lon, beta: 5.128 * Math.sin(F) };
+  }
+
+  /* ---------- Écliptique → équatoriale ---------- */
+  const OBL = 23.4392911 * RAD;
+  function eclToEqu(lambdaDeg, betaDeg) {
+    const lam = lambdaDeg * RAD, bet = betaDeg * RAD;
+    const ra = Math.atan2(Math.sin(lam) * Math.cos(OBL) - Math.tan(bet) * Math.sin(OBL), Math.cos(lam));
+    const dec = Math.asin(Math.sin(bet) * Math.cos(OBL) + Math.cos(bet) * Math.sin(OBL) * Math.sin(lam));
+    return { ra: norm360(ra * DEG), dec: dec * DEG };
+  }
+
+  /* ---------- Temps sidéral moyen de Greenwich (degrés) ---------- */
+  function gmst(date) {
+    const jd = jdFromDate(date);
+    return norm360(280.46061837 + 360.98564736629 * (jd - 2451545.0));
+  }
+
+  /* ---------- Hauteur & azimut d'un astre ---------- */
+  function altAz(date, latDeg, lonDeg, lambdaDeg, betaDeg) {
+    const { ra, dec } = eclToEqu(lambdaDeg, betaDeg);
+    const H = (gmst(date) + lonDeg - ra) * RAD;
+    const phi = latDeg * RAD, decR = dec * RAD;
+    const alt = Math.asin(Math.sin(phi) * Math.sin(decR) + Math.cos(phi) * Math.cos(decR) * Math.cos(H));
+    const az = norm360(Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(phi) - Math.tan(decR) * Math.cos(phi)) * DEG + 180);
+    return { alt: alt * DEG, az, ra, dec };
+  }
+
+  const moonAlt = (date, lat, lon) => {
+    const m = moonCoords(date);
+    return altAz(date, lat, lon, m.lambda, m.beta).alt;
+  };
+  const sunAlt = (date, lat, lon) => {
+    const s = sunCoords(date);
+    return altAz(date, lat, lon, s.lambda, 0).alt;
+  };
+
+  /* ---------- Crossings (lever/coucher) pour un jour local ---------- */
+  const H0_SUN = -0.833;   // réfraction + demi-diamètre
+  const H0_MOON = -0.125;  // réfraction + parallaxe lunaire corrigée
+
+  function dayCrossings(date, lat, lon, altFn, h0) {
+    const start = new Date(date); start.setHours(0, 0, 0, 0);
+    const end = new Date(start); end.setDate(end.getDate() + 1);
+    const tStart = start.getTime(), tEnd = end.getTime();
+    const step = 5 * 60 * 1000;
+    const pad = 10 * 3600 * 1000;
+    const samples = [];
+    for (let t = tStart - pad; t <= tEnd + pad; t += step) {
+      samples.push({ t, alt: altFn(new Date(t), lat, lon) });
+    }
+    const events = [], extrema = [];
+    for (let i = 1; i < samples.length; i++) {
+      const a = samples[i - 1], b = samples[i];
+      if ((a.alt - h0) * (b.alt - h0) <= 0 && a.alt !== b.alt) {
+        const frac = (h0 - a.alt) / (b.alt - a.alt);
+        const crossT = a.t + frac * (b.t - a.t);
+        if (crossT >= tStart && crossT < tEnd) {
+          events.push({ time: new Date(crossT), dir: a.alt < b.alt ? 'rise' : 'set' });
+        }
+      }
+    }
+    for (let i = 1; i < samples.length - 1; i++) {
+      const p = samples[i - 1].alt, c = samples[i].alt, n = samples[i + 1].alt;
+      if (c >= p && c > n) extrema.push({ time: new Date(samples[i].t), kind: 'max', alt: c });
+      else if (c <= p && c < n) extrema.push({ time: new Date(samples[i].t), kind: 'min', alt: c });
+    }
+    const inDay = extrema.filter(e => e.time.getTime() >= tStart && e.time.getTime() < tEnd);
+    const hiE = inDay.filter(e => e.kind === 'max').sort((a, b) => b.alt - a.alt)[0];
+    const loE = inDay.filter(e => e.kind === 'min').sort((a, b) => a.alt - b.alt)[0];
+    return {
+      events,
+      maxAlt: hiE ? hiE.time : new Date(tStart + 12 * 3600e3),
+      minAlt: loE ? loE.time : new Date(tStart),
+      hi: hiE ? hiE.alt : -90,
+      lo: loE ? loE.alt : 90
+    };
+  }
+
+  const moonDay = (date, lat, lon) => dayCrossings(date, lat, lon, moonAlt, H0_MOON);
+  const sunDay  = (date, lat, lon) => dayCrossings(date, lat, lon, sunAlt,  H0_SUN);
+
+  /* ---------- Phase, illumination, âge ---------- */
+  function phaseInfo(date) {
+    const jd = jdFromDate(date);
+    const s = sunCoords(date), m = moonCoords(date);
+    const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
+    const psi = Math.acos(clamp(cosPsi, -1, 1)); // élongation 0..π
+    const illum = (1 - Math.cos(psi)) / 2;
+    const elongDeg = psi * DEG; // 0 = nouvelle, 180 = pleine
+    let age = (jd - NEW_MOON_EPOCH_JD) % SYNODIC;
+    if (age < 0) age += SYNODIC;
+    const idx = Math.floor(((age / SYNODIC) * 8) + 0.5) % 8;
+    const names = ['Nouvelle lune', 'Premier croissant', 'Premier quartier', 'Gibbeuse croissante',
+                   'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'];
+    return {
+      age, illum, elong: elongDeg, idx,
+      name: names[idx],
+      waxing: age < SYNODIC / 2,
+      phaseAngle: psi
+    };
+  }
+
+  /* Jours restants avant le prochain événement clé (nouvelle ou pleine lune) */
+  function daysToNextSyzygy(date) {
+    const ph = phaseInfo(date);
+    const pos = ph.age; // jours depuis la nouvelle lune
+    const toNew = SYNODIC - pos;
+    const full = pos <= SYNODIC / 2 ? (SYNODIC / 2 - pos) : (SYNODIC * 1.5 - pos);
+    return [
+      { label: 'Pleine lune', days: full },
+      { label: 'Nouvelle lune', days: toNew }
+    ].sort((a, b) => a.days - b.days)[0];
+  }
+
+  /* ---------- Périodes solunaires ---------- */
+  function solunarPeriods(date, lat, lon) {
+    const periods = [];
+    const offsets = [-1, 0, 1];
+    const transits = [];
+
+    for (const off of offsets) {
+      const d = new Date(date); d.setDate(d.getDate() + off);
+      const m = moonDay(d, lat, lon);
+      transits.push({ time: m.maxAlt, kind: 'major' });
+      transits.push({ time: m.minAlt, kind: 'major' });
+    }
+    transits.sort((a, b) => a.time - b.time);
+
+    // Mineures : à mi-chemin entre deux culminations successives
+    for (let i = 0; i < transits.length - 1; i++) {
+      const a = transits[i].time.getTime(), b = transits[i + 1].time.getTime();
+      const mid = new Date((a + b) / 2);
+      periods.push({ type: 'minor', center: mid, start: new Date(mid.getTime() - 45 * 60000), end: new Date(mid.getTime() + 45 * 60000) });
+    }
+    for (const t of transits) {
+      const half = 55 * 60000;
+      periods.push({ type: 'major', center: t.time, start: new Date(t.time.getTime() - half), end: new Date(t.time.getTime() + half) });
+    }
+    // Ne garder que celles qui chevauchent le jour local
+    const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1);
+    return periods
+      .filter(p => p.end > dayStart && p.start < dayEnd)
+      .sort((a, b) => a.center - b.center);
+  }
+
+  /* Recouvrement (minutes) d'une période avec la nuit (coucher→lever) */
+  function nightOverlap(period, sunsetT, sunriseNextT) {
+    const ns = sunsetT instanceof Date ? sunsetT.getTime() : NaN;
+    const nr = sunriseNextT instanceof Date ? sunriseNextT.getTime() : NaN;
+    if (Number.isNaN(ns) || Number.isNaN(nr)) return 0;
+    const s = period.start.getTime(), e = period.end.getTime();
+    const a = Math.max(s, ns), b = Math.min(e, nr);
+    return Math.max(0, Math.round((b - a) / 60000));
+  }
+
+  /* ---------- Indice solunaire du jour (qualité générale, %) ---------- */
+  function solunarRating(date, lat, lon) {
+    const jd = jdFromDate(date);
+    const s = sunCoords(date), m = moonCoords(date);
+    const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
+    const psi = Math.acos(clamp(cosPsi, -1, 1));
+    const coef = Math.pow(Math.abs(Math.cos(psi)), 1.6); // syzygie ≈ 1, quadrature ≈ 0
+    return Math.round(42 + 55 * coef);
+  }
+
+  /* ---------- Activité horaire (courbe 0..1) ---------- */
+  function activityAt(minutesOfDay, periods, nightFactor) {
+    let a = 0.14;
+    for (const p of periods) {
+      const centerMin = p.center.getHours() * 60 + p.center.getMinutes();
+      const sigma = p.type === 'major' ? 58 : 46;
+      const amp = p.type === 'major' ? 1.0 : 0.55;
+      const dd = minutesOfDay - centerMin;
+      a += amp * Math.exp(-(dd * dd) / (2 * sigma * sigma));
+    }
+    return clamp(a * nightFactor, 0, 1.4);
+  }
+
+  return {
+    jdFromDate, norm360, clamp,
+    sunCoords, moonCoords, altAz, moonAlt, sunAlt,
+    moonDay, sunDay, phaseInfo, daysToNextSyzygy,
+    solunarPeriods, nightOverlap, solunarRating, activityAt,
+    SYNODIC
+  };
+})();
+
+</script>
+<script>
+/* ============================================================
+   GHAZAOUET CALAMAR LIVE — Application
+   Données live : Open-Meteo (météo + mer) · Astronomie : moteur
+   interne (assets/js/astro.js) · Mise en cache 10 min.
+   ============================================================ */
+'use strict';
+
+/* ─────────── Configuration port de Ghazaouet ─────────── */
+const CONFIG = {
+  lat: 35.096, lon: -1.860,
+  tz: 'Africa/Algiers',
+  place: 'Port de Ghazaouet',
+  refreshMs: 10 * 60 * 1000
+};
+const METEO_URL = 'https://api.open-meteo.com/v1/forecast?latitude=35.096&longitude=-1.860'
+  + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover'
+  + '&hourly=pressure_msl,precipitation,weather_code'
+  + '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,precipitation_sum,cloud_cover_mean'
+  + '&forecast_days=16&timezone=Africa%2FAlgiers';
+const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&longitude=-1.860'
+  + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
+  + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
+
+const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20.5, 18.5]; // sur 20 pts, jan→déc
+const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
+const WMO = {
+  0:['Ciel dégagé','i-sun'],1:['Plutôt dégagé','i-sun'],2:['Partiellement nuageux','i-cloud'],3:['Couvert','i-cloud'],
+  45:['Brouillard','i-cloud'],48:['Brouillard givrant','i-cloud'],
+  51:['Bruine légère','i-rain'],53:['Bruine','i-rain'],55:['Bruine forte','i-rain'],56:['Bruine verglaçante','i-rain'],57:['Bruine verglaçante','i-rain'],
+  61:['Pluie faible','i-rain'],63:['Pluie modérée','i-rain'],65:['Pluie forte','i-rain'],66:['Pluie verglaçante','i-rain'],67:['Pluie verglaçante','i-rain'],
+  71:['Neige faible','i-cloud'],73:['Neige','i-cloud'],75:['Neige forte','i-cloud'],77:['Grésil','i-cloud'],
+  80:['Averses faibles','i-rain'],81:['Averses','i-rain'],82:['Averses violentes','i-rain'],
+  85:['Averses de neige','i-cloud'],86:['Averses de neige','i-cloud'],
+  95:['Orage','i-rain'],96:['Orage + grêle','i-rain'],99:['Orage + grêle','i-rain']
+};
+const COMPASS_FR = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+
+/* ─────────── État global ─────────── */
+const state = {
+  meteo: null, marine: null, online: true,
+  units: { wind: 'kmh', temp: 'c' },
+  lastUpdate: null,
+  selectedDayISO: null,
+  calCursor: new Date(),
+  refreshTimer: null
+};
+
+/* ─────────── Utilitaires ─────────── */
+const $ = (s, ctx = document) => ctx.querySelector(s);
+const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const pad2 = n => String(n).padStart(2, '0');
+const parseLocal = s => new Date(s.length === 10 ? s + 'T12:00:00+01:00' : (s.length === 16 ? s + ':00+01:00' : s));
+const parseLocalISO = s => new Date(s + ':00+01:00');
+const dayKey = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const fmtTime = d => d ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: CONFIG.tz }) : '—';
+const fmtTimeFull = d => d ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: CONFIG.tz }) : '—';
+const fmtDateLong = d => d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: CONFIG.tz });
+const fmtDayShort = d => d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: CONFIG.tz });
+const degToCompass = deg => COMPASS_FR[Math.round(((deg % 360) + 360) % 360 / 22.5) % 16];
+const wmoDesc = code => (WMO[code] || ['Conditions variables', 'i-cloud'])[0];
+const wmoIcon = (code, isDay) => (code === 0 || code === 1) && !isDay ? 'i-moon' : (WMO[code] || ['', 'i-cloud'])[1];
+const toTemp = c => state.units.temp === 'f' ? Math.round(c * 9 / 5 + 32) : Math.round(c);
+const tempUnit = () => state.units.temp === 'f' ? '°F' : '°C';
+const windVal = kmh => state.units.wind === 'kn' ? (kmh / 1.852) : kmh;
+const windUnit = () => state.units.wind === 'kn' ? 'kn' : 'km/h';
+const fmtWind = kmh => `${windVal(kmh).toFixed(state.units.wind === 'kn' ? 1 : 0)} ${windUnit()}`;
+const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
+
+function wmoStorm(code) { return code >= 95; }
+
+function cacheRead() {
+  try {
+    const raw = localStorage.getItem('gcl-cache-v1');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Date.now() - parsed.ts > CONFIG.refreshMs) return { stale: true, ...parsed };
+    return parsed;
+  } catch { return null; }
+}
+function cacheWrite(meteo, marine) {
+  try { localStorage.setItem('gcl-cache-v1', JSON.stringify({ ts: Date.now(), meteo, marine })); } catch { /* quota */ }
+}
+
+/* ─────────── Données journalières agrégées (météo + mer) ─────────── */
+function dailyMap() {
+  const map = {};
+  const d = state.meteo?.daily;
+  if (d?.time) {
+    d.time.forEach((t, i) => {
+      map[t] = {
+        tMax: d.temperature_2m_max?.[i], tMin: d.temperature_2m_min?.[i],
+        code: d.weather_code?.[i], sunrise: parseLocalISO(d.sunrise[i]), sunset: parseLocalISO(d.sunset[i]),
+        windMax: d.wind_speed_10m_max?.[i], gustMax: d.wind_gusts_10m_max?.[i],
+        windDir: d.wind_direction_10m_dominant?.[i], precip: d.precipitation_sum?.[i],
+        cloud: d.cloud_cover_mean?.[i],
+        waveMax: state.marine?.daily?.wave_height_max?.[state.marine.daily.time.indexOf(t)] ?? null
+      };
+    });
+  }
+  return map;
+}
+
+/* Périodes solunaires d'un jour, avec minutes de nuit (00:00→lever, coucher→24:00) */
+function solunarForDay(date, sunrise, sunset) {
+  const periods = Astro.solunarPeriods(date, CONFIG.lat, CONFIG.lon);
+  const srMin = sunrise ? nearestMinutes(sunrise) : 400;
+  const ssMin = sunset ? nearestMinutes(sunset) : 1080;
+  const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1);
+  const relMin = t => Math.round((t - dayStart.getTime()) / 60000);
+  const out = periods.map(p => {
+    const a = clamp(relMin(Math.max(p.start.getTime(), dayStart.getTime())), 0, 1440);
+    const b = clamp(relMin(Math.min(p.end.getTime(), dayEnd.getTime())), 0, 1440);
+    const night = Math.max(0, Math.min(b, srMin) - a) + Math.max(0, b - Math.max(a, ssMin));
+    return { ...p, nightMin: Math.round(night) };
+  });
+  return out.sort((a, b) => a.center - b.center);
+}
+
+const isPrimeWindow = center => { const h = center.getHours(); return h >= 20 || h < 2; };
+
+/* ─────────── Indice Calamar™ ─────────── */
+function scoreFor(date, dm) {
+  const day = dm?.[dayKey(date)] || null;
+  const ph = Astro.phaseInfo(date);
+  const elong = ph.elong * Math.PI / 180;
+
+  // 1) Lune — 35 pts (syzygie = plein score)
+  const moon = 35 * (0.30 + 0.70 * Math.pow(Math.abs(Math.cos(elong)), 1.8));
+
+  // 2) Solunaire — 25 pts (recouvrement nocturne + fenêtre prime 20h→02h)
+  const periods = solunarForDay(date, day?.sunrise, day?.sunset);
+  let sol = 0;
+  for (const p of periods) {
+    if (p.type === 'major') sol += Math.min(8, p.nightMin / 15);
+    else sol += Math.min(2, p.nightMin / 30);
+  }
+  if (periods.some(p => p.type === 'major' && p.nightMin > 15 && isPrimeWindow(p.center))) sol += 5;
+  sol = Math.min(25, sol);
+
+  // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
+  const season = SEASON_20[date.getMonth()];
+
+  // 4) Mer — 12 pts (houle < 0,5 m pénalisée dès 0,6 m ; eau idéale 13–20 °C)
+  let meteo = 8;
+  const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
+  if (wave !== null && wave !== undefined) {
+    meteo = wave < 0.3 ? 12 : wave < 0.6 ? 10 : wave < 1.0 ? 7 : wave < 1.5 ? 4 : 1;
+  }
+  const sst = state.marine?.current?.sea_surface_temperature ?? null;
+  if (sst !== null && sst !== undefined) {
+    if (sst < 13) meteo -= 3; else if (sst > 20.5) meteo -= 1.5;
+  }
+  if (day?.windMax != null && day.windMax > 30) meteo -= 2;
+  meteo = clamp(meteo, 0, 12);
+
+  // 5) Pression — 8 pts
+  const presVal = state.meteo?.current?.pressure_msl ?? null;
+  let pres = 6;
+  if (presVal !== null) pres = presVal > 1022 ? 8 : presVal > 1016 ? 7 : presVal >= 1010 ? 6 : presVal >= 1000 ? 3 : 1;
+
+  const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
+  const total = clamp(Math.round(moon + sol + season + meteo + pres), 0, 100);
+  return { total, parts, phase: ph, periods, day };
+}
+
+const ratingOf = s => s < 40 ? { label: 'Faible', level: 'low' }
+  : s < 58 ? { label: 'Correct', level: 'mid' }
+  : s < 70 ? { label: 'Bon', level: 'good' }
+  : s < 85 ? { label: 'Excellent', level: 'great' }
+  : { label: 'Exceptionnel', level: 'epic' };
+
+const bestWindowFor = periods => {
+  const nightMajors = periods.filter(p => p.type === 'major' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
+  const nightMinors = periods.filter(p => p.type === 'minor' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
+  const pick = nightMajors[0] || nightMinors[0] || null;
+  if (!pick) return null;
+  return { start: fmtTime(pick.start), end: fmtTime(pick.end), type: pick.type, center: pick.center, night: pick.nightMin };
+};
+
+/* ─────────── Rendu : horloge sidebar ─────────── */
+function renderClock() {
+  const now = new Date();
+  $('#sideClock').textContent = fmtTimeFull(now);
+  $('#sideDate').textContent = fmtDateLong(now);
+}
+
+/* ─────────── Rendu : jauge ─────────── */
+let gaugeAnim = { from: 0, to: 0, start: 0 };
+function drawGauge(score) {
+  const canvas = $('#gaugeCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H - 34, r = Math.min(W, H * 1.35) / 2 - 16;
+  const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25; // 270°
+  // Piste
+  ctx.lineWidth = 20; ctx.lineCap = 'round';
+  ctx.strokeStyle = 'rgba(255,255,255,.07)';
+  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a1); ctx.stroke();
+  // Arc valeur (dégradé)
+  const frac = clamp(score, 0, 100) / 100;
+  const grad = ctx.createLinearGradient(0, cy, W, cy);
+  grad.addColorStop(0, '#ff7a52'); grad.addColorStop(0.35, '#ffc247'); grad.addColorStop(0.68, '#34c6dd'); grad.addColorStop(1, '#f0b429');
+  ctx.strokeStyle = grad;
+  ctx.shadowColor = 'rgba(240,180,41,.45)'; ctx.shadowBlur = 18;
+  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a0 + (a1 - a0) * frac); ctx.stroke();
+  ctx.shadowBlur = 0;
+  // Graduations
+  ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 2;
+  for (let i = 0; i <= 10; i++) {
+    const a = a0 + (a1 - a0) * (i / 10);
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a) * (r - 14), cy + Math.sin(a) * (r - 14));
+    ctx.lineTo(cx + Math.cos(a) * (r - 22), cy + Math.sin(a) * (r - 22));
+    ctx.stroke();
+  }
+  // Aiguille
+  const na = a0 + (a1 - a0) * frac;
+  ctx.strokeStyle = '#f4f8fc'; ctx.lineWidth = 3.4;
+  ctx.beginPath(); ctx.moveTo(cx + Math.cos(na) * 18, cy + Math.sin(na) * 18); ctx.lineTo(cx + Math.cos(na) * (r - 30), cy + Math.sin(na) * (r - 30)); ctx.stroke();
+  ctx.fillStyle = '#f0b429';
+  ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#0a1f33'; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
+}
+function animateGauge(target) {
+  gaugeAnim = { from: gaugeAnim.to ?? 0, to: target, start: performance.now() };
+  const dur = 900;
+  function frame(t) {
+    const k = clamp((t - gaugeAnim.start) / dur, 0, 1);
+    const e = 1 - Math.pow(2, -10 * k);
+    const val = gaugeAnim.from + (gaugeAnim.to - gaugeAnim.from) * (k === 1 ? 1 : e);
+    drawGauge(val);
+    $('#gaugeValue').textContent = Math.round(val);
+    if (k < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function renderFactors(parts) {
+  const max = { moon: 35, sol: 25, season: 20, meteo: 12, pres: 8 };
+  const labels = { moon: 'Lune', sol: 'Solunaire', season: 'Saison', meteo: 'Mer', pres: 'Pression' };
+  $('#factorList').innerHTML = Object.keys(max).map(k => `
+    <li class="factor"><small>${labels[k]}</small>
+      <div class="factor-track"><div class="factor-fill" style="width:${(parts[k] / max[k]) * 100}%"></div></div>
+      <span class="factor-val">${parts[k]}/${max[k]}</span></li>`).join('');
+}
+
+/* ─────────── Rendu : lune (canvas) ─────────── */
+function drawMoonOn(cv, date, glow = true) {
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height, cx = W / 2, cy = H / 2, r = Math.min(W, H) / 2 - 4;
+  const ph = Astro.phaseInfo(date);
+  ctx.clearRect(0, 0, W, H);
+  if (glow) {
+    const g = ctx.createRadialGradient(cx, cy, r * 0.4, cx, cy, r * 1.6);
+    g.addColorStop(0, 'rgba(240,235,215,.34)'); g.addColorStop(1, 'rgba(240,235,215,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  // Disque sombre
+  const darkGrad = ctx.createRadialGradient(cx - r * .3, cy - r * .3, r * .1, cx, cy, r);
+  darkGrad.addColorStop(0, '#2a3648'); darkGrad.addColorStop(1, '#161f2c');
+  ctx.fillStyle = darkGrad;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  // Partie éclairée
+  const k = ph.illum, cosI = 1 - 2 * k;
+  const waxing = ph.waxing;
+  const rx = Math.abs(cosI) * r;
+  const lightGrad = ctx.createRadialGradient(cx + (waxing ? -r * .25 : r * .25), cy - r * .25, r * .1, cx, cy, r * 1.25);
+  lightGrad.addColorStop(0, '#fbf7ea'); lightGrad.addColorStop(.55, '#ddd8c8'); lightGrad.addColorStop(1, '#b9b4a4');
+  ctx.fillStyle = lightGrad;
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+  // Moitié de base du côté éclairé
+  ctx.beginPath();
+  if (waxing) ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2); else ctx.arc(cx, cy, r, Math.PI / 2, Math.PI * 1.5);
+  ctx.fill();
+  // Ellipse terminateur
+  ctx.beginPath();
+  if (k < 0.5) {
+    // croissant : retirer une demi-ellipse du côté éclairé
+    ctx.fillStyle = darkGrad;
+    if (waxing) ctx.ellipse(cx, cy, rx, r, 0, -Math.PI / 2, Math.PI / 2);
+    else ctx.ellipse(cx, cy, rx, r, 0, Math.PI / 2, Math.PI * 1.5);
+    ctx.fill();
+  } else {
+    // gibbeuse : ajouter une demi-ellipse du côté opposé
+    ctx.fillStyle = lightGrad;
+    if (waxing) ctx.ellipse(cx, cy, rx, r, 0, Math.PI / 2, Math.PI * 1.5);
+    else ctx.ellipse(cx, cy, rx, r, 0, -Math.PI / 2, Math.PI / 2);
+    ctx.fill();
+  }
+  // "Mers" lunaires (subtil)
+  ctx.fillStyle = 'rgba(90,95,110,.35)';
+  const maria = [[-0.32, -0.15, .16], [0.05, 0.1, .12], [-0.1, 0.38, .09], [0.28, -0.35, .07]];
+  for (const [mx, my, mr] of maria) { ctx.beginPath(); ctx.ellipse(cx + mx * r, cy + my * r, mr * r * 1.4, mr * r, 0.4, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+  // Limb
+  ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(cx, cy, r - 0.6, 0, Math.PI * 2); ctx.stroke();
+}
+
+function renderMoonCard(date, dayData) {
+  drawMoonOn($('#moonCanvas'), date, true);
+  const ph = Astro.phaseInfo(date);
+  $('#moonPhaseName').textContent = ph.name;
+  $('#moonWaxChip').textContent = ph.waxing ? 'Croissante ↗' : 'Décroissante ↘';
+  $('#moonIllum').textContent = Math.round(ph.illum * 100);
+  $('#moonAge').textContent = `${ph.age.toFixed(1)} j`;
+  $('#moonElong').textContent = `${Math.round(ph.elong)}°`;
+  const md = Astro.moonDay(date, CONFIG.lat, CONFIG.lon);
+  const rise = md.events.find(e => e.dir === 'rise');
+  const set = [...md.events].reverse().find(e => e.dir === 'set');
+  $('#moonRise').textContent = rise ? fmtTime(rise.time) : '—';
+  $('#moonSet').textContent = set ? fmtTime(set.time) : '—';
+  $('#moonTransit').textContent = fmtTime(md.maxAlt);
+  const coef = Math.round(45 + 50 * Math.pow(Math.abs(Math.cos(ph.elong * Math.PI / 180)), 1.3));
+  $('#tideCoef').textContent = `≈ ${coef}`;
+  const next = Astro.daysToNextSyzygy(date);
+  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong> — ${next.days < 1 ? 'cette nuit' : next.days < 2 ? 'demain' : 'dans ' + Math.round(next.days) + ' jours'}.`;
+}
+
+/* ─────────── Rendu : météo ─────────── */
+function renderMeteo(dm) {
+  const m = state.meteo, cur = m?.current;
+  const today = dm[dayKey(new Date())];
+  const isDay = cur?.is_day !== 0;
+  $('#wxDesc').textContent = cur ? wmoDesc(cur.weather_code) : 'Données indisponibles';
+  $('#wxIcon').innerHTML = `<use href="#${cur ? wmoIcon(cur.weather_code, isDay) : 'i-cloud'}"/>`;
+  $('#wxTemp').textContent = cur ? toTemp(cur.temperature_2m) : '–';
+  $('#wxUnit').textContent = tempUnit();
+  $('#wxFeel').textContent = cur ? `${toTemp(cur.apparent_temperature)}${tempUnit()}` : '–';
+  $('#wxMinMax').textContent = today ? `${toTemp(today.tMin)}° / ${toTemp(today.tMax)}°` : '';
+  $('#wxWind').textContent = cur ? fmtWind(cur.wind_speed_10m) : '–';
+  $('#wxWindDir').textContent = cur ? degToCompass(cur.wind_direction_10m) : '';
+  $('#windArrow').textContent = '↑';
+  $('#windArrow').style.transform = cur ? `rotate(${(cur.wind_direction_10m + 180) % 360}deg)` : 'none';
+  $('#wxGusts').textContent = cur ? fmtWind(cur.wind_gusts_10m) : '–';
+  $('#wxHumidity').textContent = cur ? `${Math.round(cur.relative_humidity_2m)} %` : '–';
+  $('#wxPressure').textContent = cur ? `${Math.round(cur.pressure_msl)} hPa` : '–';
+  // Tendance 3 h
+  let trend = '→';
+  const hourly = m?.hourly?.pressure_msl, times = m?.hourly?.time;
+  if (hourly && times) {
+    const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
+    const nowIdx = idx > 0 ? idx - 1 : 0;
+    const prevIdx = Math.max(0, nowIdx - 3);
+    const delta = hourly[nowIdx] - hourly[prevIdx];
+    trend = delta > 0.8 ? '↗ hausse' : delta < -0.8 ? '↘ baisse' : '→ stable';
+  }
+  $('#wxPressureTrend').textContent = trend;
+  $('#wxClouds').textContent = cur ? `${Math.round(cur.cloud_cover)} %` : '–';
+  $('#wxPrecip').textContent = today?.precip != null ? `${today.precip.toFixed(1)} mm` : '–';
+}
+
+/* ─────────── Rendu : mer ─────────── */
+function renderMer() {
+  const cur = state.marine?.current;
+  if (!cur) {
+    $('#waveHeight').textContent = '–';
+    $('#seaNote').textContent = 'Données marines indisponibles (hors ligne ?) — Indice calculé sur lune + saison.';
+    return;
+  }
+  $('#waveHeight').textContent = cur.wave_height.toFixed(2);
+  $('#waveDir').textContent = `${degToCompass(cur.wave_direction)} ${Math.round(cur.wave_direction)}°`;
+  $('#waveArrow').textContent = '↑';
+  $('#waveArrow').style.transform = `rotate(${(cur.wave_direction + 180) % 360}deg)`;
+  $('#wavePeriod').textContent = `${cur.wave_period.toFixed(1)} s`;
+  $('#swellHeight').textContent = `${cur.swell_wave_height.toFixed(2)} m`;
+  $('#waveBar').style.left = `${clamp(cur.wave_height / 1.5, 0, 1) * 100}%`;
+  const sst = cur.sea_surface_temperature;
+  $('#sstValue').textContent = sst.toFixed(1);
+  const verdict = sst < 13 ? 'Eau froide' : sst <= 20 ? 'Optimum calamar' : 'Un peu chaude';
+  $('#sstVerdict').textContent = verdict;
+  $('#sstVerdict').className = 'chip ' + (sst < 13 || sst > 20.5 ? 'chip-ghost' : 'chip-sea');
+  const note = cur.wave_height < 0.3 ? 'Mer belle à légère — conditions idéales pour la turlutte comme pour le lamparo.'
+    : cur.wave_height < 0.6 ? 'Petite agitation — agréable en dérive, lamparo déconseillé si le vent forcit.'
+    : cur.wave_height < 1.0 ? 'Mer agitée — sorties en barque sportives ; privilégiez la jetée sous le vent.'
+    : 'Mer formée — restez à quai. La sécurité prime sur la pêche.';
+  $('#seaNote').textContent = note;
+}
+
+/* ─────────── Rendu : solunaire ─────────── */
+function renderSolunaire(date, periods, rating) {
+  $('#solRating').textContent = `Solunaire ${rating}/100`;
+  const items = periods.map(p => {
+    const major = p.type === 'major';
+    const tag = p.nightMin > 0 ? `<span class="sol-tag sol-tag-night">Nuit · ${p.nightMin} min</span>` : `<span class="sol-tag sol-tag-day">Jour</span>`;
+    return `<li class="sol-item ${major ? 'sol-item-major' : ''}">
+      <span class="sol-badge ${major ? 'sol-badge-major' : 'sol-badge-minor'}">${major ? 'MAJEURE' : 'MINEURE'}</span>
+      <span class="sol-time">${fmtTime(p.start)} – ${fmtTime(p.end)}</span>
+      ${tag}</li>`;
+  });
+  $('#solList').innerHTML = items.join('') || '<li class="sol-item is-skeleton">Aucune période</li>';
+}
+
+/* ─────────── Rendu : recommandations ─────────── */
+function renderReco(date, score, dm) {
+  const ph = Astro.phaseInfo(date);
+  const today = dm[dayKey(date)];
+  const cur = state.meteo?.current;
+  const wave = state.marine?.current?.wave_height;
+  const recos = [];
+  const bw = bestWindowFor(score.periods);
+  if (bw && bw.night > 0) {
+    recos.push({ cls: 'reco-gold', icon: 'i-squid', html: `<strong>Sortez ${bw.type === 'major' ? 'ce soir' : 'pour la mineure'} :</strong> fenêtre ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'}, ${bw.night} min de nuit).` });
+  } else {
+    recos.push({ cls: '', icon: 'i-clock', html: `<strong>Pas de période majeure dans la nuit</strong> — tentez l'aube ou reportez-vous sur les périodes du calendrier.` });
+  }
+  // Lune
+  const cosAbs = Math.abs(Math.cos(ph.elong * Math.PI / 180));
+  if (cosAbs > 0.85) recos.push({ cls: 'reco-gold', icon: 'i-moon', html: `<strong>${ph.name}</strong> — forte attraction solunaire (coefficient max). Les calamars chassent activement.` });
+  else if (cosAbs > 0.5) recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (${Math.round(ph.illum * 100)} % éclairée) — activité intermédiaire.` });
+  else recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (quadrature) — activité réduite ; misez sur les heures de culmination.` });
+  // Météo / mer
+  if (cur && wmoStorm(cur.weather_code)) recos.push({ cls: 'reco-warn', icon: 'i-alert', html: `<strong>Orage en cours</strong> — n'allez pas en mer. La pêche attendra.` });
+  else if (today && today.code >= 95) recos.push({ cls: 'reco-warn', icon: 'i-alert', html: `<strong>Orages annoncés aujourd'hui</strong> — surveillez le bulletin ONM avant de partir.` });
+  else if (wave != null && wave >= 0.6) recos.push({ cls: 'reco-warn', icon: 'i-waves', html: `<strong>Houle ${wave.toFixed(2)} m</strong> — préférez la digue abritée ou reportez la sortie en barque.` });
+  else if (cur && cur.wind_speed_10m > 25) recos.push({ cls: 'reco-warn', icon: 'i-wind', html: `<strong>Vent ${fmtWind(cur.wind_speed_10m)}</strong> — dérive difficile, lin­gue lourde conseillée.` });
+  // Saison / eau
+  const m = date.getMonth();
+  if (m >= 9 || m <= 1) recos.push({ cls: '', icon: 'i-check', html: `<strong>Pleine saison</strong> (oct.–fév.) — les gros sujets se rapprochent de la côte ; privilégiez 20–60 m.` });
+  else if (m >= 5 && m <= 8) recos.push({ cls: '', icon: 'i-info', html: `<strong>Été : petites tailles</strong> — turlutte fine (n° 1.5–2.5) et pêche surtout à l'aube/au crépuscule.` });
+  // Lumière
+  if (ph.illum < 0.35) recos.push({ cls: '', icon: 'i-sun', html: `<strong>Nuit noire</strong> — le lamparo (projecteur) sera décisif ; poissonnez sous le halo.` });
+  $('#recoList').innerHTML = recos.slice(0, 5).map(r => `<li class="reco-item ${r.cls}"><svg class="ic"><use href="#${r.icon}"/></svg><span>${r.html}</span></li>`).join('');
+}
+
+/* ─────────── Rendu : alerte orage ─────────── */
+function renderStormAlert(dm) {
+  const codes = [];
+  if (state.meteo?.current) codes.push(state.meteo.current.weather_code);
+  for (const k of Object.keys(dm)) codes.push(dm[k].code);
+  const storm = codes.find(c => c >= 95);
+  const gust = state.meteo?.current?.wind_gusts_10m;
+  const strip = $('#stormAlert');
+  if (storm) {
+    strip.classList.remove('is-hidden');
+    $('#stormAlertText').textContent = 'Alerte orage — mer dangereuse. Sortie en mer déconseillée ; restez à l’abri et sécurisez le matériel.';
+  } else if (gust != null && gust > 60) {
+    strip.classList.remove('is-hidden');
+    $('#stormAlertText').textContent = `Rafales ${fmtWind(gust)} — navigation délicate. Évitez la digue exposée nord-ouest.`;
+  } else {
+    strip.classList.add('is-hidden');
+  }
+}
+
+/* ─────────── Rendu : courbe d'activité 24 h ─────────── */
+function renderActivityChart(date, periods, today) {
+  const canvas = $('#activityChart');
+  const wrap = canvas.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const sr = today?.sunrise, ss = today?.sunset;
+  const srMin = sr ? nearestMinutes(sr) : 460, ssMin = ss ? nearestMinutes(ss) : 1080;
+  const xOf = min => (min / 1440) * (W - 44) + 34;
+  const yOf = v => H - 30 - v * (H - 62);
+
+  // Zones de nuit
+  ctx.fillStyle = 'rgba(110,130,255,.09)';
+  ctx.fillRect(xOf(0), 8, xOf(srMin) - xOf(0), H - 38);
+  ctx.fillRect(xOf(ssMin), 8, xOf(1440) - xOf(ssMin), H - 38);
+
+  // Grille horizontale
+  ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
+  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.font = '9px JetBrains Mono, monospace';
+  for (const g of [0.25, 0.5, 0.75]) {
+    ctx.beginPath(); ctx.moveTo(xOf(0), yOf(g)); ctx.lineTo(xOf(1440), yOf(g)); ctx.stroke();
+    ctx.fillText(String(Math.round(g * 100)), 4, yOf(g) + 3);
+  }
+  // Axe X
+  ctx.fillStyle = 'rgba(255,255,255,.4)';
+  for (let h = 0; h <= 24; h += 4) ctx.fillText(`${pad2(h)}h`, xOf(h * 60) - 8, H - 12);
+
+  // Lever / coucher (pointillés)
+  ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4;
+  ctx.strokeStyle = 'rgba(255,217,112,.55)';
+  ctx.beginPath(); ctx.moveTo(xOf(srMin), 8); ctx.lineTo(xOf(srMin), H - 30); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xOf(ssMin), 8); ctx.lineTo(xOf(ssMin), H - 30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,217,112,.85)'; ctx.font = '8px JetBrains Mono, monospace';
+  if (sr) ctx.fillText(`↑ ${fmtTime(sr)}`, xOf(srMin) + 4, 18);
+  if (ss) ctx.fillText(`↓ ${fmtTime(ss)}`, xOf(ssMin) + 4, 18);
+
+  // Courbe d'activité (facteur nuit plus fort)
+  const nightFactor = min => (min < srMin || min >= ssMin) ? 1 : 0.42;
+  const pts = [];
+  for (let min = 0; min <= 1440; min += 6) {
+    let a = 0.14;
+    for (const p of periods) {
+      const cMin = nearestMinutes(p.center);
+      const sigma = p.type === 'major' ? 58 : 46;
+      const amp = p.type === 'major' ? 1.0 : 0.55;
+      a += amp * Math.exp(-((min - cMin) ** 2) / (2 * sigma * sigma));
+    }
+    pts.push({ min, v: clamp(a * nightFactor(min), 0, 1.15) / 1.15 });
+  }
+  // Remplissage
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, 'rgba(52,198,221,.45)'); grad.addColorStop(1, 'rgba(52,198,221,.02)');
+  ctx.beginPath(); ctx.moveTo(xOf(0), yOf(0));
+  for (const p of pts) ctx.lineTo(xOf(p.min), yOf(p.v));
+  ctx.lineTo(xOf(1440), yOf(0)); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+  // Ligne
+  ctx.beginPath();
+  pts.forEach((p, i) => i ? ctx.lineTo(xOf(p.min), yOf(p.v)) : ctx.moveTo(xOf(p.min), yOf(p.v)));
+  ctx.strokeStyle = '#5ce0f2'; ctx.lineWidth = 2.2;
+  ctx.shadowColor = 'rgba(92,224,242,.6)'; ctx.shadowBlur = 8; ctx.stroke(); ctx.shadowBlur = 0;
+
+  // Marqueur "maintenant"
+  const now = new Date();
+  if (dayKey(now) === dayKey(date)) {
+    const m = nearestMinutes(now);
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = '#f0b429'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xOf(m), 8); ctx.lineTo(xOf(m), H - 30); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#f0b429'; ctx.font = 'bold 8px JetBrains Mono, monospace';
+    ctx.fillText('MAINTENANT', clamp(xOf(m) + 4, 4, W - 70), H - 34);
+  }
+  // Pied : meilleure fenêtre
+  const bw = bestWindowFor(periods);
+  $('#chartFoot').innerHTML = bw
+    ? `<span>Fenêtre idéale : <b>${bw.start} → ${bw.end}</b></span><span>· type : <b>${bw.type === 'major' ? 'MAJEURE' : 'MINEURE'}</b></span><span>· obscurité : <b>${bw.night} min</b></span>`
+    : '<span>Aucune fenêtre de nuit — voir le calendrier pour les prochains jours.</span>';
+}
+
+/* ─────────── Rendu : grille 14 jours ─────────── */
+function bandOf(s) { return s < 40 ? 'low' : s < 58 ? 'mid' : s < 70 ? 'good' : s < 85 ? 'great' : 'epic'; }
+const scoreColor = s => s < 40 ? '#ff9a76' : s < 58 ? '#ffd98a' : s < 70 ? '#8df0b4' : s < 85 ? '#7ce7f4' : '#ffe9a8';
+
+function renderForecast(dm) {
+  const grid = $('#forecastGrid');
+  const today = new Date();
+  const cards = [];
+  for (let i = 0; i < 14; i++) {
+    const d = new Date(today); d.setDate(d.getDate() + i);
+    const sc = scoreFor(d, dm);
+    const day = dm[dayKey(d)];
+    const bw = bestWindowFor(sc.periods);
+    cards.push({ d, sc, day, bw, wave: day?.waveMax ?? null });
+  }
+  grid.innerHTML = cards.map(({ d, sc, day, bw, wave }, i) => {
+    const todayTag = i === 0 ? '<span class="f-tag">AUJ.</span>' : '';
+    const tMax = day ? `${toTemp(day.tMax)}°` : '–';
+    const tMin = day ? `${toTemp(day.tMin)}°` : '–';
+    const waveTxt = wave != null ? `vagues ${wave.toFixed(2)} m` : 'vagues –';
+    const windTxt = day?.windMax != null ? fmtWind(day.windMax) : '';
+    const gustoTxt = day?.gustMax != null ? `raf. ${fmtWind(day.gustMax)}` : '';
+    const win = bw ? `<span>${bw.start} → ${bw.end}</span>` : '<em>Pas de fenêtre de nuit</em>';
+    return `<button class="f-card ${i === 0 ? 'is-today' : ''} ${state.selectedDayISO === dayKey(d) ? 'is-selected' : ''}" data-day="${dayKey(d)}" aria-label="${fmtDayShort(d)} : indice ${sc.total} sur 100">
+      ${todayTag}
+      <div class="f-day"><b>${d.toLocaleDateString('fr-FR', { weekday: 'short' })}</b><span>${d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span></div>
+      <div class="f-moon-row"><canvas width="88" height="88" data-moon="${d.toISOString()}"></canvas>
+        <div class="f-moon-meta"><small>${sc.phase.name}</small><span>${Math.round(sc.phase.illum * 100)}% éclairée</span></div>
+      </div>
+      <div class="f-score"><b style="color:${scoreColor(sc.total)}">${sc.total}</b><small>/100 · ${ratingOf(sc.total).label}</small></div>
+      <div class="f-bar"><i style="width:${sc.total}%"></i></div>
+      <div class="f-rows"><div><svg class="ic"><use href="#i-thermo"/></svg>${tMin} / ${tMax}</div><div><svg class="ic"><use href="#i-waves"/></svg>${waveTxt}</div><div><svg class="ic"><use href="#i-wind"/></svg>${windTxt} ${gustoTxt}</div></div>
+      <div class="f-window">${bw ? 'Fenêtre : ' : ''}${win}</div>
+    </button>`;
+  }).join('');
+  $$('canvas[data-moon]', grid).forEach(cv => drawMoonOn(cv, new Date(cv.dataset.moon), false));
+  $$('.f-card', grid).forEach(card => card.addEventListener('click', () => {
+    state.selectedDayISO = card.dataset.day;
+    renderForecast(dm);
+    renderDayDetail(dm);
+  }));
+}
+
+function renderDayDetail(dm) {
+  const box = $('#dayDetail');
+  const iso = state.selectedDayISO;
+  if (!iso) { box.classList.add('is-hidden'); return; }
+  const d = new Date(iso + 'T12:00:00+01:00');
+  const sc = scoreFor(d, dm);
+  const day = dm[iso];
+  const rating = ratingOf(sc.total);
+  const max = { moon: 35, sol: 25, season: 20, meteo: 12, pres: 8 };
+  const labels = { moon: 'Lune', sol: 'Périodes solunaires', season: 'Saison', meteo: 'Mer & vent', pres: 'Pression' };
+  const rows = Object.keys(max).map(k => `
+    <div class="factor" style="grid-template-columns:130px 1fr 44px"><small>${labels[k]}</small>
+      <div class="factor-track"><div class="factor-fill" style="width:${(sc.parts[k] / max[k]) * 100}%"></div></div>
+      <span class="factor-val">${sc.parts[k]}/${max[k]}</span></div>`).join('');
+  const periodsHtml = sc.periods.map(p => `
+    <li class="sol-item ${p.type === 'major' ? 'sol-item-major' : ''}">
+      <span class="sol-badge ${p.type === 'major' ? 'sol-badge-major' : 'sol-badge-minor'}">${p.type === 'major' ? 'MAJEURE' : 'MINEURE'}</span>
+      <span class="sol-time">${fmtTime(p.start)} – ${fmtTime(p.end)}</span>
+      ${p.nightMin > 0 ? `<span class="sol-tag sol-tag-night">Nuit · ${p.nightMin} min</span>` : '<span class="sol-tag sol-tag-day">Jour</span>'}
+    </li>`).join('');
+  const bw = bestWindowFor(sc.periods);
+  box.classList.remove('is-hidden');
+  box.innerHTML = `
+    <div class="day-detail-head">
+      <div>
+        <span class="card-kicker">Fiche journée</span>
+        <h3>${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: CONFIG.tz })}</h3>
+        <p class="view-sub" style="margin-top:4px">${sc.phase.name} · ${Math.round(sc.phase.illum * 100)} % éclairée · âge ${sc.phase.age.toFixed(1)} j</p>
+      </div>
+      <div class="rating-pill" data-level="${rating.level}" style="font-size:20px;padding:12px 20px">${sc.total}<small style="font-size:12px;opacity:.7">/100</small> · ${rating.label}</div>
+    </div>
+    <div class="day-detail-grid">
+      <div class="dd-block"><h4>Décomposition</h4><div class="factors">${rows}</div></div>
+      <div class="dd-block"><h4>Périodes de la journée</h4><ol class="sol-list" style="margin-top:2px">${periodsHtml}</ol></div>
+      <div class="dd-block"><h4>Conditions prévues</h4>
+        <ul class="f-rows" style="font-size:11px;gap:7px;list-style:none;padding:0">
+          <li><svg class="ic"><use href="#i-thermo"/></svg> Min / max : <strong style="color:#fff">${day ? `${toTemp(day.tMin)} / ${toTemp(day.tMax)} ${tempUnit()}` : '—'}</strong></li>
+          <li><svg class="ic"><use href="#i-waves"/></svg> Vagues max : <strong style="color:#fff">${day?.waveMax != null ? day.waveMax.toFixed(2) + ' m' : '—'}</strong></li>
+          <li><svg class="ic"><use href="#i-wind"/></svg> Vent max : <strong style="color:#fff">${day?.windMax != null ? fmtWind(day.windMax) : '—'}</strong> · raf. ${day?.gustMax != null ? fmtWind(day.gustMax) : '—'}</li>
+          <li><svg class="ic"><use href="#i-rain"/></svg> Précipitations : <strong style="color:#fff">${day?.precip != null ? day.precip.toFixed(1) + ' mm' : '—'}</strong></li>
+          <li><svg class="ic"><use href="#i-sunrise"/></svg> Lever ${day?.sunrise ? fmtTime(day.sunrise) : '—'} · Coucher ${day?.sunset ? fmtTime(day.sunset) : '—'}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="dd-actions">
+      <button class="btn btn-gold" id="btnCopyFiche"><svg class="ic"><use href="#i-copy"/></svg> Copier la fiche texte</button>
+      <button class="btn btn-ghost" id="btnCloseDetail"><svg class="ic"><use href="#i-x"/></svg> Fermer</button>
+    </div>`;
+  $('#btnCloseDetail').addEventListener('click', () => { state.selectedDayISO = null; box.classList.add('is-hidden'); renderForecast(dm); });
+  $('#btnCopyFiche').addEventListener('click', async () => {
+    const txt = [
+      `GHAZAOUET CALAMAR LIVE — ${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: CONFIG.tz })}`,
+      `Indice Calamar : ${sc.total}/100 (${rating.label})`,
+      `Lune : ${sc.phase.name}, ${Math.round(sc.phase.illum * 100)} % éclairée`,
+      bw ? `Fenêtre de nuit : ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'})` : 'Pas de fenêtre de nuit',
+      day ? `Météo : ${toTemp(day.tMin)}/${toTemp(day.tMax)} °C · pluie ${day.precip?.toFixed(1) ?? 0} mm · vent max ${day.windMax ?? '?'} km/h` : '',
+      'Port de Ghazaouet · 35.096°N 1.860°W'
+    ].join('\n');
+    try {
+      await navigator.clipboard.writeText(txt);
+      const b = $('#btnCopyFiche');
+      b.innerHTML = '<svg class="ic"><use href="#i-check"/></svg> Copié !';
+      setTimeout(() => { b.innerHTML = '<svg class="ic"><use href="#i-copy"/></svg> Copier la fiche texte'; }, 1800);
+    } catch { /* presse-papier indisponible */ }
+  });
+}
+
+/* ─────────── Rendu : calendrier du mois ─────────── */
+function syzygiesOfMonth(year, month) {
+  const out = [];
+  const days = new Date(year, month + 1, 0).getDate();
+  let prevIllum = null, prevAge = null;
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(year, month, d, 12, 0, 0);
+    const ph = Astro.phaseInfo(date);
+    if (ph.illum > 0.985 && prevIllum !== null && prevIllum <= ph.illum) out.push({ type: 'Pleine lune', date });
+    if (ph.age < 1.1 && prevAge !== null && prevAge > ph.age) out.push({ type: 'Nouvelle lune', date });
+    prevIllum = ph.illum; prevAge = ph.age;
+  }
+  return out;
+}
+
+function renderCalendar(dm) {
+  const cursor = state.calCursor;
+  const year = cursor.getFullYear(), month = cursor.getMonth();
+  $('#calMonthTitle').textContent = MONTH_FR[month].charAt(0).toUpperCase() + MONTH_FR[month].slice(1) + ' ' + year;
+  const grid = $('#calGrid');
+  const offset = (new Date(year, month, 1).getDay() + 6) % 7; // lundi = 0
+  const daysIn = new Date(year, month + 1, 0).getDate();
+  const cells = [];
+  const todayKey = dayKey(new Date());
+  const scores = [];
+  for (let i = 0; i < 42; i++) {
+    const dayNum = i - offset + 1;
+    if (dayNum < 1 || dayNum > daysIn) { cells.push('<div class="cal-cell is-out" aria-hidden="true"></div>'); continue; }
+    const d = new Date(year, month, dayNum, 12, 0, 0);
+    const iso = dayKey(d);
+    const inForecast = dm[iso] !== undefined;
+    const sc = scoreFor(d, dm);
+    scores.push({ d, sc, inForecast });
+    const band = bandOf(sc.total);
+    cells.push(`<div class="cal-cell ${iso === todayKey ? 'is-today' : ''}" data-band="${band}" role="button" tabindex="0" data-day="${iso}" aria-label="${dayNum} ${MONTH_FR[month]} : indice ${sc.total}">
+      <div class="cal-daynum"><span>${dayNum}</span>${inForecast ? '' : '<em>*</em>'}</div>
+      <canvas width="68" height="68" data-moon="${d.toISOString()}"></canvas>
+      <div class="cal-score" style="color:${scoreColor(sc.total)}">${sc.total}<small>${ratingOf(sc.total).label}</small></div>
+    </div>`);
+  }
+  grid.innerHTML = cells.join('');
+  $$('canvas[data-moon]', grid).forEach(cv => drawMoonOn(cv, new Date(cv.dataset.moon), false));
+  $$('.cal-cell[data-day]', grid).forEach(cell => {
+    const open = () => {
+      state.selectedDayISO = cell.dataset.day;
+      activateView('previsions');
+      renderForecast(dm);
+      renderDayDetail(dm);
+      $('#dayDetail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+    cell.addEventListener('click', open);
+    cell.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  const top = [...scores].sort((a, b) => b.sc.total - a.sc.total).slice(0, 5);
+  $('#topDaysList').innerHTML = top.map(({ d, sc, inForecast }, i) => `<li><span class="rank">${i + 1}.</span><span>${d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}${inForecast ? '' : ' *'}</span><b>${sc.total}</b></li>`).join('');
+  const syz = syzygiesOfMonth(year, month);
+  $('#syzygyList').innerHTML = syz.length
+    ? syz.map(s => `<li><svg class="ic"><use href="#i-moon"/></svg><span><strong>${s.type}</strong><small>${s.date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</small></span></li>`).join('')
+    : '<li>Aucune syzygie détectée ce mois-ci.</li>';
+}
+
+/* ─────────── Rendu : barres saisonnières ─────────── */
+function renderSeasonBars() {
+  const max = Math.max(...SEASON_20);
+  const topMonths = [9, 10, 0, 1, 11]; // oct, nov, jan, fév, déc
+  $('#seasonBars').innerHTML = SEASON_20.map((v, i) => {
+    const top = topMonths.includes(i);
+    return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
+  }).join('');
+  requestAnimationFrame(() => $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; }));
+}
+
+/* ─────────── Rendu : FAQ ─────────── */
+const FAQ = [
+  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Les nuits de nouvelle et de pleine lune (syzygie, ± 2 jours) concentrent l’activité : l’attraction conjuguée soleil–lune renforce les courants et la chasse. La nouvelle lune est idéale pour la pêche à la lumière (lamparo, contraste maximal) ; la pleine lune favorise la turlutte aux beaux sujets littoraux. Évitez les quartiers si vous ne pouvez pêcher qu’une nuit.' },
+  { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
+  { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
+  { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
+  { q: 'Quel leurre et quelle animation ?', a: 'Turlutte (turlutte) 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Silure interdit ? Non — mais pas d’ardillon : la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
+  { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
+  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur parmi d’autres : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau < 13 °C peuvent annihiler l’activité. C’est exactement ce que synthétise l’Indice Calamar™ : lune (35) + solunaire (25) + saison (20) + mer (12) + pression (8).' }
+];
+function renderFAQ() {
+  $('#faqList').innerHTML = FAQ.map((f, i) => `
+    <div class="faq-item ${i === 0 ? 'is-open' : ''}">
+      <button class="faq-q" aria-expanded="${i === 0}"><span>${f.q}</span><svg class="ic"><use href="#i-squid"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
+    </div>`).join('');
+  $$('.faq-q').forEach(btn => btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    item.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', item.classList.contains('is-open'));
+  }));
+}
+
+/* ─────────── Rendu : méthode ─────────── */
+const METHOD = [
+  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle ou pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. C’est le pilier du solunaire et le meilleur prédicteur statistique d’activité des céphalopodes.', w: '35 pts' },
+  { h: 'Périodes solunaires — 25 points', p: 'Chaque période majeure recouvrant la nuit rapporte jusqu’à 8 points, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Le tout plafonné à 25.', w: '25 pts' },
+  { h: 'Saison — 20 points', p: 'Calendrier méditerranéen ouest (Loligo vulgaris) : migration des gros sujets jan–fév, ponte début d’été et début d’automne, recrutement fév–mars et juil–sept. Barème mensuel /20.', w: '20 pts' },
+  { h: 'Mer & vent — 12 points', p: 'Vagues < 0,3 m = 12 pts ; pénalités dès 0,6 m, quasi nulles au-delà de 1,5 m. Eau < 13 °C ou > 20,5 °C pénalisée ; vent > 30 km/h pénalisé.', w: '12 pts' },
+  { h: 'Pression — 8 points', p: 'Anticyclone > 1022 hPa = 8 pts ; 1016–1022 = 7 ; 1010–1016 = 6 ; < 1000 = 1. Les régimes stables ou en hausse favorisent la chasse en surface.', w: '8 pts' }
+];
+function renderMethod() {
+  $('#methodList').innerHTML = METHOD.map(m => `
+    <li class="method-item"><div><h4>${m.h}</h4><p>${m.p}</p></div><div class="method-weight">${m.w}<small>poids</small></div></li>`).join('');
+}
+
+/* ─────────── Navigation / vues ─────────── */
+const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
+function activateView(name) {
+  if (!VIEW_IDS.includes(name)) name = 'dashboard';
+  $$('.view').forEach(v => v.classList.toggle('is-active', v.id === 'view-' + name));
+  $$('.nav-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
+  try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
+  $('#sidebar').classList.remove('is-open');
+  $('#sidebarOverlay').classList.remove('is-on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function bindNav() {
+  $$('[data-nav]').forEach(el => el.addEventListener('click', () => activateView(el.dataset.nav)));
+  $('#btnMenu').addEventListener('click', () => { $('#sidebar').classList.add('is-open'); $('#sidebarOverlay').classList.add('is-on'); });
+  $('#sidebarOverlay').addEventListener('click', () => { $('#sidebar').classList.remove('is-open'); $('#sidebarOverlay').classList.remove('is-on'); });
+  window.addEventListener('hashchange', () => activateView(location.hash.replace('#', '')));
+}
+
+/* ─────────── Thème unique (abyssal) ─────────── */
+function bindTheme() {
+  document.documentElement.dataset.theme = 'dark';
+  try { localStorage.setItem('gcl-theme', 'dark'); } catch { /* privé */ }
+}
+function bindUnits() {
+  try {
+    const w = localStorage.getItem('gcl-unit-wind'); if (w) state.units.wind = w;
+    const t = localStorage.getItem('gcl-unit-temp'); if (t) state.units.temp = t;
+  } catch { /* privé */ }
+  const syncSeg = () => {
+    $$('.seg-btn[data-unit-wind]').forEach(b => b.classList.toggle('is-active', b.dataset.unitWind === state.units.wind));
+    $$('.seg-btn[data-unit-temp]').forEach(b => b.classList.toggle('is-active', b.dataset.unitTemp === state.units.temp));
+  };
+  syncSeg();
+  $$('.seg-btn[data-unit-wind]').forEach(b => b.addEventListener('click', () => { state.units.wind = b.dataset.unitWind; try { localStorage.setItem('gcl-unit-wind', state.units.wind); } catch {} syncSeg(); refreshAll(false); }));
+  $$('.seg-btn[data-unit-temp]').forEach(b => b.addEventListener('click', () => { state.units.temp = b.dataset.unitTemp; try { localStorage.setItem('gcl-unit-temp', state.units.temp); } catch {} syncSeg(); refreshAll(false); }));
+}
+
+/* ─────────── Orchestration des données ─────────── */
+async function fetchJSON(url) {
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+async function loadData(force = false) {
+  if (!force) {
+    const cached = cacheRead();
+    if (cached && !cached.stale && cached.meteo && cached.marine) {
+      state.meteo = cached.meteo; state.marine = cached.marine; state.online = true; state.lastUpdate = new Date(cached.ts);
+      return;
+    }
+  }
+  try {
+    const [meteo, marine] = await Promise.all([fetchJSON(METEO_URL), fetchJSON(MARINE_URL)]);
+    state.meteo = meteo; state.marine = marine; state.online = true; state.lastUpdate = new Date();
+    cacheWrite(meteo, marine);
+  } catch (err) {
+    console.warn('[GCL] Hors ligne ou API injoignable :', err);
+    const cached = cacheRead();
+    if (cached && cached.meteo) {
+      state.meteo = cached.meteo; state.marine = cached.marine ?? null; state.online = false; state.lastUpdate = new Date(cached.ts);
+    } else {
+      state.meteo = null; state.marine = null; state.online = false; state.lastUpdate = null;
+    }
+  }
+}
+
+function renderAll() {
+  const dm = dailyMap();
+  const now = new Date();
+  // Horloge & entête
+  renderClock();
+  const onlineChip = state.online ? '' : ' · hors ligne (cache)';
+  $('#topbarSub').textContent = `Tlemcen · Algérie · ${state.online ? 'données en direct' : 'données en cache'}${onlineChip}`;
+  $('#lastUpdate').textContent = state.lastUpdate ? fmtTime(state.lastUpdate) : '—';
+  $('#gaugeDateChip').textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: CONFIG.tz });
+
+  // Score du jour
+  const todayISO = dayKey(now);
+  const today = dm[todayISO];
+  const score = scoreFor(now, dm);
+  animateGauge(score.total);
+  const rating = ratingOf(score.total);
+  const pill = $('#ratingPill');
+  pill.textContent = rating.label;
+  pill.dataset.level = rating.level;
+  renderFactors(score.parts);
+  const bw = bestWindowFor(score.periods);
+  $('#bestWindow').textContent = bw ? `${bw.start} → ${bw.end}` : '—';
+  $('#bestWindowSub').textContent = bw ? `${bw.type === 'major' ? 'Majeure' : 'Mineure'} · ${bw.night} min de nuit · culmination ${fmtTime(bw.center)}` : 'Aucune période de nuit aujourd’hui';
+
+  // Cartes
+  renderMoonCard(now, today);
+  renderMeteo(dm);
+  renderMer();
+  const solRating = Astro.solunarRating(now, CONFIG.lat, CONFIG.lon);
+  renderSolunaire(now, score.periods, solRating);
+  renderReco(now, score, dm);
+  renderStormAlert(dm);
+  renderActivityChart(now, score.periods, today);
+
+  // Vues secondaires
+  renderForecast(dm);
+  renderDayDetail(dm);
+  renderCalendar(dm);
+}
+
+async function refreshAll(force = true) {
+  const btn = $('#btnRefresh');
+  btn.classList.add('is-spinning');
+  try {
+    await loadData(force);
+    renderAll();
+  } finally {
+    btn.classList.remove('is-spinning');
+  }
+}
+
+/* ─────────── Démarrage ─────────── */
+function init() {
+  bindNav(); bindTheme(); bindUnits();
+  renderSeasonBars(); renderFAQ(); renderMethod();
+  $('#btnRefresh').addEventListener('click', () => refreshAll(true));
+  $('#btnRefresh2').addEventListener('click', () => refreshAll(true));
+  $('#btnPrint').addEventListener('click', () => window.print());
+  $('#calPrev').addEventListener('click', () => { state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() - 1, 1); renderAll(); });
+  $('#calNext').addEventListener('click', () => { state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() + 1, 1); renderAll(); });
+  $('#calToday').addEventListener('click', () => { state.calCursor = new Date(); renderAll(); });
+  window.addEventListener('resize', () => { /* redessiner le graphique */ const dm = dailyMap(); const now = new Date(); const today = dm[dayKey(now)]; const score = scoreFor(now, dm); renderActivityChart(now, score.periods, today); });
+  setInterval(renderClock, 1000);
+  activateView(location.hash.replace('#', '') || 'dashboard');
+  refreshAll(false).then(() => { state.refreshTimer = setInterval(() => refreshAll(false), CONFIG.refreshMs); });
+}
+init();
+
+</script>
+</body>
+</html>
