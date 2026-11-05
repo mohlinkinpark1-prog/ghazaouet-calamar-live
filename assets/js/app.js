@@ -68,6 +68,18 @@ const windUnit = () => state.units.wind === 'kn' ? 'kn' : 'km/h';
 const fmtWind = kmh => `${windVal(kmh).toFixed(state.units.wind === 'kn' ? 1 : 0)} ${windUnit()}`;
 const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
 
+/* Tendance de pression sur 3 h (hPa) — négative = pression en baisse */
+function pressureTrendNow() {
+  const hourly = state.meteo?.hourly?.pressure_msl, times = state.meteo?.hourly?.time;
+  if (!hourly || !times || !times.length) return 0;
+  const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
+  const nowIdx = idx > 0 ? idx - 1 : 0;
+  const prevIdx = Math.max(0, nowIdx - 3);
+  const cur = hourly[nowIdx], prev = hourly[prevIdx];
+  if (cur == null || prev == null) return 0;
+  return cur - prev;
+}
+
 function wmoStorm(code) { return code >= 95; }
 
 function cacheRead() {
@@ -143,23 +155,26 @@ function scoreFor(date, dm) {
   // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
   const season = SEASON_20[date.getMonth()];
 
-  // 4) Mer — 12 pts (houle < 0,5 m pénalisée dès 0,6 m ; eau idéale 13–20 °C)
-  let meteo = 8;
+  // 4) Mer — 12 pts (vagues ≤ 7 · eau ≤ 5). Étude Baléares 2012 : CPUE plus forte par eau fraîche ; palier dès 0,6 m de houle
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
-  if (wave !== null && wave !== undefined) {
-    meteo = wave < 0.3 ? 12 : wave < 0.6 ? 10 : wave < 1.0 ? 7 : wave < 1.5 ? 4 : 1;
-  }
+  let wavePts = wave == null ? 4 : wave < 0.3 ? 7 : wave < 0.6 ? 6 : wave < 1.0 ? 4 : wave < 1.5 ? 2 : 0;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  if (sst !== null && sst !== undefined) {
-    if (sst < 13) meteo -= 3; else if (sst > 20.5) meteo -= 1.5;
-  }
+  let seaPts = sst == null ? 3 : sst <= 16 ? 5 : sst <= 19 ? 4 : sst <= 21 ? 3 : 1;
+  if (sst != null && sst < 12) seaPts = 2; // trop froid : activité ralentie
+  let meteo = wavePts + seaPts;
   if (day?.windMax != null && day.windMax > 30) meteo -= 2;
   meteo = clamp(meteo, 0, 12);
 
-  // 5) Pression — 8 pts
-  const presVal = state.meteo?.current?.pressure_msl ?? null;
-  let pres = 6;
-  if (presVal !== null) pres = presVal > 1022 ? 8 : presVal > 1016 ? 7 : presVal >= 1010 ? 6 : presVal >= 1000 ? 3 : 1;
+  // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
+  const p = state.meteo?.current?.pressure_msl ?? null;
+  const dp = pressureTrendNow();
+  let pres;
+  if (dp < -0.7) pres = 8;        // en baisse nette — favorable
+  else if (dp > 0.7) pres = 4;    // en hausse nette — défavorable
+  else if (p == null) pres = 5;
+  else if (p <= 1012) pres = 7;   // basse stable
+  else if (p <= 1018) pres = 5;   // neutre
+  else pres = 4;                  // haute stable
 
   const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
   const total = clamp(Math.round(moon + sol + season + meteo + pres), 0, 100);
@@ -227,11 +242,18 @@ function drawGauge(score) {
 }
 function animateGauge(target) {
   gaugeAnim = { from: gaugeAnim.to ?? 0, to: target, start: performance.now() };
+  // Peinture synchrone de la valeur finale — garantie même si rAF est gelé (onglet caché / headless)
+  drawGauge(target);
+  $('#gaugeValue').textContent = Math.round(target);
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.hidden || reduced || !window.requestAnimationFrame) return;
   const dur = 900;
+  const from = gaugeAnim.from;
+  const t0 = performance.now();
   function frame(t) {
-    const k = clamp((t - gaugeAnim.start) / dur, 0, 1);
+    const k = clamp((t - t0) / dur, 0, 1);
     const e = 1 - Math.pow(2, -10 * k);
-    const val = gaugeAnim.from + (gaugeAnim.to - gaugeAnim.from) * (k === 1 ? 1 : e);
+    const val = from + (target - from) * (k === 1 ? 1 : e);
     drawGauge(val);
     $('#gaugeValue').textContent = Math.round(val);
     if (k < 1) requestAnimationFrame(frame);
@@ -317,8 +339,8 @@ function renderMoonCard(date, dayData) {
   $('#moonTransit').textContent = fmtTime(md.maxAlt);
   const coef = Math.round(45 + 50 * Math.pow(Math.abs(Math.cos(ph.elong * Math.PI / 180)), 1.3));
   $('#tideCoef').textContent = `≈ ${coef}`;
-  const next = Astro.daysToNextSyzygy(date);
-  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong> — ${next.days < 1 ? 'cette nuit' : next.days < 2 ? 'demain' : 'dans ' + Math.round(next.days) + ' jours'}.`;
+  const next = Astro.nextSyzygy(date);
+  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong>${next.time ? ` · ${next.time.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', timeZone: CONFIG.tz })} à ${fmtTime(next.time)}` : ''}`;
 }
 
 /* ─────────── Rendu : météo ─────────── */
@@ -339,16 +361,8 @@ function renderMeteo(dm) {
   $('#wxGusts').textContent = cur ? fmtWind(cur.wind_gusts_10m) : '–';
   $('#wxHumidity').textContent = cur ? `${Math.round(cur.relative_humidity_2m)} %` : '–';
   $('#wxPressure').textContent = cur ? `${Math.round(cur.pressure_msl)} hPa` : '–';
-  // Tendance 3 h
-  let trend = '→';
-  const hourly = m?.hourly?.pressure_msl, times = m?.hourly?.time;
-  if (hourly && times) {
-    const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
-    const nowIdx = idx > 0 ? idx - 1 : 0;
-    const prevIdx = Math.max(0, nowIdx - 3);
-    const delta = hourly[nowIdx] - hourly[prevIdx];
-    trend = delta > 0.8 ? '↗ hausse' : delta < -0.8 ? '↘ baisse' : '→ stable';
-  }
+  const dP = pressureTrendNow();
+  const trend = dP > 0.8 ? '↗ hausse' : dP < -0.8 ? '↘ baisse' : '→ stable';
   $('#wxPressureTrend').textContent = trend;
   $('#wxClouds').textContent = cur ? `${Math.round(cur.cloud_cover)} %` : '–';
   $('#wxPrecip').textContent = today?.precip != null ? `${today.precip.toFixed(1)} mm` : '–';
@@ -710,18 +724,19 @@ function renderSeasonBars() {
     const top = topMonths.includes(i);
     return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
   }).join('');
-  requestAnimationFrame(() => $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; }));
+  // Largeurs peintes immédiatement (transition CSS si visible) — rAF parfois gelé en onglet caché
+  $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; });
 }
 
 /* ─────────── Rendu : FAQ ─────────── */
 const FAQ = [
-  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Les nuits de nouvelle et de pleine lune (syzygie, ± 2 jours) concentrent l’activité : l’attraction conjuguée soleil–lune renforce les courants et la chasse. La nouvelle lune est idéale pour la pêche à la lumière (lamparo, contraste maximal) ; la pleine lune favorise la turlutte aux beaux sujets littoraux. Évitez les quartiers si vous ne pouvez pêcher qu’une nuit.' },
+  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Ça dépend de la technique — la science est nette : (1) Turlutte sans lampe : la pleine lune renforce les captures (étude mer Égée, p<0.01), turluttes rouges devant. (2) Lamparo / LEDs : les nuits sombres gagnent — nouvelle lune idéale ; sous LEDs clignotantes, le 3e quartier est le plus productif (étude Indonésie 2021, p<0.05) ; LED bleue > blanche. (3) Sans technique définie, l’étude méditerranéenne de référence (Baléares, ICES 2012) montre des CPUE supérieures près de la nouvelle lune + mois froids. Dans tous les cas : lune en phase syzygie (± 2 jours) = pic d’activité.' },
   { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
   { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
   { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
   { q: 'Quel leurre et quelle animation ?', a: 'Turlutte (turlutte) 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Silure interdit ? Non — mais pas d’ardillon : la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
   { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
-  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur parmi d’autres : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau < 13 °C peuvent annihiler l’activité. C’est exactement ce que synthétise l’Indice Calamar™ : lune (35) + solunaire (25) + saison (20) + mer (12) + pression (8).' }
+  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau trop chaude (> 21 °C) égalisent l’effet lunaire — les études montrent des CPUE faibles dès que la mer se forme ou que la pression monte. C’est exactement ce que synthétise l’Indice Calamar™ (lune 35 + solunaire 25 + saison 20 + mer 12 + pression 8). Et si la pression baisse nette (−0,7 hPa/3 h), c’est souvent bon signe : l’étude des Baléares l’associe à de meilleures touches.' }
 ];
 function renderFAQ() {
   $('#faqList').innerHTML = FAQ.map((f, i) => `
@@ -738,11 +753,11 @@ function renderFAQ() {
 
 /* ─────────── Rendu : méthode ─────────── */
 const METHOD = [
-  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle ou pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. C’est le pilier du solunaire et le meilleur prédicteur statistique d’activité des céphalopodes.', w: '35 pts' },
-  { h: 'Périodes solunaires — 25 points', p: 'Chaque période majeure recouvrant la nuit rapporte jusqu’à 8 points, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Le tout plafonné à 25.', w: '25 pts' },
-  { h: 'Saison — 20 points', p: 'Calendrier méditerranéen ouest (Loligo vulgaris) : migration des gros sujets jan–fév, ponte début d’été et début d’automne, recrutement fév–mars et juil–sept. Barème mensuel /20.', w: '20 pts' },
-  { h: 'Mer & vent — 12 points', p: 'Vagues < 0,3 m = 12 pts ; pénalités dès 0,6 m, quasi nulles au-delà de 1,5 m. Eau < 13 °C ou > 20,5 °C pénalisée ; vent > 30 km/h pénalisé.', w: '12 pts' },
-  { h: 'Pression — 8 points', p: 'Anticyclone > 1022 hPa = 8 pts ; 1016–1022 = 7 ; 1010–1016 = 6 ; < 1000 = 1. Les régimes stables ou en hausse favorisent la chasse en surface.', w: '8 pts' }
+  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle OU pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. Effet lunaire statistiquement établi chez le calamar (Égée 2011 p<0.01, Indonésie 2021 p<0.05, Baléares 2012). Sens optimal : nouvelle lune (lamparo/approche globale) vs pleine lune (turlutte sans lampe) — l’indice les traite à égalité et le guide détaille.', w: '35 pts' },
+  { h: 'Périodes solunaires — 25 points', p: 'Chaque majeure recouvrant la nuit rapporte jusqu’à 8 pts, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Honnêteté : Knight (1926) est une hypothèse folklorique non validée en général (revues : effet modeste, ~5 % sur trophées) ; elle reste le meilleur descripteur horaire disponible, croisé ici avec la preuve lunaire directe.', w: '25 pts' },
+  { h: 'Saison — 20 points', p: 'Barème /20 (oct–déc–jan ≈ 20, nov max) : migration côtière des gros sujets jan–fév ; ponte échelonnée printemps et automne (Rocha & Guerra 1996) ; recrutement fév–mars et juil–sept ; CPUE supérieures en mois froids (Baléares 2012).', w: '20 pts' },
+  { h: 'Mer — 12 points', p: 'Vagues 7 pts (<0,3 m = 7 ; 0,6–1 m = 4 ; ≥1,5 m = 0) + eau 5 pts (≤16 °C = 5 ; 17–19 °C = 4 ; 19–21 °C = 3 ; >21 °C = 1). Étude Baléares : CPUE plus forte par mer fraîche et houle faible ; l’été (eau chaude) fait chuter l’activité.', w: '12 pts' },
+  { h: 'Pression — 8 points', p: 'En baisse nette (3 h, Δ<−0,7 hPa) = 8 pts (favorable, étude Baléares 2012) ; basse stable ≤1012 hPa = 7 ; neutre 1012–1018 = 5 ; haute ou en hausse = 4. Les régimes dépressionnaires stimulent la chasse de surface.', w: '8 pts' }
 ];
 function renderMethod() {
   $('#methodList').innerHTML = METHOD.map(m => `
@@ -844,7 +859,7 @@ function renderAll() {
   renderMoonCard(now, today);
   renderMeteo(dm);
   renderMer();
-  const solRating = Astro.solunarRating(now, CONFIG.lat, CONFIG.lon);
+  const solRating = Astro.solunarRating(now);
   renderSolunaire(now, score.periods, solRating);
   renderReco(now, score, dm);
   renderStormAlert(dm);

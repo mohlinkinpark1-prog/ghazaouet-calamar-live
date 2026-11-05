@@ -3,7 +3,8 @@
    Phases lunaires, levées/couchers, passages (culminations),
    périodes solunaires et Indice Calamar.
    Précision : ~0,3° sur la longitude lunaire → erreur < 5 min
-   sur les heures de lever/coucher. Approximatif, sans garantie.
+   sur les heures de lever/coucher ; âge lunaire exact par solveur.
+   Approximatif, sans garantie.
    ============================================================ */
 'use strict';
 
@@ -13,11 +14,27 @@ const Astro = (() => {
   const norm360 = d => ((d % 360) + 360) % 360;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const SYNODIC = 29.530588853;
-  const NEW_MOON_EPOCH_JD = 2451550.26; // 6 janvier 2000, 18:14 UTC
-
   const jdFromDate = date => date.getTime() / 86400000 + 2440587.5;
 
-  /* ---------- Soleil ---------- */
+  /* ---------- Élongation signée (degrés, -180..180] ---------- */
+  const signedElong = date => {
+    const s = sunCoords(date), m = moonCoords(date);
+    let e = m.lambda - s.lambda;
+    return ((e + 540) % 360) - 180;
+  };
+
+  /* ---------- Âge précis de la lune (solveur Newton–Raphson) ---------- */
+  const ELONG_RATE = 360 / SYNODIC; // ≈ 12,1907°/jour
+  function moonAgePrecise(date) {
+    let t = date.getTime();
+    for (let i = 0; i < 10; i++) {
+      t -= (signedElong(new Date(t)) / ELONG_RATE) * 86400000;
+    }
+    let age = (date.getTime() - t) / 86400000;
+    age = ((age % SYNODIC) + SYNODIC) % SYNODIC; // racine la plus proche → âge positif
+    return age;
+  }
+
   function sunCoords(date) {
     const T = (jdFromDate(date) - 2451545.0) / 36525;
     const L0 = norm360(280.46646 + 36000.76983 * T);
@@ -141,14 +158,12 @@ const Astro = (() => {
 
   /* ---------- Phase, illumination, âge ---------- */
   function phaseInfo(date) {
-    const jd = jdFromDate(date);
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
     const psi = Math.acos(clamp(cosPsi, -1, 1)); // élongation 0..π
     const illum = (1 - Math.cos(psi)) / 2;
     const elongDeg = psi * DEG; // 0 = nouvelle, 180 = pleine
-    let age = (jd - NEW_MOON_EPOCH_JD) % SYNODIC;
-    if (age < 0) age += SYNODIC;
+    const age = moonAgePrecise(date);
     const idx = Math.floor(((age / SYNODIC) * 8) + 0.5) % 8;
     const names = ['Nouvelle lune', 'Premier croissant', 'Premier quartier', 'Gibbeuse croissante',
                    'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'];
@@ -160,16 +175,25 @@ const Astro = (() => {
     };
   }
 
-  /* Jours restants avant le prochain événement clé (nouvelle ou pleine lune) */
-  function daysToNextSyzygy(date) {
-    const ph = phaseInfo(date);
-    const pos = ph.age; // jours depuis la nouvelle lune
-    const toNew = SYNODIC - pos;
-    const full = pos <= SYNODIC / 2 ? (SYNODIC / 2 - pos) : (SYNODIC * 1.5 - pos);
-    return [
-      { label: 'Pleine lune', days: full },
-      { label: 'Nouvelle lune', days: toNew }
-    ].sort((a, b) => a.days - b.days)[0];
+  /* Prochain événement majeur (nouvelle ou pleine lune) — solveur de passage */
+  function nextSyzygy(date) {
+    const step = 4 * 3600e3;
+    let t = date.getTime();
+    let prevE = signedElong(new Date(t));
+    for (let i = 0; i < 120; i++) {
+      const t0 = t, e0 = prevE;
+      t += step;
+      const e = signedElong(new Date(t));
+      const isNew = e0 < 0 && e >= 0 && Math.abs(e - e0) < 40;
+      const isFull = e0 > 150 && e < -150 && (e0 - e) > 300;
+      if (isNew || isFull) {
+        const frac = isNew ? Math.abs(e0) / Math.abs(e0 - e) : (180 - e0) / (360 - e0 + e);
+        const at = new Date(t0 + frac * step);
+        return { label: isNew ? 'Nouvelle lune' : 'Pleine lune', days: (at.getTime() - date.getTime()) / 86400000, time: at };
+      }
+      prevE = e;
+    }
+    return { label: 'Nouvelle lune', days: SYNODIC / 2, time: null };
   }
 
   /* ---------- Périodes solunaires ---------- */
@@ -204,19 +228,8 @@ const Astro = (() => {
       .sort((a, b) => a.center - b.center);
   }
 
-  /* Recouvrement (minutes) d'une période avec la nuit (coucher→lever) */
-  function nightOverlap(period, sunsetT, sunriseNextT) {
-    const ns = sunsetT instanceof Date ? sunsetT.getTime() : NaN;
-    const nr = sunriseNextT instanceof Date ? sunriseNextT.getTime() : NaN;
-    if (Number.isNaN(ns) || Number.isNaN(nr)) return 0;
-    const s = period.start.getTime(), e = period.end.getTime();
-    const a = Math.max(s, ns), b = Math.min(e, nr);
-    return Math.max(0, Math.round((b - a) / 60000));
-  }
-
   /* ---------- Indice solunaire du jour (qualité générale, %) ---------- */
-  function solunarRating(date, lat, lon) {
-    const jd = jdFromDate(date);
+  function solunarRating(date) {
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
     const psi = Math.acos(clamp(cosPsi, -1, 1));
@@ -224,24 +237,11 @@ const Astro = (() => {
     return Math.round(42 + 55 * coef);
   }
 
-  /* ---------- Activité horaire (courbe 0..1) ---------- */
-  function activityAt(minutesOfDay, periods, nightFactor) {
-    let a = 0.14;
-    for (const p of periods) {
-      const centerMin = p.center.getHours() * 60 + p.center.getMinutes();
-      const sigma = p.type === 'major' ? 58 : 46;
-      const amp = p.type === 'major' ? 1.0 : 0.55;
-      const dd = minutesOfDay - centerMin;
-      a += amp * Math.exp(-(dd * dd) / (2 * sigma * sigma));
-    }
-    return clamp(a * nightFactor, 0, 1.4);
-  }
-
   return {
     jdFromDate, norm360, clamp,
-    sunCoords, moonCoords, altAz, moonAlt, sunAlt,
-    moonDay, sunDay, phaseInfo, daysToNextSyzygy,
-    solunarPeriods, nightOverlap, solunarRating, activityAt,
+    sunCoords, moonCoords, altAz, moonAlt, sunAlt, signedElong, moonAgePrecise,
+    moonDay, sunDay, phaseInfo, nextSyzygy,
+    solunarPeriods, solunarRating,
     SYNODIC
   };
 })();

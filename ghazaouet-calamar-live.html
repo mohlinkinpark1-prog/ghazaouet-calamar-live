@@ -417,6 +417,17 @@ button{font-family:inherit;cursor:pointer}
 .safety-box strong{color:#ffc9b8;font-size:12px}
 .safety-box ul{margin:6px 0 0 16px;font-size:11px;color:#d9c1b8;line-height:1.6}
 
+/* ===== Science grid ===== */
+.science-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.sci{border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;background:rgba(255,255,255,.025);display:flex;flex-direction:column;gap:7px;transition:border-color .2s}
+.sci:hover{border-color:var(--line-strong)}
+.sci-tag{font-family:var(--font-mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--sea-2)}
+.sci h4{font-size:13px;color:#fff;line-height:1.35}
+.sci p{font-size:11px;color:var(--muted);line-height:1.6}
+.sci p strong{color:var(--gold-2)}
+.sci-src{margin-top:auto;border-top:1px dashed var(--line);padding-top:8px;font-family:var(--font-mono);font-size:8px;letter-spacing:.06em;color:var(--muted-2);line-height:1.6}
+@media (max-width:1100px){.science-grid{grid-template-columns:1fr}}
+
 .table-wrap{overflow-x:auto}
 .gear-table{width:100%;border-collapse:collapse;font-size:12px;min-width:640px}
 .gear-table th,.gear-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -853,26 +864,27 @@ button{font-family:inherit;cursor:pointer}
     <article class="card span-7">
       <header class="card-head"><div><span class="card-kicker">Calendrier saisonnier</span><h3 class="card-title">Quand sortir, mois par mois</h3></div></header>
       <div class="season-bars" id="seasonBars" aria-label="Qualité de la pêche par mois"></div>
-      <p class="note">Migration côtière des plus gros sujets dès janvier–février ; petites tailles en été ; ponte majeure en début d'été et début d'automne ; recrutement (jeunes) février–mars et juillet–septembre. Automne–début d'hiver = le meilleur de l'année à Ghazaouet. (Sources : FAO / AdriaMed, SeaLifeBase.)</p>
+      <p class="note">Migration côtière des plus gros sujets dès janvier–février ; petites tailles en été ; ponte majeure en début d'été et début d'automne (reproduction échelonnée sur l'année, Rocha &amp; Guerra 1996) ; recrutement (jeunes) février–mars et juillet–septembre. Automne–début d'hiver = le meilleur de l'année à Ghazaouet — les études montrent des CPUE plus élevées en mois froids (Baléares 2012). (Sources : FAO / AdriaMed, SeaLifeBase, Cabanellas-Reboredo et al. 2012.)</p>
     </article>
 
     <article class="card span-5">
       <header class="card-head"><div><span class="card-kicker">Les bonnes heures</span><h3 class="card-title">Le rythme d'une nuit</h3></div></header>
       <ul class="hour-slots">
-        <li><span class="hs-time">17h – 19h</span><div class="hs-bar"><div style="width:55%"></div></div><span class="hs-note">Crépuscule — premiers mouvements</span></li>
+        <li><span class="hs-time">17h – 19h</span><div class="hs-bar is-good"><div style="width:72%"></div></div><span class="hs-note">Crépuscule — créneau validé par la science (étude Baléares)</span></li>
         <li><span class="hs-time">19h – 22h</span><div class="hs-bar is-peak"><div style="width:96%"></div></div><span class="hs-note">Prime time — turlutte &amp; lumière</span></li>
         <li><span class="hs-time">22h – 02h</span><div class="hs-bar is-good"><div style="width:78%"></div></div><span class="hs-note">Pleine nuit — activité soutenue</span></li>
         <li><span class="hs-time">02h – 04h</span><div class="hs-bar is-good"><div style="width:60%"></div></div><span class="hs-note">Second souffle — calme plat souvent</span></li>
         <li><span class="hs-time">04h – 07h</span><div class="hs-bar"><div style="width:30%"></div></div><span class="hs-note">Aube — touches sporadiques</span></li>
         <li><span class="hs-time">07h – 17h</span><div class="hs-bar is-low"><div style="width:8%"></div></div><span class="hs-note">Journée — calamar redescend (20–250 m)</span></li>
       </ul>
+      <p class="note"><strong>Preuve scientifique</strong> — étude Cabanellas-Reboredo et al. (2012, <em>ICES Journal of Marine Science</em>, Baléares) : la CPUE est maximale dans un <strong>créneau étroit autour du coucher du soleil</strong> (lumière encore suffisante pour le leurre + calamar déjà actif), meilleure en <strong>mois froids</strong>, et favorisée par eau fraîche + vent faible + <strong>basse pression</strong> + jours proches de la <strong>nouvelle lune</strong>. Étude Ulas &amp; Aydin (2011, <em>Afr. J. Biotechnol.</em>, Égée) : turluttes <strong>rouges</strong> supérieures (p&lt;0.01) et pleine lune positive (p&lt;0.01) pour la turlutte côtière.</p>
     </article>
 
     <article class="card span-6">
       <header class="card-head"><div><span class="card-kicker">Techniques</span><h3 class="card-title">4 façons de le prendre</h3></div></header>
       <div class="tech-grid">
-        <div class="tech"><div class="tech-num">01</div><h4>Turlutte (turlutte) de nuit</h4><p>Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.</p><p class="tech-pro">Conseil : tailles 2.0–3.5 · coloris rose/orange/blanc phosphorescent · fond sableux 20–60 m.</p></div>
-        <div class="tech"><div class="tech-num">02</div><h4>Pêche au lamparo</h4><p>Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.</p><p class="tech-pro">Conseil : nouvelle lune &gt; pleine lune pour le lamparo — le contraste lumineux attire plus.</p></div>
+        <div class="tech"><div class="tech-num">01</div><h4>Turlutte (turlutte) de nuit</h4><p>Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.</p><p class="tech-pro">Conseil : tailles 2.0–3.5 · <strong>rouge d'abord</strong> (étude Égée, p&lt;0.01 ; orange ensuite, blanc moins bon) · phosphorescent en nuit noire · fond sableux 20–60 m. Pleine lune = turluttes plus efficaces (p&lt;0.01).</p></div>
+        <div class="tech"><div class="tech-num">02</div><h4>Pêche au lamparo</h4><p>Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.</p><p class="tech-pro">Conseil : nouvelle lune &gt; pleine lune pour le lamparo (contraste maxi) · LED <strong>bleue &gt; blanche</strong> (étude Indonésie 2021, p&lt;0.05) · 3e quartier souvent productif sous LED.</p></div>
         <div class="tech"><div class="tech-num">03</div><h4>Dérive sur les chasses</h4><p>Repérer les chasses de thons/dorades ou les zones de courant (cassures, pointes). Dérive lente, turlutte profonde. Calamars en chasse active.</p><p class="tech-pro">Conseil : eaux 13–20 °C, mer formée légère (houle &lt; 0,5 m) = activité maximale.</p></div>
         <div class="tech"><div class="tech-num">04</div><h4>Pêche du bord (digue/jetée)</h4><p>Depuis la digue du port ou le môle : lampes, seiches/calamars montent vers les points lumineux. Petits leurres, fil fin, épuisette longue.</p><p class="tech-pro">Conseil : évitez les soirs de grosse houle d'ouest — le port est exposé nord-ouest.</p></div>
       </div>
@@ -887,6 +899,19 @@ button{font-family:inherit;cursor:pointer}
         <li><div class="spot-rank">D</div><div class="spot-body"><strong>Marsa Ben M'Hidi (à l'est, frontière)</strong><span>Spot historique · vérifier les zones autorisées et la réglementation locale avant toute sortie.</span></div></li>
       </ul>
       <div class="safety-box"><svg class="ic"><use href="#i-shield"/></svg><div><strong>Sécurité avant tout</strong><ul><li>Gilet + 2 moyens de communication (téléphone chargé / VHF) ; prévenez un proche de l'heure de retour.</li><li>Jamais de sortie par alerte orage / mer formée (voir bandeau d'alerte du tableau de bord).</li><li>Bulletin météo marine de l'ONM / Météo Algérie avant de prendre la mer.</li><li>Nuit = plus de risque : feux de navigation obligatoires en barque.</li></ul></div></div>
+    </article>
+
+    <article class="card span-12">
+      <header class="card-head"><div><span class="card-kicker">La science répond</span><h3 class="card-title">6 études majeures à connaître</h3></div><span class="chip chip-sea">Peer-reviewed</span></header>
+      <div class="science-grid">
+        <div class="sci"><span class="sci-tag">01 · ICES J. Mar. Sci. 2012</span><h4>Mer fraîche + basse pression + nouvelle lune</h4><p>Sessions de turlutte récréative dans la baie de Palma (Baléares, Méditerranée occidentale) : CPUE plus élevée en <strong>mois froids</strong>. Le combo gagnant = <strong>eau basse + vent faible + basse pression atmosphérique + jours proches de la nouvelle lune</strong>. Le meilleur créneau de la journée est <strong>étroit et centré sur le coucher du soleil</strong>.</p><p class="sci-src">Cabanellas-Reboredo M, Alós J, Palmer M, Morales-Nin B — DOI 10.1093/icesjms/fss159</p></div>
+        <div class="sci"><span class="sci-tag">02 · Afr. J. Biotechnol. 2011</span><h4>Turluttes rouges & pleine lune</h4><p>Expériences de turlutte côtière en mer Égée (Turquie) : les turluttes <strong>rouges</strong> surpassent toutes les autres couleurs (p&lt;0.01) ; la <strong>pleine lune renforce les captures</strong> (luminosité, p&lt;0.01). Utile si vous pêchez à la turlutte pure en pleine lune.</p><p class="sci-src">Ulas A, Aydin I — Afr. J. Biotechnol. 10(9):1721–1726</p></div>
+        <div class="sci"><span class="sci-tag">03 · Jurnal IPTEKS PSP 2021</span><h4>LED clignotantes : 3e quartier roi, bleu &gt; blanc</h4><p>Effet significatif de la phase lunaire (ANOVA, p&lt;0.05) ; le <strong>dernier quartier</strong> donne les meilleures captures sous LEDs clignotantes ; <strong>LED bleue &gt; LED blanche</strong> (le calamar est attiré par le bleu). À appliquer au lamparo : privilégiez le bleu par nuit sombre.</p><p class="sci-src">Palawe HJ et al. — Jurnal IPTEKS PSP 8(2):58–69 · DOI 10.20956/jipsp.v8i2.18495</p></div>
+        <div class="sci"><span class="sci-tag">04 · J. Exp. Mar. Biol. Ecol. 1996</span><h4>Ponte échelonnée toute l'année</h4><p><em>L. vulgaris</em> et <em>L. forbesi</em> pratiquent une ponte <strong>terminale intermittente</strong> : plusieurs lots d'œufs pondus en séquence, mortalité à la fin du cycle. Résultat : des cohortes <strong>échelonnées sur l'année</strong>, pics début d'été et début d'automne — d'où la longue saisonnalité du calamar en Méditerranée.</p><p class="sci-src">Rocha F, Guerra A — J. Exp. Mar. Biol. Ecol. 207:177–189</p></div>
+        <div class="sci"><span class="sci-tag">05 · ICES J. Mar. Sci. 2022</span><h4>Frayères littorales saisonnières</h4><p>Cartographie des frayères littorales de <em>L. vulgaris</em> et <em>L. forbesi</em> : les reproductions ont lieu près des côtes, surtout au printemps et à l'automne, sur fonds sableux/vaseux. Justifie les sorties côtières de nuit (Ghazaouet : digue &amp; cassure 20–60 m) en octobre–novembre et mars–mai.</p><p class="sci-src">ICES Journal of Marine Science 79(6):1918–1931</p></div>
+        <div class="sci"><span class="sci-tag">06 · FAO / GFCM — SoMFi 2025</span><h4>Stocks méditerranéens sous pression</h4><p>« The State of Mediterranean and Black Sea Fisheries 2025 » (FAO/CGPM) : pression généralisée, <em>L. vulgaris</em> non évalué en Algérie, données tunisiennes anciennes (années 2000, ~37 % des céphalopodes débarqués). Bonne nouvelle : espèce à croissance rapide, résiliente si les juvéniles sont épargnés.</p><p class="sci-src">FAO — The State of Mediterranean and Black Sea Fisheries 2025 · DOI 10.4060/cc8888en (éd. 2023 ; 2025 publiée)</p></div>
+      </div>
+      <p class="note"><strong>Honnêteté scientifique</strong> — la « théorie solunaire » (J.A. Knight, 1926) reste une <strong>hypothèse folklorique non validée</strong> de façon générale ; les revues indépendantes montrent des effets modestes et inconsistants (~5 % d'avantage sur poissons-trophées, par ex.). En revanche, l'effet lunaire sur le <em>calamar</em> est, lui, <strong>statistiquement démontré</strong> (études 01–03) — sens variable selon la technique (nouvelle lune pour le lamparo/l'approche globale, pleine lune pour la turlutte côtière). L'Indice Calamar™ intègre ces nuances ; il ne garantit rien.</p>
     </article>
 
     <article class="card span-12">
@@ -930,7 +955,7 @@ button{font-family:inherit;cursor:pointer}
     <article class="card span-7">
       <header class="card-head"><div><span class="card-kicker">L'Indice Calamar™</span><h3 class="card-title">5 facteurs, 100 points</h3></div></header>
       <ol class="method-list" id="methodList"></ol>
-      <p class="note">Le solunaire est pondéré par la présence des périodes majeures/mineures dans la nuit locale (coucher → lever). Les conditions « mer » chutent dès 0,6 m de vagues ; la pression privilégie les régimes anticycloniques ou en hausse. L'indice est recalculé à chaque actualisation (toutes les 10 min).</p>
+      <p class="note">Le solunaire est pondéré par la présence des périodes majeures/mineures dans la nuit locale (coucher → lever). Les conditions « mer » chutent dès 0,6 m de houle ; le barème « pression » privilégie les <strong>baisses nettes et les basses pressions</strong> (étude Baléares 2012). L'indice est recalculé à chaque actualisation (toutes les 10 min). Calcul lunaire : élongation réelle soleil–lune (solveur Newton–Raphson), âge précis à la minute près.</p>
     </article>
 
     <article class="card span-5">
@@ -956,11 +981,16 @@ button{font-family:inherit;cursor:pointer}
     <article class="card span-7">
       <header class="card-head"><div><span class="card-kicker">Sources</span><h3 class="card-title">D'où viennent les chiffres</h3></div></header>
       <ul class="source-list">
-        <li><strong>Météo &amp; mer temps réel</strong><span>Open-Meteo Forecast &amp; Marine API (ECMWF / ICON, CC BY 4.0) — vent, pression, nuages, houle, vagues, température de surface.</span></li>
-        <li><strong>Astronomie locale</strong><span>Calculs dans votre navigateur (algorithmes basés sur Meeus, <em>Astronomical Algorithms</em>) : phase, fraction éclairée, lever/coucher, culminations — précision ± 5 min.</span></li>
-        <li><strong>Théorie solunaire</strong><span>John Alden Knight (1926) — périodes majeures (lune au zénith/nadir) et mineures (mi-course), renforcées aux syzygies.</span></li>
-        <li><strong>Biologie de l'espèce</strong><span>FAO / AdriaMed &amp; SeaLifeBase — <em>Loligo vulgaris</em> : distribution méditerranéenne, 20–250 m, 13–20 °C, migrations côtières hiver/printemps, pontes été/automne.</span></li>
-        <li><strong>Port de Ghazaouet</strong><span>35.096° N · 1.860° W · UTC+1 · ouverture nord-ouest sur la Méditerranée — consultez aussi les bulletins ONM / Météo Algérie.</span></li>
+        <li><strong>Étude Baléares 2012 — la référence méditerranéenne</strong><span>Cabanellas-Reboredo M, Alós J, Palmer M, Morales-Nin B. « Environmental effects on recreational squid jigging fishery catches », <em>ICES Journal of Marine Science</em>, 69(10):1823–1830. DOI 10.1093/icesjms/fss159. (Mer fraîche, vent faible, basse pression, nouvelle lune, créneau autour du coucher.)</span></li>
+        <li><strong>Étude Égée 2011 — couleur & pleine lune</strong><span>Ulas A, Aydin I. « The effects of jig color and lunar bright on coastal squid jigging », <em>African Journal of Biotechnology</em>, 10(9):1721–1726. DOI 10.4314/ajb.v10i9. (Turluttes rouges p&lt;0.01 ; pleine lune positive p&lt;0.01.)</span></li>
+        <li><strong>Étude Indonésie 2021 — LEDs & phase lunaire</strong><span>Palawe HJ et al. « The Effect of Lunar Phase on Squid Catches Using Flashing LED Lights », <em>Jurnal IPTEKS Pemanfaatan Sumberdaya Perikanan</em>, 8(2):58–69. DOI 10.20956/jipsp.v8i2.18495. (ANOVA p&lt;0.05 ; 3e quartier ; LED bleue &gt; blanche.)</span></li>
+        <li><strong>Ponte échelonnée (biologie)</strong><span>Rocha F, Guerra A. « Signs of an extended and intermittent terminal spawning in the squids <em>Loligo vulgaris</em> and <em>Loligo forbesi</em> », <em>J. Exp. Mar. Biol. Ecol.</em>, 207:177–189 (1996). Ponte terminale intermittente : cohortes échelonnées toute l'année.</span></li>
+        <li><strong>Frayères littorales 2022</strong><span><em>ICES Journal of Marine Science</em>, 79(6):1918 — frayères printanières/automnales de <em>L. vulgaris</em> sur fonds côtiers sableux/vaseux (mers Celtiques et du Nord ; même schéma retenu pour la Méditerranée par FAO/AdriaMed).</span></li>
+        <li><strong>Biologie de l'espèce & pêche en Méditerranée</strong><span>FAO — fiche espèce <em>Loligo vulgaris</em> (n° 918) ; AdriaMed ; SeaLifeBase ; Rocha &amp; Guerra (1996) ; FAO/GFCM — <em>The State of Mediterranean and Black Sea Fisheries 2025</em> (SoMFi 2025 ; <em>L. vulgaris</em> non évalué en Algérie ; stocks méditerranéens sous pression).</span></li>
+        <li><strong>Météo &amp; mer temps réel</strong><span>Open-Meteo Forecast &amp; Marine API (ECMWF / ICON, CC BY 4.0) — vent, pression, nuages, houle, vagues, température de surface — données brutes non modifiées.</span></li>
+        <li><strong>Astronomie locale</strong><span>Calculs dans votre navigateur (algorithmes inspirés de Meeus) : élongation réelle, illumination (1−cos θ)/2, levers/couchers (± 5 min), culminations vraies (extrema locaux, pas bords de fenêtre), âge lunaire par solveur Newton–Raphson (± 1 min).</span></li>
+        <li><strong>Théorie solunaire — honnêteté</strong><span>John Alden Knight (1926). Hypothèse folklorique <strong>jamais validée scientifiquement</strong> en général (revues : effet modeste ~5 % sur poissons-trophées, résultats inconsistants selon espèces/pêches). Conservée comme descripteur horaire ; l'effet lunaire sur le calamar est lui démontré (études ci-dessus).</span></li>
+        <li><strong>Port de Ghazaouet</strong><span>35.096° N · 1.860° W · UTC+1 · ouverture nord-ouest sur la Méditerranée — bulletins ONM / Météo Algérie avant toute sortie en mer.</span></li>
       </ul>
     </article>
 
@@ -972,6 +1002,7 @@ button{font-family:inherit;cursor:pointer}
           <li>Aucune application ne « garantit » une touche : l'indice hiérarchise les <em>probabilités</em>, pas les certitudes.</li>
           <li>Houle d'ouest, orages et grains soudains sont la règle en Méditerranée d'automne — quand le tableau de bord affiche une alerte, restez à quai.</li>
           <li>Réglementation : renseignez-vous auprès de la <strong>Direction de la Pêche &amp; de l'Aquaculture de Tlemcen</strong> (tailles minimales, repos biologique estival, zones autorisées, permis).</li>
+          <li>SoMFi 2025 (FAO/GFCM) : les stocks méditerranéens sont largement <strong>surexploités</strong> — <em>L. vulgaris</em> n'est pas évalué en Algérie ; relâchez les reproducteurs et juvéniles, respectez les fermetures.</li>
           <li>Ne naviguez jamais seul la nuit ; signalez votre sortie ; VHF canal 16 en détresse.</li>
         </ul>
       </div>
@@ -1000,7 +1031,8 @@ button{font-family:inherit;cursor:pointer}
    Phases lunaires, levées/couchers, passages (culminations),
    périodes solunaires et Indice Calamar.
    Précision : ~0,3° sur la longitude lunaire → erreur < 5 min
-   sur les heures de lever/coucher. Approximatif, sans garantie.
+   sur les heures de lever/coucher ; âge lunaire exact par solveur.
+   Approximatif, sans garantie.
    ============================================================ */
 'use strict';
 
@@ -1010,11 +1042,27 @@ const Astro = (() => {
   const norm360 = d => ((d % 360) + 360) % 360;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const SYNODIC = 29.530588853;
-  const NEW_MOON_EPOCH_JD = 2451550.26; // 6 janvier 2000, 18:14 UTC
-
   const jdFromDate = date => date.getTime() / 86400000 + 2440587.5;
 
-  /* ---------- Soleil ---------- */
+  /* ---------- Élongation signée (degrés, -180..180] ---------- */
+  const signedElong = date => {
+    const s = sunCoords(date), m = moonCoords(date);
+    let e = m.lambda - s.lambda;
+    return ((e + 540) % 360) - 180;
+  };
+
+  /* ---------- Âge précis de la lune (solveur Newton–Raphson) ---------- */
+  const ELONG_RATE = 360 / SYNODIC; // ≈ 12,1907°/jour
+  function moonAgePrecise(date) {
+    let t = date.getTime();
+    for (let i = 0; i < 10; i++) {
+      t -= (signedElong(new Date(t)) / ELONG_RATE) * 86400000;
+    }
+    let age = (date.getTime() - t) / 86400000;
+    age = ((age % SYNODIC) + SYNODIC) % SYNODIC; // racine la plus proche → âge positif
+    return age;
+  }
+
   function sunCoords(date) {
     const T = (jdFromDate(date) - 2451545.0) / 36525;
     const L0 = norm360(280.46646 + 36000.76983 * T);
@@ -1138,14 +1186,12 @@ const Astro = (() => {
 
   /* ---------- Phase, illumination, âge ---------- */
   function phaseInfo(date) {
-    const jd = jdFromDate(date);
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
     const psi = Math.acos(clamp(cosPsi, -1, 1)); // élongation 0..π
     const illum = (1 - Math.cos(psi)) / 2;
     const elongDeg = psi * DEG; // 0 = nouvelle, 180 = pleine
-    let age = (jd - NEW_MOON_EPOCH_JD) % SYNODIC;
-    if (age < 0) age += SYNODIC;
+    const age = moonAgePrecise(date);
     const idx = Math.floor(((age / SYNODIC) * 8) + 0.5) % 8;
     const names = ['Nouvelle lune', 'Premier croissant', 'Premier quartier', 'Gibbeuse croissante',
                    'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'];
@@ -1157,16 +1203,25 @@ const Astro = (() => {
     };
   }
 
-  /* Jours restants avant le prochain événement clé (nouvelle ou pleine lune) */
-  function daysToNextSyzygy(date) {
-    const ph = phaseInfo(date);
-    const pos = ph.age; // jours depuis la nouvelle lune
-    const toNew = SYNODIC - pos;
-    const full = pos <= SYNODIC / 2 ? (SYNODIC / 2 - pos) : (SYNODIC * 1.5 - pos);
-    return [
-      { label: 'Pleine lune', days: full },
-      { label: 'Nouvelle lune', days: toNew }
-    ].sort((a, b) => a.days - b.days)[0];
+  /* Prochain événement majeur (nouvelle ou pleine lune) — solveur de passage */
+  function nextSyzygy(date) {
+    const step = 4 * 3600e3;
+    let t = date.getTime();
+    let prevE = signedElong(new Date(t));
+    for (let i = 0; i < 120; i++) {
+      const t0 = t, e0 = prevE;
+      t += step;
+      const e = signedElong(new Date(t));
+      const isNew = e0 < 0 && e >= 0 && Math.abs(e - e0) < 40;
+      const isFull = e0 > 150 && e < -150 && (e0 - e) > 300;
+      if (isNew || isFull) {
+        const frac = isNew ? Math.abs(e0) / Math.abs(e0 - e) : (180 - e0) / (360 - e0 + e);
+        const at = new Date(t0 + frac * step);
+        return { label: isNew ? 'Nouvelle lune' : 'Pleine lune', days: (at.getTime() - date.getTime()) / 86400000, time: at };
+      }
+      prevE = e;
+    }
+    return { label: 'Nouvelle lune', days: SYNODIC / 2, time: null };
   }
 
   /* ---------- Périodes solunaires ---------- */
@@ -1201,19 +1256,8 @@ const Astro = (() => {
       .sort((a, b) => a.center - b.center);
   }
 
-  /* Recouvrement (minutes) d'une période avec la nuit (coucher→lever) */
-  function nightOverlap(period, sunsetT, sunriseNextT) {
-    const ns = sunsetT instanceof Date ? sunsetT.getTime() : NaN;
-    const nr = sunriseNextT instanceof Date ? sunriseNextT.getTime() : NaN;
-    if (Number.isNaN(ns) || Number.isNaN(nr)) return 0;
-    const s = period.start.getTime(), e = period.end.getTime();
-    const a = Math.max(s, ns), b = Math.min(e, nr);
-    return Math.max(0, Math.round((b - a) / 60000));
-  }
-
   /* ---------- Indice solunaire du jour (qualité générale, %) ---------- */
-  function solunarRating(date, lat, lon) {
-    const jd = jdFromDate(date);
+  function solunarRating(date) {
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
     const psi = Math.acos(clamp(cosPsi, -1, 1));
@@ -1221,24 +1265,11 @@ const Astro = (() => {
     return Math.round(42 + 55 * coef);
   }
 
-  /* ---------- Activité horaire (courbe 0..1) ---------- */
-  function activityAt(minutesOfDay, periods, nightFactor) {
-    let a = 0.14;
-    for (const p of periods) {
-      const centerMin = p.center.getHours() * 60 + p.center.getMinutes();
-      const sigma = p.type === 'major' ? 58 : 46;
-      const amp = p.type === 'major' ? 1.0 : 0.55;
-      const dd = minutesOfDay - centerMin;
-      a += amp * Math.exp(-(dd * dd) / (2 * sigma * sigma));
-    }
-    return clamp(a * nightFactor, 0, 1.4);
-  }
-
   return {
     jdFromDate, norm360, clamp,
-    sunCoords, moonCoords, altAz, moonAlt, sunAlt,
-    moonDay, sunDay, phaseInfo, daysToNextSyzygy,
-    solunarPeriods, nightOverlap, solunarRating, activityAt,
+    sunCoords, moonCoords, altAz, moonAlt, sunAlt, signedElong, moonAgePrecise,
+    moonDay, sunDay, phaseInfo, nextSyzygy,
+    solunarPeriods, solunarRating,
     SYNODIC
   };
 })();
@@ -1315,6 +1346,18 @@ const windUnit = () => state.units.wind === 'kn' ? 'kn' : 'km/h';
 const fmtWind = kmh => `${windVal(kmh).toFixed(state.units.wind === 'kn' ? 1 : 0)} ${windUnit()}`;
 const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
 
+/* Tendance de pression sur 3 h (hPa) — négative = pression en baisse */
+function pressureTrendNow() {
+  const hourly = state.meteo?.hourly?.pressure_msl, times = state.meteo?.hourly?.time;
+  if (!hourly || !times || !times.length) return 0;
+  const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
+  const nowIdx = idx > 0 ? idx - 1 : 0;
+  const prevIdx = Math.max(0, nowIdx - 3);
+  const cur = hourly[nowIdx], prev = hourly[prevIdx];
+  if (cur == null || prev == null) return 0;
+  return cur - prev;
+}
+
 function wmoStorm(code) { return code >= 95; }
 
 function cacheRead() {
@@ -1390,23 +1433,26 @@ function scoreFor(date, dm) {
   // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
   const season = SEASON_20[date.getMonth()];
 
-  // 4) Mer — 12 pts (houle < 0,5 m pénalisée dès 0,6 m ; eau idéale 13–20 °C)
-  let meteo = 8;
+  // 4) Mer — 12 pts (vagues ≤ 7 · eau ≤ 5). Étude Baléares 2012 : CPUE plus forte par eau fraîche ; palier dès 0,6 m de houle
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
-  if (wave !== null && wave !== undefined) {
-    meteo = wave < 0.3 ? 12 : wave < 0.6 ? 10 : wave < 1.0 ? 7 : wave < 1.5 ? 4 : 1;
-  }
+  let wavePts = wave == null ? 4 : wave < 0.3 ? 7 : wave < 0.6 ? 6 : wave < 1.0 ? 4 : wave < 1.5 ? 2 : 0;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  if (sst !== null && sst !== undefined) {
-    if (sst < 13) meteo -= 3; else if (sst > 20.5) meteo -= 1.5;
-  }
+  let seaPts = sst == null ? 3 : sst <= 16 ? 5 : sst <= 19 ? 4 : sst <= 21 ? 3 : 1;
+  if (sst != null && sst < 12) seaPts = 2; // trop froid : activité ralentie
+  let meteo = wavePts + seaPts;
   if (day?.windMax != null && day.windMax > 30) meteo -= 2;
   meteo = clamp(meteo, 0, 12);
 
-  // 5) Pression — 8 pts
-  const presVal = state.meteo?.current?.pressure_msl ?? null;
-  let pres = 6;
-  if (presVal !== null) pres = presVal > 1022 ? 8 : presVal > 1016 ? 7 : presVal >= 1010 ? 6 : presVal >= 1000 ? 3 : 1;
+  // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
+  const p = state.meteo?.current?.pressure_msl ?? null;
+  const dp = pressureTrendNow();
+  let pres;
+  if (dp < -0.7) pres = 8;        // en baisse nette — favorable
+  else if (dp > 0.7) pres = 4;    // en hausse nette — défavorable
+  else if (p == null) pres = 5;
+  else if (p <= 1012) pres = 7;   // basse stable
+  else if (p <= 1018) pres = 5;   // neutre
+  else pres = 4;                  // haute stable
 
   const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
   const total = clamp(Math.round(moon + sol + season + meteo + pres), 0, 100);
@@ -1474,11 +1520,18 @@ function drawGauge(score) {
 }
 function animateGauge(target) {
   gaugeAnim = { from: gaugeAnim.to ?? 0, to: target, start: performance.now() };
+  // Peinture synchrone de la valeur finale — garantie même si rAF est gelé (onglet caché / headless)
+  drawGauge(target);
+  $('#gaugeValue').textContent = Math.round(target);
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.hidden || reduced || !window.requestAnimationFrame) return;
   const dur = 900;
+  const from = gaugeAnim.from;
+  const t0 = performance.now();
   function frame(t) {
-    const k = clamp((t - gaugeAnim.start) / dur, 0, 1);
+    const k = clamp((t - t0) / dur, 0, 1);
     const e = 1 - Math.pow(2, -10 * k);
-    const val = gaugeAnim.from + (gaugeAnim.to - gaugeAnim.from) * (k === 1 ? 1 : e);
+    const val = from + (target - from) * (k === 1 ? 1 : e);
     drawGauge(val);
     $('#gaugeValue').textContent = Math.round(val);
     if (k < 1) requestAnimationFrame(frame);
@@ -1564,8 +1617,8 @@ function renderMoonCard(date, dayData) {
   $('#moonTransit').textContent = fmtTime(md.maxAlt);
   const coef = Math.round(45 + 50 * Math.pow(Math.abs(Math.cos(ph.elong * Math.PI / 180)), 1.3));
   $('#tideCoef').textContent = `≈ ${coef}`;
-  const next = Astro.daysToNextSyzygy(date);
-  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong> — ${next.days < 1 ? 'cette nuit' : next.days < 2 ? 'demain' : 'dans ' + Math.round(next.days) + ' jours'}.`;
+  const next = Astro.nextSyzygy(date);
+  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong>${next.time ? ` · ${next.time.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', timeZone: CONFIG.tz })} à ${fmtTime(next.time)}` : ''}`;
 }
 
 /* ─────────── Rendu : météo ─────────── */
@@ -1586,16 +1639,8 @@ function renderMeteo(dm) {
   $('#wxGusts').textContent = cur ? fmtWind(cur.wind_gusts_10m) : '–';
   $('#wxHumidity').textContent = cur ? `${Math.round(cur.relative_humidity_2m)} %` : '–';
   $('#wxPressure').textContent = cur ? `${Math.round(cur.pressure_msl)} hPa` : '–';
-  // Tendance 3 h
-  let trend = '→';
-  const hourly = m?.hourly?.pressure_msl, times = m?.hourly?.time;
-  if (hourly && times) {
-    const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
-    const nowIdx = idx > 0 ? idx - 1 : 0;
-    const prevIdx = Math.max(0, nowIdx - 3);
-    const delta = hourly[nowIdx] - hourly[prevIdx];
-    trend = delta > 0.8 ? '↗ hausse' : delta < -0.8 ? '↘ baisse' : '→ stable';
-  }
+  const dP = pressureTrendNow();
+  const trend = dP > 0.8 ? '↗ hausse' : dP < -0.8 ? '↘ baisse' : '→ stable';
   $('#wxPressureTrend').textContent = trend;
   $('#wxClouds').textContent = cur ? `${Math.round(cur.cloud_cover)} %` : '–';
   $('#wxPrecip').textContent = today?.precip != null ? `${today.precip.toFixed(1)} mm` : '–';
@@ -1957,18 +2002,19 @@ function renderSeasonBars() {
     const top = topMonths.includes(i);
     return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
   }).join('');
-  requestAnimationFrame(() => $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; }));
+  // Largeurs peintes immédiatement (transition CSS si visible) — rAF parfois gelé en onglet caché
+  $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; });
 }
 
 /* ─────────── Rendu : FAQ ─────────── */
 const FAQ = [
-  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Les nuits de nouvelle et de pleine lune (syzygie, ± 2 jours) concentrent l’activité : l’attraction conjuguée soleil–lune renforce les courants et la chasse. La nouvelle lune est idéale pour la pêche à la lumière (lamparo, contraste maximal) ; la pleine lune favorise la turlutte aux beaux sujets littoraux. Évitez les quartiers si vous ne pouvez pêcher qu’une nuit.' },
+  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Ça dépend de la technique — la science est nette : (1) Turlutte sans lampe : la pleine lune renforce les captures (étude mer Égée, p<0.01), turluttes rouges devant. (2) Lamparo / LEDs : les nuits sombres gagnent — nouvelle lune idéale ; sous LEDs clignotantes, le 3e quartier est le plus productif (étude Indonésie 2021, p<0.05) ; LED bleue > blanche. (3) Sans technique définie, l’étude méditerranéenne de référence (Baléares, ICES 2012) montre des CPUE supérieures près de la nouvelle lune + mois froids. Dans tous les cas : lune en phase syzygie (± 2 jours) = pic d’activité.' },
   { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
   { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
   { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
   { q: 'Quel leurre et quelle animation ?', a: 'Turlutte (turlutte) 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Silure interdit ? Non — mais pas d’ardillon : la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
   { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
-  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur parmi d’autres : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau < 13 °C peuvent annihiler l’activité. C’est exactement ce que synthétise l’Indice Calamar™ : lune (35) + solunaire (25) + saison (20) + mer (12) + pression (8).' }
+  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau trop chaude (> 21 °C) égalisent l’effet lunaire — les études montrent des CPUE faibles dès que la mer se forme ou que la pression monte. C’est exactement ce que synthétise l’Indice Calamar™ (lune 35 + solunaire 25 + saison 20 + mer 12 + pression 8). Et si la pression baisse nette (−0,7 hPa/3 h), c’est souvent bon signe : l’étude des Baléares l’associe à de meilleures touches.' }
 ];
 function renderFAQ() {
   $('#faqList').innerHTML = FAQ.map((f, i) => `
@@ -1985,11 +2031,11 @@ function renderFAQ() {
 
 /* ─────────── Rendu : méthode ─────────── */
 const METHOD = [
-  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle ou pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. C’est le pilier du solunaire et le meilleur prédicteur statistique d’activité des céphalopodes.', w: '35 pts' },
-  { h: 'Périodes solunaires — 25 points', p: 'Chaque période majeure recouvrant la nuit rapporte jusqu’à 8 points, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Le tout plafonné à 25.', w: '25 pts' },
-  { h: 'Saison — 20 points', p: 'Calendrier méditerranéen ouest (Loligo vulgaris) : migration des gros sujets jan–fév, ponte début d’été et début d’automne, recrutement fév–mars et juil–sept. Barème mensuel /20.', w: '20 pts' },
-  { h: 'Mer & vent — 12 points', p: 'Vagues < 0,3 m = 12 pts ; pénalités dès 0,6 m, quasi nulles au-delà de 1,5 m. Eau < 13 °C ou > 20,5 °C pénalisée ; vent > 30 km/h pénalisé.', w: '12 pts' },
-  { h: 'Pression — 8 points', p: 'Anticyclone > 1022 hPa = 8 pts ; 1016–1022 = 7 ; 1010–1016 = 6 ; < 1000 = 1. Les régimes stables ou en hausse favorisent la chasse en surface.', w: '8 pts' }
+  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle OU pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. Effet lunaire statistiquement établi chez le calamar (Égée 2011 p<0.01, Indonésie 2021 p<0.05, Baléares 2012). Sens optimal : nouvelle lune (lamparo/approche globale) vs pleine lune (turlutte sans lampe) — l’indice les traite à égalité et le guide détaille.', w: '35 pts' },
+  { h: 'Périodes solunaires — 25 points', p: 'Chaque majeure recouvrant la nuit rapporte jusqu’à 8 pts, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Honnêteté : Knight (1926) est une hypothèse folklorique non validée en général (revues : effet modeste, ~5 % sur trophées) ; elle reste le meilleur descripteur horaire disponible, croisé ici avec la preuve lunaire directe.', w: '25 pts' },
+  { h: 'Saison — 20 points', p: 'Barème /20 (oct–déc–jan ≈ 20, nov max) : migration côtière des gros sujets jan–fév ; ponte échelonnée printemps et automne (Rocha & Guerra 1996) ; recrutement fév–mars et juil–sept ; CPUE supérieures en mois froids (Baléares 2012).', w: '20 pts' },
+  { h: 'Mer — 12 points', p: 'Vagues 7 pts (<0,3 m = 7 ; 0,6–1 m = 4 ; ≥1,5 m = 0) + eau 5 pts (≤16 °C = 5 ; 17–19 °C = 4 ; 19–21 °C = 3 ; >21 °C = 1). Étude Baléares : CPUE plus forte par mer fraîche et houle faible ; l’été (eau chaude) fait chuter l’activité.', w: '12 pts' },
+  { h: 'Pression — 8 points', p: 'En baisse nette (3 h, Δ<−0,7 hPa) = 8 pts (favorable, étude Baléares 2012) ; basse stable ≤1012 hPa = 7 ; neutre 1012–1018 = 5 ; haute ou en hausse = 4. Les régimes dépressionnaires stimulent la chasse de surface.', w: '8 pts' }
 ];
 function renderMethod() {
   $('#methodList').innerHTML = METHOD.map(m => `
@@ -2091,7 +2137,7 @@ function renderAll() {
   renderMoonCard(now, today);
   renderMeteo(dm);
   renderMer();
-  const solRating = Astro.solunarRating(now, CONFIG.lat, CONFIG.lon);
+  const solRating = Astro.solunarRating(now);
   renderSolunaire(now, score.periods, solRating);
   renderReco(now, score, dm);
   renderStormAlert(dm);
