@@ -2,65 +2,70 @@
    GHAZAOUET CALAMAR LIVE — Design system
    ============================================================ */
 :root{
-  --bg0:#040c16;
-  --bg1:#07182b;
-  --bg2:#0a1f33;
-  --panel:rgba(14,32,52,.66);
-  --panel-solid:#0e2033;
-  --panel-2:#12263c;
-  --line:rgba(130,190,225,.14);
-  --line-strong:rgba(130,190,225,.28);
-  --text:#e9eff6;
-  --muted:#8ba6bc;
-  --muted-2:#5f7d94;
-  --gold:#f0b429;
-  --gold-2:#ffd970;
-  --gold-deep:#b97f10;
-  --gold-rgb:240,180,41;
-  --gold-hi:#ffe9a8;
-  --gold-low:#d9a117;
-  --btn-fg:var(--btn-fg);
-  --sea:#34c6dd;
-  --sea-2:#8cebfa;
-  --green:#3ddc84;
-  --sea-rgb:52,198,221;
-  --sea-low:#164e63;
-  --red:#ff7a52;
-  --amber:#ffc247;
-  --side-g1:#0b1d30;
-  --side-g2:#060f1c;
-  --topbar-bg:rgba(6,15,28,.72);
-  --overlay-bg:rgba(2,8,16,.6);
-  --legend-grad:linear-gradient(90deg,#3a2a20,#7a3a1c,#a3541f,#c98a12,#f0b429,#ffe9a8);
-  --strong:#ffffff;         /* valeurs mises en exergue */
-  --subtle:rgba(255,255,255,.035);  /* fonds de blocs légers */
-  --subtle2:var(--subtle2);
-  --track:var(--track);    /* barres de progression */
+  /* ── Lueur de Veille — mer d'encre, phosphore, lampes sodium du port ── */
+  --bg0:#041018;
+  --bg1:#071726;
+  --bg2:#0B2032;
+  --panel:rgba(9,26,40,.68);
+  --panel-solid:#0A1E30;
+  --panel-2:#0F2638;
+  --line:rgba(154,222,255,.13);
+  --line-strong:rgba(154,222,255,.27);
+  --text:#F2EDE2;   /* chair — jamais de blanc pur, comme la lune sur la mer */
+  --muted:#9DB3BE;
+  --muted-2:#6E8794;
+  --gold:#FFB629;   /* lanterne sodium du pont */
+  --gold-2:#FFD98A;
+  --gold-deep:#C28007;
+  --gold-rgb:255,182,41;
+  --gold-hi:#FFE9B8;
+  --gold-low:#E09A14;
+  --btn-fg:#3A2504;
+  --sea:#45E6C8;    /* phosphore de meduse */
+  --sea-2:#A8F5E4;
+  --green:#5BE394;
+  --sea-rgb:69,230,200;
+  --sea-low:#0B5F55;
+  --red:#FF5E5B;    /* fosse / alerte */
+  --amber:#FFC247;
+  --side-g1:#081A28;
+  --side-g2:#030B12;
+  --topbar-bg:rgba(4,14,22,.75);
+  --overlay-bg:rgba(2,8,14,.62);
+  --legend-grad:linear-gradient(90deg,#42210F,#A34A17,#E08A14,#FFB629,#FFD98A,#FFE9B8);
+  --strong:#FFF8EC;         /* valeurs mises en exergue */
+  --subtle:rgba(255,255,255,.04);  /* fonds de blocs légers */
+  --subtle2:rgba(255,255,255,.025);
+  --track:rgba(255,255,255,.08);    /* barres de progression */
   --tick:rgba(255,255,255,.25);     /* graduations canvas */
-  --needle:#f4f8fc;                 /* aiguille jauge */
+  --needle:#F5F0E4;                 /* aiguille jauge */
+  /* Paliers de l'indice (sortie GCLEngine.scoreColor → var) */
+  --band-low:#FF8F70; --band-mid:#FFD27A; --band-good:#8DE8B4;
+  --band-great:#57EAD0; --band-epic:#FFD98A;
   --radius:18px;
   --radius-sm:12px;
   --shadow:0 24px 60px rgba(0,0,0,.45);
-  --font-display:'Fraunces',Georgia,serif;
-  --font-ui:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --font-display:'Bricolage Grotesque','Fraunces',Georgia,serif;
+  --font-ui:'Instrument Sans',Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --font-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
   --sidebar-w:288px;
   --topbar-h:64px;
 }
 html[data-theme="azur"]{
-  /* Mer Azur — Méditerranée profonde, accents corail (défaut mobile) */
-  --bg0:#031b22; --bg1:#052433; --bg2:#0a3342;
-  --panel:rgba(10,40,54,.66); --panel-solid:#0a2a3a; --panel-2:#0d3544;
-  --line:rgba(105,216,204,.15); --line-strong:rgba(105,216,204,.3);
-  --text:#e8f7f4; --muted:#8db8b1; --muted-2:#5f8f8a;
-  --gold:#ff7e63; --gold-2:#ffb59f; --gold-deep:#c04a2e;
-  --gold-rgb:255,126,99; --gold-hi:#ffd3c4; --gold-low:#e0553a; --btn-fg:#3f0f06;
-  --sea:#2ed3bf; --sea-2:#9ef2e6; --sea-rgb:46,211,191; --sea-low:#0d5a55;
-  --red:#ff5470;
-  --side-g1:#072e3d; --side-g2:#03141d;
-  --topbar-bg:rgba(3,20,29,.78); --overlay-bg:rgba(1,10,15,.62);
-  --legend-grad:linear-gradient(90deg,#0d3a38,#115a52,#1a8a72,#b8563f,#ff7e63,#ffd3c4);
-  --strong:#fff8f5;
+  /* Lueur de Veille — nuit du port de novembre, lampe allumée */
+  --bg0:#050E13; --bg1:#091A28; --bg2:#0F2A3D;
+  --panel:rgba(10,28,42,.68); --panel-solid:#0A1C2B; --panel-2:#102838;
+  --line:rgba(140,220,255,.14); --line-strong:rgba(140,220,255,.3);
+  --text:#F1ECE0; --muted:#9CADC0; --muted-2:#688292;
+  --gold:#FFB629; --gold-2:#FFD98A; --gold-deep:#C28007;
+  --gold-rgb:255,182,41; --gold-hi:#FFE9B8; --gold-low:#E09A14; --btn-fg:#3A2504;
+  --sea:#48E3C6; --sea-2:#ACF6E7; --sea-rgb:72,227,198; --sea-low:#0C605A;
+  --green:#5BE394;
+  --red:#FF5E5B;
+  --side-g1:#0A1E2E; --side-g2:#040C13;
+  --topbar-bg:rgba(5,14,19,.78); --overlay-bg:rgba(1,7,11,.64);
+  --legend-grad:linear-gradient(90deg,#3C2010,#9C4716,#D98713,#FFB629,#FFD98A,#FFE9B8);
+  --strong:#FFF9ED;
 }
 html[data-theme="nuit"]{
   /* Nuit Noire — noir pur OLED, contrastes maximaux, lisible en plein soleil */
@@ -123,6 +128,9 @@ html[data-theme="clair"]{
   --tick:rgba(18,58,78,.4);
   --needle:#13303c;
   --shadow:0 18px 44px rgba(28,62,78,.14);
+  /* Paliers — versions sombres lisibles sur fond clair */
+  --band-low:#a8401e; --band-mid:#8a5c06; --band-good:#0e7140;
+  --band-great:#04707f; --band-epic:#b8860b;
 }
 /* Ajustements ciblés du thème clair (textes teintés pensés pour fond sombre) */
 html[data-theme="clair"] .chip-red, html[data-theme="clair"] .rating-pill[data-level="low"]{color:#a03d20;border-color:rgba(211,74,38,.45);background:rgba(211,74,38,.07)}
@@ -235,7 +243,7 @@ button{font-family:inherit;cursor:pointer}
 .tp-btn.is-on{border-color:var(--strong);box-shadow:0 0 0 3px rgba(255,255,255,.14)}
 .tp-btn i{position:absolute;inset:3px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.25)}
 .tp-btn[data-theme-set="abyssal"] i{background:linear-gradient(135deg,#34c6dd 50%,#f0b429 50%)}
-.tp-btn[data-theme-set="azur"] i{background:linear-gradient(135deg,#2ed3bf 50%,#ff7e63 50%)}
+.tp-btn[data-theme-set="azur"] i{background:linear-gradient(135deg,#48E3C6 50%,#FFB629 50%)}
 .tp-btn[data-theme-set="nuit"] i{background:linear-gradient(135deg,#17171c 50%,#f6c33c 50%)}
 .tp-btn[data-theme-set="clair"] i{background:linear-gradient(135deg,#7fbfd0 50%,#e8a020 50%)}
 .tp-btn[data-theme-set="phare"] i{background:linear-gradient(135deg,#3fc9ff 50%,#f0b429 50%)}
@@ -317,7 +325,18 @@ button{font-family:inherit;cursor:pointer}
 .rating-pill[data-level="good"]{color:#b8f5cf;border-color:rgba(61,220,132,.4);background:rgba(61,220,132,.08)}
 .rating-pill[data-level="great"]{color:#8cebfa;border-color:rgba(var(--sea-rgb),.45);background:rgba(var(--sea-rgb),.1)}
 .rating-pill[data-level="epic"]{color:var(--gold-hi);border-color:rgba(var(--gold-rgb),.6);background:linear-gradient(90deg,rgba(var(--gold-rgb),.22),rgba(var(--gold-rgb),.06));box-shadow:0 0 30px rgba(var(--gold-rgb),.22)}
-.best-window{border:1px solid rgba(var(--gold-rgb),.35);background:radial-gradient(120% 160% at 20% 0%,rgba(var(--gold-rgb),.16),transparent);border-radius:var(--radius-sm);padding:10px 14px}
+.best-window{position:relative;overflow:hidden;border:1px solid rgba(var(--gold-rgb),.35);background:radial-gradient(120% 160% at 20% 0%,rgba(var(--gold-rgb),.16),transparent);border-radius:var(--radius-sm);padding:10px 14px}
+/* Signature « Lueur de Veille » — le faisceau de la lampe balaie la fenêtre de tir */
+.best-window::before{content:'';position:absolute;inset:-40% -60%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 42%,rgba(var(--gold-rgb),.14) 50%,rgba(var(--gold-hi),.22) 52%,rgba(var(--gold-rgb),.14) 54%,transparent 62%);
+  transform:translateX(-60%);animation:lamp-beam 7s ease-in-out 2.4s infinite}
+@keyframes lamp-beam{
+  0%{transform:translateX(-60%);opacity:0}
+  12%{opacity:1}
+  45%{transform:translateX(60%);opacity:1}
+  52%,100%{transform:translateX(60%);opacity:0}
+}
+@media (prefers-reduced-motion:reduce){.best-window::before{animation:none;opacity:.25;transform:none}}
 .best-window-label{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2)}
 .best-window strong{display:block;font-family:var(--font-mono);font-size:26px;letter-spacing:.03em;color:var(--strong);margin:4px 0 2px;font-variant-numeric:tabular-nums}
 .best-window-sub{font-size:11px;color:var(--muted)}
@@ -518,7 +537,7 @@ button{font-family:inherit;cursor:pointer}
 
 .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tech{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;background:var(--subtle2)}
-.tech-num{font-family:var(--font-display);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(140,235,250,.55);font-size:34px;line-height:1}
+.tech-num{font-family:var(--font-display);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(var(--sea-rgb),.55);font-size:34px;line-height:1}
 .tech h4{font-size:13.5px;margin:6px 0 6px;color:var(--strong)}
 .tech p{font-size:11.5px;color:var(--muted);line-height:1.55}
 .tech-pro{margin-top:8px;border-top:1px dashed var(--line-strong);padding-top:8px;color:var(--gold-2) !important}

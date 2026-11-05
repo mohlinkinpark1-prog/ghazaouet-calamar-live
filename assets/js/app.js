@@ -21,7 +21,7 @@ const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&
   + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
   + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
 
-const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // sur 20 pts, jan→déc
+/* Saison : source unique dans le moteur (GCLEngine.SEASON_20) */
 const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
 const WMO = {
@@ -159,52 +159,31 @@ function scoreFor(date, dm) {
   const elong = ph.elong * Math.PI / 180;
 
   // 1) Lune — 35 pts (syzygie = plein score)
-  const moon = 35 * (0.30 + 0.70 * Math.pow(Math.abs(Math.cos(elong)), 1.8));
+  const moon = GCLEngine.moonScore(elong);
 
   // 2) Solunaire — 25 pts (recouvrement nocturne + fenêtre prime 20h→02h)
   const periods = solunarForDay(date, day?.sunrise, day?.sunset);
-  let sol = 0;
-  for (const p of periods) {
-    if (p.type === 'major') sol += Math.min(8, p.nightMin / 15);
-    else sol += Math.min(2, p.nightMin / 30);
-  }
-  if (periods.some(p => p.type === 'major' && p.nightMin > 15 && isPrimeWindow(p.center))) sol += 5;
-  sol = Math.min(25, sol);
+  const sol = GCLEngine.solunarPoints(periods, isPrimeWindow);
 
   // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
-  const season = SEASON_20[date.getMonth()];
+  const season = GCLEngine.seasonScore(date.getMonth());
 
   // 4) Mer — 12 pts (vagues ≤ 7 · eau ≤ 5). Étude Baléares 2012 : CPUE plus forte par eau fraîche ; palier dès 0,6 m de houle
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
-  let wavePts = wave == null ? 4 : wave < 0.3 ? 7 : wave < 0.6 ? 6 : wave < 1.0 ? 4 : wave < 1.5 ? 2 : 0;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  let seaPts = sst == null ? 3 : sst <= 16 ? 5 : sst <= 19 ? 4 : sst <= 21 ? 3 : 1;
-  if (sst != null && sst < 12) seaPts = 2; // trop froid : activité ralentie
-  let meteo = wavePts + seaPts;
-  if (day?.windMax != null && day.windMax > 30) meteo -= 2;
-  meteo = clamp(meteo, 0, 12);
+  const meteo = GCLEngine.seaPoints(wave, sst, day?.windMax);
 
   // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
   const p = state.meteo?.current?.pressure_msl ?? null;
   const dp = pressureTrendNow();
-  let pres;
-  if (dp < -0.7) pres = 8;        // en baisse nette — favorable
-  else if (dp > 0.7) pres = 4;    // en hausse nette — défavorable
-  else if (p == null) pres = 5;
-  else if (p <= 1012) pres = 7;   // basse stable
-  else if (p <= 1018) pres = 5;   // neutre
-  else pres = 4;                  // haute stable
+  const pres = GCLEngine.pressurePoints(p, dp);
 
   const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
-  const total = clamp(Math.round(moon + sol + season + meteo + pres), 0, 100);
+  const total = GCLEngine.totalScore(parts);
   return { total, parts, phase: ph, periods, day };
 }
 
-const ratingOf = s => s < 40 ? { label: 'Faible', level: 'low' }
-  : s < 58 ? { label: 'Correct', level: 'mid' }
-  : s < 70 ? { label: 'Bon', level: 'good' }
-  : s < 85 ? { label: 'Excellent', level: 'great' }
-  : { label: 'Exceptionnel', level: 'epic' };
+const ratingOf = GCLEngine.ratingOf;
 
 const bestWindowFor = periods => {
   const nightMajors = periods.filter(p => p.type === 'major' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
@@ -572,8 +551,8 @@ function renderActivityChart(date, periods, today) {
 }
 
 /* ─────────── Rendu : grille 14 jours ─────────── */
-function bandOf(s) { return s < 40 ? 'low' : s < 58 ? 'mid' : s < 70 ? 'good' : s < 85 ? 'great' : 'epic'; }
-const scoreColor = s => s < 40 ? '#ff9a76' : s < 58 ? '#ffd98a' : s < 70 ? '#8df0b4' : s < 85 ? '#7ce7f4' : '#ffe9a8';
+const bandOf = GCLEngine.bandOf;
+const scoreColor = GCLEngine.scoreColor;
 
 function renderForecast(dm) {
   const grid = $('#forecastGrid');
@@ -744,9 +723,9 @@ function renderCalendar(dm) {
 
 /* ─────────── Rendu : barres saisonnières ─────────── */
 function renderSeasonBars() {
-  const max = Math.max(...SEASON_20);
+  const max = Math.max(...GCLEngine.SEASON_20);
   const topMonths = [9, 10, 0, 1, 11]; // oct, nov, jan, fév, déc
-  $('#seasonBars').innerHTML = SEASON_20.map((v, i) => {
+  $('#seasonBars').innerHTML = GCLEngine.SEASON_20.map((v, i) => {
     const top = topMonths.includes(i);
     return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
   }).join('');
@@ -810,7 +789,7 @@ function bindNav() {
 
 /* ─────────── Thèmes (Mer Azur par défaut, tous sombres) ─────────── */
 const THEME_NAMES = { azur: 'Mer Azur', abyssal: 'Abyssal', clair: 'Jour Mer (clair)', nuit: 'Nuit Noire', phare: 'Phare Bleu', terre: 'Terre & Sel' };
-const THEME_META = { azur: '#031b22', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
+const THEME_META = { azur: '#050E13', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
 function bindTheme() {
   let t = 'azur';
   try { t = localStorage.getItem('gcl-theme') || 'azur'; } catch { /* privé */ }

@@ -7,6 +7,7 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const read = p => readFileSync(join(root, p), 'utf8');
 
 const css = read('assets/css/style.css');
+const engine = read('assets/js/engine.js');
 const astro = read('assets/js/astro.js');
 const app = read('assets/js/app.js');
 const iconSvg = read('assets/icon.svg');
@@ -17,7 +18,8 @@ let html = read('index.html');
 
 // CSS inline
 html = html.replace(/<link rel="stylesheet" href="assets\/css\/style\.css[^"]*">/, () => `<style>\n${css}\n</style>`);
-// JS inline (ordre : astro puis app)
+// JS inline (ordre : engine, astro puis app)
+html = html.replace(/<script src="assets\/js\/engine\.js[^"]*"><\/script>/, () => `<script>\n${engine}\n</script>`);
 html = html.replace(/<script src="assets\/js\/astro\.js[^"]*"><\/script>/, () => `<script>\n${astro}\n</script>`);
 html = html.replace(/<script src="assets\/js\/app\.js[^"]*"><\/script>/, () => `<script>\n${app}\n</script>`);
 // Icône en data URI partout

@@ -7,74 +7,80 @@
 <meta name="description" content="App pro en direct pour la pêche du calamar (encornet) au port de Ghazaouet (Tlemcen, Algérie) : Indice Calamar sur 100, phases lunaires, périodes solunaires majeures et mineures, marée, météo et état de la mer temps réel, calendrier des meilleures journées.">
 <meta name="theme-color" content="#050e1a">
 <meta name="author" content="Ghazaouet Calamar Live">
-<link rel="icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" type="image/svg+xml">
+<link rel="icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3C!--%20Lueur%20de%20Veille%20%E2%80%94%20encornet%20phosphore%20dans%20le%20faisceau%20sodium%2C%20lune%20d%27or%20--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230C1A2A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230A1624%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3CradialGradient%20id%3D%22halo%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD278%22%20stop-opacity%3D%22.45%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FradialGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22beamg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%22.36%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD98A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23E09A14%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ACF6E7%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233FCDB2%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3C!--%20lune%20--%3E%0A%20%20%3Ccircle%20cx%3D%2249.7%22%20cy%3D%2218.5%22%20r%3D%227.5%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2252.1%22%20cy%3D%2216.6%22%20r%3D%226.1%22%20fill%3D%22%230C1A2A%22%2F%3E%0A%20%20%3C!--%20faisceau%20%2B%20lampe%20--%3E%0A%20%20%3Cpath%20d%3D%22M12.5%209%20L53.7%2043.7%20L18.7%2058.7%20Z%22%20fill%3D%22url%28%23beamg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%229%22%20r%3D%2218%22%20fill%3D%22url%28%23halo%29%22%2F%3E%0A%20%20%3C!--%20encornet%20--%3E%0A%20%20%3Cg%20transform%3D%22translate%2831.2%2030.7%29%20rotate%28-12%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0.5%20-16%20L10.7%20-7.7%20L3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-0.5%20-16%20L-10.7%20-7.7%20L-3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%20-18.5%20C3.7%20-13%205.7%20-6.5%205.7%203%20C5.7%209.7%203%2013.2%200%2013.2%20C-3%2013.2%20-5.7%209.7%20-5.7%203%20C-5.7%20-6.5%20-3.7%20-13%200%20-18.5%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22-2.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%222.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-9%2025.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-4%2027.7%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L1.5%2028.2%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L6.5%2026.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L10.5%2024.5%22%20stroke-width%3D%222.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M-1%2015%20Q-7.2%2023.7%20-8.2%2031.5%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M1.2%2015.2%20Q8%2024.5%209.5%2032.2%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-4.2%20-2%20Q0%20-3.7%204.2%20-2M-4%202.5%20Q0%20.8%204%202.5M-3.8%207%20Q0%205.3%203.8%207%22%20fill%3D%22none%22%20stroke%3D%22rgba%2810%2C22%2C36%2C.25%29%22%20stroke-width%3D%22.7%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3C!--%20mer%20--%3E%0A%20%20%3Cpath%20d%3D%22M5.5%2052.5%20Q11.5%2049.5%2017.5%2052.5%20T29.5%2052.5%20T41.5%2052.5%20T53.5%2052.5%20T64.5%2052.5%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.92%22%20stroke-width%3D%223.1%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11.5%2059%20Q17%2056.2%2022.5%2059%20T33.5%2059%20T44.5%2059%20T55.5%2059%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.38%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E%0A" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    GHAZAOUET CALAMAR LIVE — Design system
    ============================================================ */
 :root{
-  --bg0:#040c16;
-  --bg1:#07182b;
-  --bg2:#0a1f33;
-  --panel:rgba(14,32,52,.66);
-  --panel-solid:#0e2033;
-  --panel-2:#12263c;
-  --line:rgba(130,190,225,.14);
-  --line-strong:rgba(130,190,225,.28);
-  --text:#e9eff6;
-  --muted:#8ba6bc;
-  --muted-2:#5f7d94;
-  --gold:#f0b429;
-  --gold-2:#ffd970;
-  --gold-deep:#b97f10;
-  --gold-rgb:240,180,41;
-  --gold-hi:#ffe9a8;
-  --gold-low:#d9a117;
-  --btn-fg:var(--btn-fg);
-  --sea:#34c6dd;
-  --sea-2:#8cebfa;
-  --green:#3ddc84;
-  --sea-rgb:52,198,221;
-  --sea-low:#164e63;
-  --red:#ff7a52;
-  --amber:#ffc247;
-  --side-g1:#0b1d30;
-  --side-g2:#060f1c;
-  --topbar-bg:rgba(6,15,28,.72);
-  --overlay-bg:rgba(2,8,16,.6);
-  --legend-grad:linear-gradient(90deg,#3a2a20,#7a3a1c,#a3541f,#c98a12,#f0b429,#ffe9a8);
-  --strong:#ffffff;         /* valeurs mises en exergue */
-  --subtle:rgba(255,255,255,.035);  /* fonds de blocs légers */
-  --subtle2:var(--subtle2);
-  --track:var(--track);    /* barres de progression */
+  /* ── Lueur de Veille — mer d'encre, phosphore, lampes sodium du port ── */
+  --bg0:#041018;
+  --bg1:#071726;
+  --bg2:#0B2032;
+  --panel:rgba(9,26,40,.68);
+  --panel-solid:#0A1E30;
+  --panel-2:#0F2638;
+  --line:rgba(154,222,255,.13);
+  --line-strong:rgba(154,222,255,.27);
+  --text:#F2EDE2;   /* chair — jamais de blanc pur, comme la lune sur la mer */
+  --muted:#9DB3BE;
+  --muted-2:#6E8794;
+  --gold:#FFB629;   /* lanterne sodium du pont */
+  --gold-2:#FFD98A;
+  --gold-deep:#C28007;
+  --gold-rgb:255,182,41;
+  --gold-hi:#FFE9B8;
+  --gold-low:#E09A14;
+  --btn-fg:#3A2504;
+  --sea:#45E6C8;    /* phosphore de meduse */
+  --sea-2:#A8F5E4;
+  --green:#5BE394;
+  --sea-rgb:69,230,200;
+  --sea-low:#0B5F55;
+  --red:#FF5E5B;    /* fosse / alerte */
+  --amber:#FFC247;
+  --side-g1:#081A28;
+  --side-g2:#030B12;
+  --topbar-bg:rgba(4,14,22,.75);
+  --overlay-bg:rgba(2,8,14,.62);
+  --legend-grad:linear-gradient(90deg,#42210F,#A34A17,#E08A14,#FFB629,#FFD98A,#FFE9B8);
+  --strong:#FFF8EC;         /* valeurs mises en exergue */
+  --subtle:rgba(255,255,255,.04);  /* fonds de blocs légers */
+  --subtle2:rgba(255,255,255,.025);
+  --track:rgba(255,255,255,.08);    /* barres de progression */
   --tick:rgba(255,255,255,.25);     /* graduations canvas */
-  --needle:#f4f8fc;                 /* aiguille jauge */
+  --needle:#F5F0E4;                 /* aiguille jauge */
+  /* Paliers de l'indice (sortie GCLEngine.scoreColor → var) */
+  --band-low:#FF8F70; --band-mid:#FFD27A; --band-good:#8DE8B4;
+  --band-great:#57EAD0; --band-epic:#FFD98A;
   --radius:18px;
   --radius-sm:12px;
   --shadow:0 24px 60px rgba(0,0,0,.45);
-  --font-display:'Fraunces',Georgia,serif;
-  --font-ui:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --font-display:'Bricolage Grotesque','Fraunces',Georgia,serif;
+  --font-ui:'Instrument Sans',Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --font-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
   --sidebar-w:288px;
   --topbar-h:64px;
 }
 html[data-theme="azur"]{
-  /* Mer Azur — Méditerranée profonde, accents corail (défaut mobile) */
-  --bg0:#031b22; --bg1:#052433; --bg2:#0a3342;
-  --panel:rgba(10,40,54,.66); --panel-solid:#0a2a3a; --panel-2:#0d3544;
-  --line:rgba(105,216,204,.15); --line-strong:rgba(105,216,204,.3);
-  --text:#e8f7f4; --muted:#8db8b1; --muted-2:#5f8f8a;
-  --gold:#ff7e63; --gold-2:#ffb59f; --gold-deep:#c04a2e;
-  --gold-rgb:255,126,99; --gold-hi:#ffd3c4; --gold-low:#e0553a; --btn-fg:#3f0f06;
-  --sea:#2ed3bf; --sea-2:#9ef2e6; --sea-rgb:46,211,191; --sea-low:#0d5a55;
-  --red:#ff5470;
-  --side-g1:#072e3d; --side-g2:#03141d;
-  --topbar-bg:rgba(3,20,29,.78); --overlay-bg:rgba(1,10,15,.62);
-  --legend-grad:linear-gradient(90deg,#0d3a38,#115a52,#1a8a72,#b8563f,#ff7e63,#ffd3c4);
-  --strong:#fff8f5;
+  /* Lueur de Veille — nuit du port de novembre, lampe allumée */
+  --bg0:#050E13; --bg1:#091A28; --bg2:#0F2A3D;
+  --panel:rgba(10,28,42,.68); --panel-solid:#0A1C2B; --panel-2:#102838;
+  --line:rgba(140,220,255,.14); --line-strong:rgba(140,220,255,.3);
+  --text:#F1ECE0; --muted:#9CADC0; --muted-2:#688292;
+  --gold:#FFB629; --gold-2:#FFD98A; --gold-deep:#C28007;
+  --gold-rgb:255,182,41; --gold-hi:#FFE9B8; --gold-low:#E09A14; --btn-fg:#3A2504;
+  --sea:#48E3C6; --sea-2:#ACF6E7; --sea-rgb:72,227,198; --sea-low:#0C605A;
+  --green:#5BE394;
+  --red:#FF5E5B;
+  --side-g1:#0A1E2E; --side-g2:#040C13;
+  --topbar-bg:rgba(5,14,19,.78); --overlay-bg:rgba(1,7,11,.64);
+  --legend-grad:linear-gradient(90deg,#3C2010,#9C4716,#D98713,#FFB629,#FFD98A,#FFE9B8);
+  --strong:#FFF9ED;
 }
 html[data-theme="nuit"]{
   /* Nuit Noire — noir pur OLED, contrastes maximaux, lisible en plein soleil */
@@ -137,6 +143,9 @@ html[data-theme="clair"]{
   --tick:rgba(18,58,78,.4);
   --needle:#13303c;
   --shadow:0 18px 44px rgba(28,62,78,.14);
+  /* Paliers — versions sombres lisibles sur fond clair */
+  --band-low:#a8401e; --band-mid:#8a5c06; --band-good:#0e7140;
+  --band-great:#04707f; --band-epic:#b8860b;
 }
 /* Ajustements ciblés du thème clair (textes teintés pensés pour fond sombre) */
 html[data-theme="clair"] .chip-red, html[data-theme="clair"] .rating-pill[data-level="low"]{color:#a03d20;border-color:rgba(211,74,38,.45);background:rgba(211,74,38,.07)}
@@ -249,7 +258,7 @@ button{font-family:inherit;cursor:pointer}
 .tp-btn.is-on{border-color:var(--strong);box-shadow:0 0 0 3px rgba(255,255,255,.14)}
 .tp-btn i{position:absolute;inset:3px;border-radius:50%;display:block;border:1px solid rgba(0,0,0,.25)}
 .tp-btn[data-theme-set="abyssal"] i{background:linear-gradient(135deg,#34c6dd 50%,#f0b429 50%)}
-.tp-btn[data-theme-set="azur"] i{background:linear-gradient(135deg,#2ed3bf 50%,#ff7e63 50%)}
+.tp-btn[data-theme-set="azur"] i{background:linear-gradient(135deg,#48E3C6 50%,#FFB629 50%)}
 .tp-btn[data-theme-set="nuit"] i{background:linear-gradient(135deg,#17171c 50%,#f6c33c 50%)}
 .tp-btn[data-theme-set="clair"] i{background:linear-gradient(135deg,#7fbfd0 50%,#e8a020 50%)}
 .tp-btn[data-theme-set="phare"] i{background:linear-gradient(135deg,#3fc9ff 50%,#f0b429 50%)}
@@ -331,7 +340,18 @@ button{font-family:inherit;cursor:pointer}
 .rating-pill[data-level="good"]{color:#b8f5cf;border-color:rgba(61,220,132,.4);background:rgba(61,220,132,.08)}
 .rating-pill[data-level="great"]{color:#8cebfa;border-color:rgba(var(--sea-rgb),.45);background:rgba(var(--sea-rgb),.1)}
 .rating-pill[data-level="epic"]{color:var(--gold-hi);border-color:rgba(var(--gold-rgb),.6);background:linear-gradient(90deg,rgba(var(--gold-rgb),.22),rgba(var(--gold-rgb),.06));box-shadow:0 0 30px rgba(var(--gold-rgb),.22)}
-.best-window{border:1px solid rgba(var(--gold-rgb),.35);background:radial-gradient(120% 160% at 20% 0%,rgba(var(--gold-rgb),.16),transparent);border-radius:var(--radius-sm);padding:10px 14px}
+.best-window{position:relative;overflow:hidden;border:1px solid rgba(var(--gold-rgb),.35);background:radial-gradient(120% 160% at 20% 0%,rgba(var(--gold-rgb),.16),transparent);border-radius:var(--radius-sm);padding:10px 14px}
+/* Signature « Lueur de Veille » — le faisceau de la lampe balaie la fenêtre de tir */
+.best-window::before{content:'';position:absolute;inset:-40% -60%;pointer-events:none;
+  background:linear-gradient(105deg,transparent 42%,rgba(var(--gold-rgb),.14) 50%,rgba(var(--gold-hi),.22) 52%,rgba(var(--gold-rgb),.14) 54%,transparent 62%);
+  transform:translateX(-60%);animation:lamp-beam 7s ease-in-out 2.4s infinite}
+@keyframes lamp-beam{
+  0%{transform:translateX(-60%);opacity:0}
+  12%{opacity:1}
+  45%{transform:translateX(60%);opacity:1}
+  52%,100%{transform:translateX(60%);opacity:0}
+}
+@media (prefers-reduced-motion:reduce){.best-window::before{animation:none;opacity:.25;transform:none}}
 .best-window-label{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2)}
 .best-window strong{display:block;font-family:var(--font-mono);font-size:26px;letter-spacing:.03em;color:var(--strong);margin:4px 0 2px;font-variant-numeric:tabular-nums}
 .best-window-sub{font-size:11px;color:var(--muted)}
@@ -532,7 +552,7 @@ button{font-family:inherit;cursor:pointer}
 
 .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tech{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;background:var(--subtle2)}
-.tech-num{font-family:var(--font-display);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(140,235,250,.55);font-size:34px;line-height:1}
+.tech-num{font-family:var(--font-display);font-weight:700;color:transparent;-webkit-text-stroke:1px rgba(var(--sea-rgb),.55);font-size:34px;line-height:1}
 .tech h4{font-size:13.5px;margin:6px 0 6px;color:var(--strong)}
 .tech p{font-size:11.5px;color:var(--muted);line-height:1.55}
 .tech-pro{margin-top:8px;border-top:1px dashed var(--line-strong);padding-top:8px;color:var(--gold-2) !important}
@@ -830,7 +850,7 @@ button{font-family:inherit;cursor:pointer}
 <!-- ═══════════ SIDEBAR ═══════════ -->
 <aside class="sidebar" id="sidebar" aria-label="Navigation principale">
   <div class="brand">
-    <img class="brand-logo" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="Logo Ghazaouet Calamar Live" width="52" height="52">
+    <img class="brand-logo" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3C!--%20Lueur%20de%20Veille%20%E2%80%94%20encornet%20phosphore%20dans%20le%20faisceau%20sodium%2C%20lune%20d%27or%20--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230C1A2A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230A1624%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3CradialGradient%20id%3D%22halo%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD278%22%20stop-opacity%3D%22.45%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FradialGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22beamg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%22.36%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD98A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23E09A14%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ACF6E7%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233FCDB2%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3C!--%20lune%20--%3E%0A%20%20%3Ccircle%20cx%3D%2249.7%22%20cy%3D%2218.5%22%20r%3D%227.5%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2252.1%22%20cy%3D%2216.6%22%20r%3D%226.1%22%20fill%3D%22%230C1A2A%22%2F%3E%0A%20%20%3C!--%20faisceau%20%2B%20lampe%20--%3E%0A%20%20%3Cpath%20d%3D%22M12.5%209%20L53.7%2043.7%20L18.7%2058.7%20Z%22%20fill%3D%22url%28%23beamg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%229%22%20r%3D%2218%22%20fill%3D%22url%28%23halo%29%22%2F%3E%0A%20%20%3C!--%20encornet%20--%3E%0A%20%20%3Cg%20transform%3D%22translate%2831.2%2030.7%29%20rotate%28-12%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0.5%20-16%20L10.7%20-7.7%20L3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-0.5%20-16%20L-10.7%20-7.7%20L-3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%20-18.5%20C3.7%20-13%205.7%20-6.5%205.7%203%20C5.7%209.7%203%2013.2%200%2013.2%20C-3%2013.2%20-5.7%209.7%20-5.7%203%20C-5.7%20-6.5%20-3.7%20-13%200%20-18.5%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22-2.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%222.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-9%2025.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-4%2027.7%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L1.5%2028.2%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L6.5%2026.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L10.5%2024.5%22%20stroke-width%3D%222.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M-1%2015%20Q-7.2%2023.7%20-8.2%2031.5%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M1.2%2015.2%20Q8%2024.5%209.5%2032.2%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-4.2%20-2%20Q0%20-3.7%204.2%20-2M-4%202.5%20Q0%20.8%204%202.5M-3.8%207%20Q0%205.3%203.8%207%22%20fill%3D%22none%22%20stroke%3D%22rgba%2810%2C22%2C36%2C.25%29%22%20stroke-width%3D%22.7%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3C!--%20mer%20--%3E%0A%20%20%3Cpath%20d%3D%22M5.5%2052.5%20Q11.5%2049.5%2017.5%2052.5%20T29.5%2052.5%20T41.5%2052.5%20T53.5%2052.5%20T64.5%2052.5%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.92%22%20stroke-width%3D%223.1%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11.5%2059%20Q17%2056.2%2022.5%2059%20T33.5%2059%20T44.5%2059%20T55.5%2059%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.38%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="Logo Ghazaouet Calamar Live" width="52" height="52">
     <div class="brand-text">
       <span class="brand-kicker">الغزوات · Tlemcen · Algérie</span>
       <h1 class="brand-name">Ghazaouet <em>Calamar&nbsp;Live</em></h1>
@@ -1270,7 +1290,7 @@ button{font-family:inherit;cursor:pointer}
       </div>
       <div class="version-box">
         <span class="mini-card-kicker">Version</span>
-        <p>Ghazaouet Calamar Live v1.0 · Novembre 2026 · Conçu pour les pêcheurs du port de Ghazaouet.<br>Données © Open-Meteo (CC BY 4.0). Icônes : sprite interne. Police : Fraunces / Inter / JetBrains Mono.</p>
+        <p>Ghazaouet Calamar Live v1.0 · Novembre 2026 · Conçu pour les pêcheurs du port de Ghazaouet.<br>Données © Open-Meteo (CC BY 4.0). Icônes : sprite interne. Police : Bricolage Grotesque / Instrument Sans / JetBrains Mono.</p>
       </div>
     </article>
   </div>
@@ -1278,7 +1298,7 @@ button{font-family:inherit;cursor:pointer}
 
 <footer class="footer">
   <div class="footer-col footer-brand">
-    <img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2310233a%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23050e1a%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd970%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfa028%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%220%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%2334c6dd%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%237ce7f4%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2243%22%20cy%3D%2219%22%20r%3D%229%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2247.5%22%20cy%3D%2215.5%22%20r%3D%227.6%22%20fill%3D%22%230e2136%22%2F%3E%0A%20%20%3Cg%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M22%2010v22.5a8%208%200%201%201-16%200%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2032.5l5.2-3.2%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Ccircle%20cx%3D%2222%22%20cy%3D%229%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22url%28%23gold%29%22%20stroke-width%3D%223%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M6%2047q5.5-5%2011%200t11%200%2011%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.95%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11%2055q5.5-5%2011%200t11%200%2011%200%2011%200%22%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.55%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="" width="40" height="40">
+    <img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3C!--%20Lueur%20de%20Veille%20%E2%80%94%20encornet%20phosphore%20dans%20le%20faisceau%20sodium%2C%20lune%20d%27or%20--%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230C1A2A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230A1624%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3CradialGradient%20id%3D%22halo%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD278%22%20stop-opacity%3D%22.45%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FradialGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22beamg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%22.36%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB629%22%20stop-opacity%3D%220%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFD98A%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23E09A14%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22sea%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ACF6E7%22%2F%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233FCDB2%22%2F%3E%0A%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%3C!--%20lune%20--%3E%0A%20%20%3Ccircle%20cx%3D%2249.7%22%20cy%3D%2218.5%22%20r%3D%227.5%22%20fill%3D%22url%28%23gold%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2252.1%22%20cy%3D%2216.6%22%20r%3D%226.1%22%20fill%3D%22%230C1A2A%22%2F%3E%0A%20%20%3C!--%20faisceau%20%2B%20lampe%20--%3E%0A%20%20%3Cpath%20d%3D%22M12.5%209%20L53.7%2043.7%20L18.7%2058.7%20Z%22%20fill%3D%22url%28%23beamg%29%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2212.5%22%20cy%3D%229%22%20r%3D%2218%22%20fill%3D%22url%28%23halo%29%22%2F%3E%0A%20%20%3C!--%20encornet%20--%3E%0A%20%20%3Cg%20transform%3D%22translate%2831.2%2030.7%29%20rotate%28-12%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0.5%20-16%20L10.7%20-7.7%20L3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-0.5%20-16%20L-10.7%20-7.7%20L-3.2%20-7.2%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%20-18.5%20C3.7%20-13%205.7%20-6.5%205.7%203%20C5.7%209.7%203%2013.2%200%2013.2%20C-3%2013.2%20-5.7%209.7%20-5.7%203%20C-5.7%20-6.5%20-3.7%20-13%200%20-18.5%20Z%22%20fill%3D%22url%28%23sea%29%22%20stroke%3D%22url%28%23bg%29%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22-2.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%222.1%22%20cy%3D%2212%22%20r%3D%221.2%22%20fill%3D%22url%28%23bg%29%22%2F%3E%0A%20%20%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22url%28%23sea%29%22%20stroke-linecap%3D%22round%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-9%2025.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L-4%2027.7%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L1.5%2028.2%22%20stroke-width%3D%223.2%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L6.5%2026.7%22%20stroke-width%3D%223.1%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M0%2014.5%20L10.5%2024.5%22%20stroke-width%3D%222.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M-1%2015%20Q-7.2%2023.7%20-8.2%2031.5%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M1.2%2015.2%20Q8%2024.5%209.5%2032.2%22%20stroke-width%3D%221.9%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cpath%20d%3D%22M-4.2%20-2%20Q0%20-3.7%204.2%20-2M-4%202.5%20Q0%20.8%204%202.5M-3.8%207%20Q0%205.3%203.8%207%22%20fill%3D%22none%22%20stroke%3D%22rgba%2810%2C22%2C36%2C.25%29%22%20stroke-width%3D%22.7%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3C!--%20mer%20--%3E%0A%20%20%3Cpath%20d%3D%22M5.5%2052.5%20Q11.5%2049.5%2017.5%2052.5%20T29.5%2052.5%20T41.5%2052.5%20T53.5%2052.5%20T64.5%2052.5%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.92%22%20stroke-width%3D%223.1%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M11.5%2059%20Q17%2056.2%2022.5%2059%20T33.5%2059%20T44.5%2059%20T55.5%2059%22%20fill%3D%22none%22%20stroke%3D%22%2348E3C6%22%20stroke-opacity%3D%22.38%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="" width="40" height="40">
     <div><strong>Ghazaouet Calamar Live</strong><span>La météo du calamar, en direct du port.</span></div>
   </div>
   <div class="footer-col"><span class="footer-title">Données</span><a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.fao.org/fishery/species/918/en" target="_blank" rel="noopener">FAO — Loligo vulgaris <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.meteo.dz" target="_blank" rel="noopener">Météo Algérie (ONM) <svg class="ic ic-xs"><use href="#i-external"/></svg></a></div>
@@ -1296,6 +1316,89 @@ button{font-family:inherit;cursor:pointer}
   <button class="tab-btn" data-nav="methode" aria-label="Méthode et sources"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
 </nav>
 
+<script>
+/* ============================================================
+   GHAZAOUET CALAMAR LIVE — Moteur de notation (pur, sans DOM)
+   Module universel : chargeable par <script> (window.GCLEngine)
+   et par Node (module.exports). Les entrées/sorties ne contiennent
+   que des valeurs — aucun accès à document, localStorage ou réseau.
+   ============================================================ */
+'use strict';
+
+(function (global) {
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  /* Paliers de l'Indice Calamar™ : 40 / 58 / 70 / 85 */
+  const ratingOf = s => s < 40 ? { label: 'Faible', level: 'low' }
+    : s < 58 ? { label: 'Correct', level: 'mid' }
+    : s < 70 ? { label: 'Bon', level: 'good' }
+    : s < 85 ? { label: 'Excellent', level: 'great' }
+    : { label: 'Exceptionnel', level: 'epic' };
+
+  const bandOf = s => s < 40 ? 'low' : s < 58 ? 'mid' : s < 70 ? 'good' : s < 85 ? 'great' : 'epic';
+
+  /* Couleurs par palier → variables CSS du thème actif */
+  const scoreColor = s => s < 40 ? 'var(--band-low)' : s < 58 ? 'var(--band-mid)'
+    : s < 70 ? 'var(--band-good)' : s < 85 ? 'var(--band-great)' : 'var(--band-epic)';
+
+  /* ── Mer — 12 pts : houle ≤ 7 · eau ≤ 5 · vent > 30 km/h −2 (Baléares 2012) ── */
+  const wavePoints = w => w == null ? 4
+    : w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1.0 ? 4 : w < 1.5 ? 2 : 0;
+
+  const waterPoints = t => t == null ? 3
+    : t < 12 ? 2 /* trop froid : activité ralentie */
+    : t <= 16 ? 5 : t <= 19 ? 4 : t <= 21 ? 3 : 1;
+
+  const seaPoints = (wave, sst, windMax) => {
+    let sea = wavePoints(wave) + waterPoints(sst);
+    if (windMax != null && windMax > 30) sea -= 2;
+    return clamp(sea, 0, 12);
+  };
+
+  /* ── Pression — 8 pts : basse pression (ou en baisse) = touches meilleures ── */
+  const pressurePoints = (p, dp) => {
+    if (dp < -0.7) return 8;
+    if (dp > 0.7) return 4;
+    if (p == null) return 5;
+    if (p <= 1012) return 7;
+    if (p <= 1018) return 5;
+    return 4;
+  };
+
+  /* ── Lune — 35 pts : syzygie (nouvelle ou pleine) = plein score ── */
+  const moonScore = elongRad => 35 * (0.30 + 0.70 * Math.pow(Math.abs(Math.cos(elongRad)), 1.8));
+
+  /* ── Solunaire — 25 pts : recouvrement nocturne + fenêtre prime 20h→02h ── */
+  const solunarPoints = (periods, isPrime) => {
+    let sol = 0;
+    for (const p of periods) {
+      if (p.type === 'major') sol += Math.min(8, p.nightMin / 15);
+      else sol += Math.min(2, p.nightMin / 30);
+    }
+    if (periods.some(p => p.type === 'major' && p.nightMin > 15 && isPrime(p.center))) sol += 5;
+    return Math.min(25, sol);
+  };
+
+  /* ── Saison — 20 pts max (Méditerranée ouest : migration, pontes, recrutement) ── */
+  const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // jan→déc
+  const seasonScore = m => SEASON_20[((m % 12) + 12) % 12];
+
+  /* ── Total — somme arrondie bornée 0–100 ── */
+  const totalScore = pieces => clamp(Math.round(
+    (pieces.moon ?? 0) + (pieces.sol ?? 0) + (pieces.season ?? 0) +
+    (pieces.meteo ?? 0) + (pieces.pres ?? 0)), 0, 100);
+
+  const GCLEngine = {
+    clamp, ratingOf, bandOf, scoreColor,
+    wavePoints, waterPoints, seaPoints, pressurePoints,
+    moonScore, solunarPoints, seasonScore, SEASON_20, totalScore
+  };
+
+  if (global) global.GCLEngine = GCLEngine;
+  if (typeof module !== 'undefined' && module.exports) module.exports = GCLEngine;
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : null));
+
+</script>
 <script>
 /* ============================================================
    GHAZAOUET CALAMAR LIVE — Moteur astronomique & solunaire
@@ -1570,7 +1673,7 @@ const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&
   + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
   + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
 
-const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // sur 20 pts, jan→déc
+/* Saison : source unique dans le moteur (GCLEngine.SEASON_20) */
 const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
 const WMO = {
@@ -1708,52 +1811,31 @@ function scoreFor(date, dm) {
   const elong = ph.elong * Math.PI / 180;
 
   // 1) Lune — 35 pts (syzygie = plein score)
-  const moon = 35 * (0.30 + 0.70 * Math.pow(Math.abs(Math.cos(elong)), 1.8));
+  const moon = GCLEngine.moonScore(elong);
 
   // 2) Solunaire — 25 pts (recouvrement nocturne + fenêtre prime 20h→02h)
   const periods = solunarForDay(date, day?.sunrise, day?.sunset);
-  let sol = 0;
-  for (const p of periods) {
-    if (p.type === 'major') sol += Math.min(8, p.nightMin / 15);
-    else sol += Math.min(2, p.nightMin / 30);
-  }
-  if (periods.some(p => p.type === 'major' && p.nightMin > 15 && isPrimeWindow(p.center))) sol += 5;
-  sol = Math.min(25, sol);
+  const sol = GCLEngine.solunarPoints(periods, isPrimeWindow);
 
   // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
-  const season = SEASON_20[date.getMonth()];
+  const season = GCLEngine.seasonScore(date.getMonth());
 
   // 4) Mer — 12 pts (vagues ≤ 7 · eau ≤ 5). Étude Baléares 2012 : CPUE plus forte par eau fraîche ; palier dès 0,6 m de houle
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
-  let wavePts = wave == null ? 4 : wave < 0.3 ? 7 : wave < 0.6 ? 6 : wave < 1.0 ? 4 : wave < 1.5 ? 2 : 0;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  let seaPts = sst == null ? 3 : sst <= 16 ? 5 : sst <= 19 ? 4 : sst <= 21 ? 3 : 1;
-  if (sst != null && sst < 12) seaPts = 2; // trop froid : activité ralentie
-  let meteo = wavePts + seaPts;
-  if (day?.windMax != null && day.windMax > 30) meteo -= 2;
-  meteo = clamp(meteo, 0, 12);
+  const meteo = GCLEngine.seaPoints(wave, sst, day?.windMax);
 
   // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
   const p = state.meteo?.current?.pressure_msl ?? null;
   const dp = pressureTrendNow();
-  let pres;
-  if (dp < -0.7) pres = 8;        // en baisse nette — favorable
-  else if (dp > 0.7) pres = 4;    // en hausse nette — défavorable
-  else if (p == null) pres = 5;
-  else if (p <= 1012) pres = 7;   // basse stable
-  else if (p <= 1018) pres = 5;   // neutre
-  else pres = 4;                  // haute stable
+  const pres = GCLEngine.pressurePoints(p, dp);
 
   const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
-  const total = clamp(Math.round(moon + sol + season + meteo + pres), 0, 100);
+  const total = GCLEngine.totalScore(parts);
   return { total, parts, phase: ph, periods, day };
 }
 
-const ratingOf = s => s < 40 ? { label: 'Faible', level: 'low' }
-  : s < 58 ? { label: 'Correct', level: 'mid' }
-  : s < 70 ? { label: 'Bon', level: 'good' }
-  : s < 85 ? { label: 'Excellent', level: 'great' }
-  : { label: 'Exceptionnel', level: 'epic' };
+const ratingOf = GCLEngine.ratingOf;
 
 const bestWindowFor = periods => {
   const nightMajors = periods.filter(p => p.type === 'major' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
@@ -2121,8 +2203,8 @@ function renderActivityChart(date, periods, today) {
 }
 
 /* ─────────── Rendu : grille 14 jours ─────────── */
-function bandOf(s) { return s < 40 ? 'low' : s < 58 ? 'mid' : s < 70 ? 'good' : s < 85 ? 'great' : 'epic'; }
-const scoreColor = s => s < 40 ? '#ff9a76' : s < 58 ? '#ffd98a' : s < 70 ? '#8df0b4' : s < 85 ? '#7ce7f4' : '#ffe9a8';
+const bandOf = GCLEngine.bandOf;
+const scoreColor = GCLEngine.scoreColor;
 
 function renderForecast(dm) {
   const grid = $('#forecastGrid');
@@ -2293,9 +2375,9 @@ function renderCalendar(dm) {
 
 /* ─────────── Rendu : barres saisonnières ─────────── */
 function renderSeasonBars() {
-  const max = Math.max(...SEASON_20);
+  const max = Math.max(...GCLEngine.SEASON_20);
   const topMonths = [9, 10, 0, 1, 11]; // oct, nov, jan, fév, déc
-  $('#seasonBars').innerHTML = SEASON_20.map((v, i) => {
+  $('#seasonBars').innerHTML = GCLEngine.SEASON_20.map((v, i) => {
     const top = topMonths.includes(i);
     return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
   }).join('');
@@ -2359,7 +2441,7 @@ function bindNav() {
 
 /* ─────────── Thèmes (Mer Azur par défaut, tous sombres) ─────────── */
 const THEME_NAMES = { azur: 'Mer Azur', abyssal: 'Abyssal', clair: 'Jour Mer (clair)', nuit: 'Nuit Noire', phare: 'Phare Bleu', terre: 'Terre & Sel' };
-const THEME_META = { azur: '#031b22', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
+const THEME_META = { azur: '#050E13', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
 function bindTheme() {
   let t = 'azur';
   try { t = localStorage.getItem('gcl-theme') || 'azur'; } catch { /* privé */ }
