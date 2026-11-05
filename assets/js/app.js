@@ -769,22 +769,54 @@ function renderMethod() {
     <li class="method-item"><div><h4>${m.h}</h4><p>${m.p}</p></div><div class="method-weight">${m.w}<small>poids</small></div></li>`).join('');
 }
 
-/* ─────────── Navigation / vues ─────────── */
+/* ─────────── Navigation — story verticale : scroll + scroll-spy ─────────── */
 const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
+let spyPiloting = false; // vrai pendant un défilement déclenché par le dock
+let spyArmed = false;
+function setDockActive(name) {
+  $$('.dock-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
+  try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
+}
 function activateView(name) {
   if (!VIEW_IDS.includes(name)) name = 'dashboard';
-  $$('.view').forEach(v => v.classList.toggle('is-active', v.id === 'view-' + name));
-  $$('.nav-item[data-nav], .tab-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
-  try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
+  const target = document.getElementById('s-' + name);
+  setDockActive(name);
+  spyPiloting = true; // on pilote le scroll : le spy reprend la main une fois arrivé
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const disarm = () => { spyPiloting = false; };
+  if ('onscrollend' in window) document.addEventListener('scrollend', disarm, { once: true, capture: true });
+  setTimeout(disarm, 1300);
   $('#sidebar').classList.remove('is-open');
   $('#sidebarOverlay').classList.remove('is-on');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+let spyTickPending = false;
+function spyTick() {
+  spyTickPending = false;
+  if (spyPiloting) return;
+  /* ligne de focus : ~35 % de la hauteur visible, sous la topbar */
+  const focus = window.innerHeight * 0.35;
+  let current = null;
+  for (const s of $$('section[data-sec]')) {
+    const top = s.getBoundingClientRect().top;
+    if (top <= focus) current = s.dataset.sec;
+    else break;
+  }
+  if (!current) current = 'dashboard';
+  if (current !== (document.querySelector('.dock-btn.is-active') || {}).dataset?.nav) setDockActive(current);
 }
 function bindNav() {
   $$('[data-nav]').forEach(el => el.addEventListener('click', () => activateView(el.dataset.nav)));
   $('#btnMenu').addEventListener('click', () => { $('#sidebar').classList.add('is-open'); $('#sidebarOverlay').classList.add('is-on'); });
   $('#sidebarOverlay').addEventListener('click', () => { $('#sidebar').classList.remove('is-open'); $('#sidebarOverlay').classList.remove('is-on'); });
   window.addEventListener('hashchange', () => activateView(location.hash.replace('#', '')));
+  /* Scroll-spy : la section qui couvre la ligne de focus allume son icône du dock */
+  spyArmed = true;
+  document.addEventListener('scroll', () => {
+    if (!spyArmed || spyTickPending) return;
+    spyTickPending = true;
+    requestAnimationFrame(spyTick);
+  }, { passive: true, capture: true });
+  spyTick();
 }
 
 /* ─────────── Thèmes (Mer Azur par défaut, tous sombres) ─────────── */
