@@ -16,10 +16,10 @@ const iconDataUri = 'data:image/svg+xml;utf8,' + encodeURIComponent(iconSvg)
 let html = read('index.html');
 
 // CSS inline
-html = html.replace('<link rel="stylesheet" href="assets/css/style.css">', () => `<style>\n${css}\n</style>`);
+html = html.replace(/<link rel="stylesheet" href="assets\/css\/style\.css[^"]*">/, () => `<style>\n${css}\n</style>`);
 // JS inline (ordre : astro puis app)
-html = html.replace('<script src="assets/js/astro.js"></script>', () => `<script>\n${astro}\n</script>`);
-html = html.replace('<script src="assets/js/app.js"></script>', () => `<script>\n${app}\n</script>`);
+html = html.replace(/<script src="assets\/js\/astro\.js[^"]*"><\/script>/, () => `<script>\n${astro}\n</script>`);
+html = html.replace(/<script src="assets\/js\/app\.js[^"]*"><\/script>/, () => `<script>\n${app}\n</script>`);
 // Icône en data URI partout
 html = html.replaceAll('src="assets/icon.svg"', `src="${iconDataUri}"`);
 html = html.replace('<link rel="icon" href="assets/icon.svg" type="image/svg+xml">',
