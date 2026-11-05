@@ -21,7 +21,7 @@ const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&
   + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
   + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
 
-const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20.5, 18.5]; // sur 20 pts, jan→déc
+const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // sur 20 pts, jan→déc
 const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
 const WMO = {
@@ -228,7 +228,11 @@ function drawGauge(score) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-  const cx = W / 2, cy = H - 34, r = Math.min(W, H * 1.35) / 2 - 16;
+  const cx = W / 2;
+  // Pivot calculé pour que l'arc complet 270° (extrémités rondes incluses) tienne dans le canvas.
+  // Contraintes : cy − r ≥ 16 (haut) et cy + 0,707·r ≤ H − 10 (bas).
+  const cy = (H - 4.7) / 1.707;
+  const r = cy - 16;
   const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25; // 270°
   const tc = themeColors();
   // Piste
@@ -791,7 +795,7 @@ const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
 function activateView(name) {
   if (!VIEW_IDS.includes(name)) name = 'dashboard';
   $$('.view').forEach(v => v.classList.toggle('is-active', v.id === 'view-' + name));
-  $$('.nav-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
+  $$('.nav-item[data-nav], .tab-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
   try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
   $('#sidebar').classList.remove('is-open');
   $('#sidebarOverlay').classList.remove('is-on');

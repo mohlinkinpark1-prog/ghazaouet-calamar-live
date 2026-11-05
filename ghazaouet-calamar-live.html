@@ -321,7 +321,7 @@ button{font-family:inherit;cursor:pointer}
 .gauge-body{display:flex;gap:18px;align-items:center}
 .gauge-canvas-wrap{position:relative;flex:0 0 auto}
 #gaugeCanvas{display:block;width:280px;height:198px}
-.gauge-center{position:absolute;left:0;right:0;bottom:26px;text-align:center;pointer-events:none}
+.gauge-center{position:absolute;left:0;right:0;bottom:92px;text-align:center;pointer-events:none}
 .gauge-value{font-family:var(--font-display);font-weight:700;font-size:56px;line-height:1;color:var(--strong);text-shadow:0 4px 24px rgba(var(--gold-rgb),.35);font-variant-numeric:tabular-nums}
 .gauge-max{font-family:var(--font-mono);font-size:10px;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
 .gauge-side{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -620,6 +620,28 @@ button{font-family:inherit;cursor:pointer}
 .footer-col a{color:var(--sea-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px;width:max-content}
 .footer-col a:hover{color:var(--sea-2);text-decoration:underline}
 
+/* ═══════════ BARRE D'ONGLETS MOBILE ═══════════ */
+.tabbar{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:45;
+  grid-auto-flow:column;grid-auto-columns:1fr;align-items:stretch;
+  height:calc(58px + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:var(--topbar-bg);backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  box-shadow:0 -12px 30px rgba(0,0,0,.25);
+}
+.tab-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  background:transparent;border:0;color:var(--muted);
+  padding:8px 0 3px;font-size:9.5px;font-weight:600;letter-spacing:.03em;
+  position:relative;transition:color .15s;min-width:0;
+}
+.tab-btn .ic{width:21px;height:21px}
+.tab-btn:active{color:var(--sea)}
+.tab-btn.is-active{color:var(--gold-2)}
+.tab-btn.is-active .ic{color:var(--gold)}
+.tab-btn.is-active::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:34px;height:3px;border-radius:0 0 4px 4px;background:var(--gold)}
+
 /* ═══════════ RESPONSIVE ═══════════ */
 @media (max-width:1240px){
   .card-gauge{grid-column:span 12}
@@ -635,15 +657,20 @@ button{font-family:inherit;cursor:pointer}
   .footer{grid-template-columns:1fr}
   .dd-block{grid-column:span 6}
 }
-@media (max-width:1024px){
-  :root{--sidebar-w:0px}
-  .sidebar{transform:translateX(-105%);width:290px;transition:transform .3s ease;box-shadow:var(--shadow)}
+@media (max-width:900px){
+  /* Interface mobile : tabbar basse, topbar compacte, carte écran positif */
+  :root{--sidebar-w:0px;--topbar-h:54px}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
+  .tabbar{display:grid}
+  .sidebar{transform:translateX(-105%);width:min(84vw,300px);transition:transform .3s ease;box-shadow:var(--shadow);z-index:50}
   .sidebar.is-open{transform:none}
-  .topbar{left:0}
-  .main{margin-left:0;padding-left:14px;padding-right:14px}
+  .sidebar-overlay{z-index:48}
+  .topbar{left:0;padding:0 12px}
+  .main{margin-left:0;padding:calc(var(--topbar-h) + 12px) 14px calc(74px + env(safe-area-inset-bottom))}
   .topbar-menu{display:inline-flex}
   .topbar-loc-text span{display:none}
-  .live-pill{display:none}
+  .live-pill{display:flex}
+  .footer{margin-top:28px;padding-bottom:18px}
   .gauge-body{flex-direction:column;align-items:stretch}
   .gauge-canvas-wrap{align-self:center}
   .moon-body{flex-direction:column;text-align:center}
@@ -664,6 +691,8 @@ button{font-family:inherit;cursor:pointer}
   .topbar-loc-text strong{font-size:11.5px}
   .topbar-right{gap:6px}
   .icon-btn{width:36px;height:36px}
+  .live-pill{padding:6px 10px;font-size:9px;letter-spacing:.04em;gap:6px}
+  .live-pill-txt,.live-pill-sep{display:none}
   .main{padding:calc(var(--topbar-h) + 12px) 10px 0;overflow-x:clip}
   .view-head{gap:12px;margin-bottom:14px}
   .view-sub{font-size:12px;margin-top:5px}
@@ -674,7 +703,7 @@ button{font-family:inherit;cursor:pointer}
   /* Jauge */
   .gauge-body{gap:12px}
   #gaugeCanvas{width:224px;height:160px}
-  .gauge-center{bottom:34px}
+  .gauge-center{bottom:73px}
   .gauge-value{font-size:42px}
   .gauge-max{font-size:8.5px}
   .rating-pill{font-size:14px;padding:7px 14px}
@@ -720,6 +749,7 @@ button{font-family:inherit;cursor:pointer}
   .cal-cell{min-height:62px;padding:4px 5px}
   .cal-cell canvas{width:22px;height:22px}
   .cal-score{font-size:12.5px}
+  .cal-score small{display:none}
   .cal-daynum{font-size:10px}
   .cal-side{gap:11px}
   .mini-card{padding:12px 13px}
@@ -856,7 +886,7 @@ button{font-family:inherit;cursor:pointer}
     </div>
   </div>
   <div class="topbar-right">
-    <div class="live-pill"><span class="live-dot"></span> EN DIRECT <span class="live-pill-sep">·</span> MAJ <span id="lastUpdate">--:--</span></div>
+    <div class="live-pill"><span class="live-dot"></span> <span class="live-pill-txt">EN DIRECT</span><span class="live-pill-sep">·</span> MAJ <span id="lastUpdate">--:--</span></div>
     <button class="icon-btn" id="btnRefresh" aria-label="Actualiser les données"><svg class="ic" id="refreshIcon"><use href="#i-refresh"/></svg></button>
   </div>
 </header>
@@ -1257,6 +1287,15 @@ button{font-family:inherit;cursor:pointer}
 
 </main>
 
+<!-- ═══════════ BARRE D'ONGLETS (smartphone) ═══════════ -->
+<nav class="tabbar" id="tabbar" aria-label="Navigation rapide">
+  <button class="tab-btn is-active" data-nav="dashboard" aria-label="Tableau de bord"><svg class="ic"><use href="#i-grid"/></svg><span>Accueil</span></button>
+  <button class="tab-btn" data-nav="previsions" aria-label="Prévisions 14 jours"><svg class="ic"><use href="#i-cal"/></svg><span>Prévisions</span></button>
+  <button class="tab-btn" data-nav="calendrier" aria-label="Calendrier lunaire"><svg class="ic"><use href="#i-moon"/></svg><span>Lune</span></button>
+  <button class="tab-btn" data-nav="guide" aria-label="Guide du pêcheur"><svg class="ic"><use href="#i-book"/></svg><span>Guide</span></button>
+  <button class="tab-btn" data-nav="methode" aria-label="Méthode et sources"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
+</nav>
+
 <script>
 /* ============================================================
    GHAZAOUET CALAMAR LIVE — Moteur astronomique & solunaire
@@ -1531,7 +1570,7 @@ const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&
   + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
   + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
 
-const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20.5, 18.5]; // sur 20 pts, jan→déc
+const SEASON_20 = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // sur 20 pts, jan→déc
 const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
 const WMO = {
@@ -1738,7 +1777,11 @@ function drawGauge(score) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-  const cx = W / 2, cy = H - 34, r = Math.min(W, H * 1.35) / 2 - 16;
+  const cx = W / 2;
+  // Pivot calculé pour que l'arc complet 270° (extrémités rondes incluses) tienne dans le canvas.
+  // Contraintes : cy − r ≥ 16 (haut) et cy + 0,707·r ≤ H − 10 (bas).
+  const cy = (H - 4.7) / 1.707;
+  const r = cy - 16;
   const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25; // 270°
   const tc = themeColors();
   // Piste
@@ -2301,7 +2344,7 @@ const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
 function activateView(name) {
   if (!VIEW_IDS.includes(name)) name = 'dashboard';
   $$('.view').forEach(v => v.classList.toggle('is-active', v.id === 'view-' + name));
-  $$('.nav-item[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
+  $$('.nav-item[data-nav], .tab-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
   try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
   $('#sidebar').classList.remove('is-open');
   $('#sidebarOverlay').classList.remove('is-on');

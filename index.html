@@ -115,7 +115,7 @@
     </div>
   </div>
   <div class="topbar-right">
-    <div class="live-pill"><span class="live-dot"></span> EN DIRECT <span class="live-pill-sep">·</span> MAJ <span id="lastUpdate">--:--</span></div>
+    <div class="live-pill"><span class="live-dot"></span> <span class="live-pill-txt">EN DIRECT</span><span class="live-pill-sep">·</span> MAJ <span id="lastUpdate">--:--</span></div>
     <button class="icon-btn" id="btnRefresh" aria-label="Actualiser les données"><svg class="ic" id="refreshIcon"><use href="#i-refresh"/></svg></button>
   </div>
 </header>
@@ -515,6 +515,15 @@
 </footer>
 
 </main>
+
+<!-- ═══════════ BARRE D'ONGLETS (smartphone) ═══════════ -->
+<nav class="tabbar" id="tabbar" aria-label="Navigation rapide">
+  <button class="tab-btn is-active" data-nav="dashboard" aria-label="Tableau de bord"><svg class="ic"><use href="#i-grid"/></svg><span>Accueil</span></button>
+  <button class="tab-btn" data-nav="previsions" aria-label="Prévisions 14 jours"><svg class="ic"><use href="#i-cal"/></svg><span>Prévisions</span></button>
+  <button class="tab-btn" data-nav="calendrier" aria-label="Calendrier lunaire"><svg class="ic"><use href="#i-moon"/></svg><span>Lune</span></button>
+  <button class="tab-btn" data-nav="guide" aria-label="Guide du pêcheur"><svg class="ic"><use href="#i-book"/></svg><span>Guide</span></button>
+  <button class="tab-btn" data-nav="methode" aria-label="Méthode et sources"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
+</nav>
 
 <script src="assets/js/astro.js"></script>
 <script src="assets/js/app.js"></script>
