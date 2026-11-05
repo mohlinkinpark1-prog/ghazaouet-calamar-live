@@ -68,6 +68,25 @@ const windUnit = () => state.units.wind === 'kn' ? 'kn' : 'km/h';
 const fmtWind = kmh => `${windVal(kmh).toFixed(state.units.wind === 'kn' ? 1 : 0)} ${windUnit()}`;
 const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
 
+/* Couleur du thème actif (canvas ne connaît pas les variables CSS) */
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function themeColors() {
+  return {
+    gold: cssv('--gold') || '#f0b429',
+    goldHi: cssv('--gold-hi') || '#ffe9a8',
+    goldRgb: cssv('--gold-rgb') || '240,180,41',
+    sea: cssv('--sea') || '#34c6dd',
+    sea2: cssv('--sea-2') || '#8cebfa',
+    seaRgb: cssv('--sea-rgb') || '52,198,221',
+    red: cssv('--red') || '#ff7a52',
+    amber: cssv('--amber') || '#ffc247',
+    bg2: cssv('--bg2') || '#0a1f33',
+    track: cssv('--track') || 'rgba(255,255,255,.07)',
+    tick: cssv('--tick') || 'rgba(255,255,255,.25)',
+    needle: cssv('--needle') || '#f4f8fc'
+  };
+}
+
 /* Tendance de pression sur 3 h (hPa) — négative = pression en baisse */
 function pressureTrendNow() {
   const hourly = state.meteo?.hourly?.pressure_msl, times = state.meteo?.hourly?.time;
@@ -211,20 +230,21 @@ function drawGauge(score) {
   ctx.clearRect(0, 0, W, H);
   const cx = W / 2, cy = H - 34, r = Math.min(W, H * 1.35) / 2 - 16;
   const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25; // 270°
+  const tc = themeColors();
   // Piste
   ctx.lineWidth = 20; ctx.lineCap = 'round';
-  ctx.strokeStyle = 'rgba(255,255,255,.07)';
+  ctx.strokeStyle = tc.track;
   ctx.beginPath(); ctx.arc(cx, cy, r, a0, a1); ctx.stroke();
   // Arc valeur (dégradé)
   const frac = clamp(score, 0, 100) / 100;
   const grad = ctx.createLinearGradient(0, cy, W, cy);
-  grad.addColorStop(0, '#ff7a52'); grad.addColorStop(0.35, '#ffc247'); grad.addColorStop(0.68, '#34c6dd'); grad.addColorStop(1, '#f0b429');
+  grad.addColorStop(0, tc.red); grad.addColorStop(0.35, tc.amber); grad.addColorStop(0.68, tc.sea); grad.addColorStop(1, tc.gold);
   ctx.strokeStyle = grad;
-  ctx.shadowColor = 'rgba(240,180,41,.45)'; ctx.shadowBlur = 18;
+  ctx.shadowColor = `rgba(${tc.goldRgb},.45)`; ctx.shadowBlur = 18;
   ctx.beginPath(); ctx.arc(cx, cy, r, a0, a0 + (a1 - a0) * frac); ctx.stroke();
   ctx.shadowBlur = 0;
   // Graduations
-  ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 2;
+  ctx.strokeStyle = tc.tick; ctx.lineWidth = 2;
   for (let i = 0; i <= 10; i++) {
     const a = a0 + (a1 - a0) * (i / 10);
     ctx.beginPath();
@@ -234,11 +254,11 @@ function drawGauge(score) {
   }
   // Aiguille
   const na = a0 + (a1 - a0) * frac;
-  ctx.strokeStyle = '#f4f8fc'; ctx.lineWidth = 3.4;
+  ctx.strokeStyle = tc.needle; ctx.lineWidth = 3.4;
   ctx.beginPath(); ctx.moveTo(cx + Math.cos(na) * 18, cy + Math.sin(na) * 18); ctx.lineTo(cx + Math.cos(na) * (r - 30), cy + Math.sin(na) * (r - 30)); ctx.stroke();
-  ctx.fillStyle = '#f0b429';
+  ctx.fillStyle = tc.gold;
   ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#0a1f33'; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = tc.bg2; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
 }
 function animateGauge(target) {
   gaugeAnim = { from: gaugeAnim.to ?? 0, to: target, start: performance.now() };
@@ -517,7 +537,8 @@ function renderActivityChart(date, periods, today) {
   }
   // Remplissage
   const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, 'rgba(52,198,221,.45)'); grad.addColorStop(1, 'rgba(52,198,221,.02)');
+  const seaRgb = themeColors().seaRgb;
+  grad.addColorStop(0, `rgba(${seaRgb},.45)`); grad.addColorStop(1, `rgba(${seaRgb},.02)`);
   ctx.beginPath(); ctx.moveTo(xOf(0), yOf(0));
   for (const p of pts) ctx.lineTo(xOf(p.min), yOf(p.v));
   ctx.lineTo(xOf(1440), yOf(0)); ctx.closePath();
@@ -525,17 +546,18 @@ function renderActivityChart(date, periods, today) {
   // Ligne
   ctx.beginPath();
   pts.forEach((p, i) => i ? ctx.lineTo(xOf(p.min), yOf(p.v)) : ctx.moveTo(xOf(p.min), yOf(p.v)));
-  ctx.strokeStyle = '#5ce0f2'; ctx.lineWidth = 2.2;
-  ctx.shadowColor = 'rgba(92,224,242,.6)'; ctx.shadowBlur = 8; ctx.stroke(); ctx.shadowBlur = 0;
+  ctx.strokeStyle = themeColors().sea2; ctx.lineWidth = 2.2;
+  ctx.shadowColor = `rgba(${seaRgb},.6)`; ctx.shadowBlur = 8; ctx.stroke(); ctx.shadowBlur = 0;
 
   // Marqueur "maintenant"
   const now = new Date();
   if (dayKey(now) === dayKey(date)) {
     const m = nearestMinutes(now);
-    ctx.setLineDash([5, 4]); ctx.strokeStyle = '#f0b429'; ctx.lineWidth = 1.6;
+    const nowCol = themeColors().gold;
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = nowCol; ctx.lineWidth = 1.6;
     ctx.beginPath(); ctx.moveTo(xOf(m), 8); ctx.lineTo(xOf(m), H - 30); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = '#f0b429'; ctx.font = 'bold 8px JetBrains Mono, monospace';
+    ctx.fillStyle = nowCol; ctx.font = 'bold 8px JetBrains Mono, monospace';
     ctx.fillText('MAINTENANT', clamp(xOf(m) + 4, 4, W - 70), H - 34);
   }
   // Pied : meilleure fenêtre
@@ -568,7 +590,7 @@ function renderForecast(dm) {
     const windTxt = day?.windMax != null ? fmtWind(day.windMax) : '';
     const gustoTxt = day?.gustMax != null ? `raf. ${fmtWind(day.gustMax)}` : '';
     const win = bw ? `<span>${bw.start} → ${bw.end}</span>` : '<em>Pas de fenêtre de nuit</em>';
-    return `<button class="f-card ${i === 0 ? 'is-today' : ''} ${state.selectedDayISO === dayKey(d) ? 'is-selected' : ''}" data-day="${dayKey(d)}" aria-label="${fmtDayShort(d)} : indice ${sc.total} sur 100">
+    return `<button class="f-card ${i === 0 ? 'is-today' : ''} ${state.selectedDayISO === dayKey(d) ? 'is-selected' : ''}" data-day="${dayKey(d)}">
       ${todayTag}
       <div class="f-day"><b>${d.toLocaleDateString('fr-FR', { weekday: 'short' })}</b><span>${d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span></div>
       <div class="f-moon-row"><canvas width="88" height="88" data-moon="${d.toISOString()}"></canvas>
@@ -689,7 +711,7 @@ function renderCalendar(dm) {
     const sc = scoreFor(d, dm);
     scores.push({ d, sc, inForecast });
     const band = bandOf(sc.total);
-    cells.push(`<div class="cal-cell ${iso === todayKey ? 'is-today' : ''}" data-band="${band}" role="button" tabindex="0" data-day="${iso}" aria-label="${dayNum} ${MONTH_FR[month]} : indice ${sc.total}">
+    cells.push(`<div class="cal-cell ${iso === todayKey ? 'is-today' : ''}" data-band="${band}" role="button" tabindex="0" data-day="${iso}">
       <div class="cal-daynum"><span>${dayNum}</span>${inForecast ? '' : '<em>*</em>'}</div>
       <canvas width="68" height="68" data-moon="${d.toISOString()}"></canvas>
       <div class="cal-score" style="color:${scoreColor(sc.total)}">${sc.total}<small>${ratingOf(sc.total).label}</small></div>
@@ -782,10 +804,34 @@ function bindNav() {
   window.addEventListener('hashchange', () => activateView(location.hash.replace('#', '')));
 }
 
-/* ─────────── Thème unique (abyssal) ─────────── */
+/* ─────────── Thèmes (Mer Azur par défaut, tous sombres) ─────────── */
+const THEME_NAMES = { azur: 'Mer Azur', abyssal: 'Abyssal', clair: 'Jour Mer (clair)', nuit: 'Nuit Noire', phare: 'Phare Bleu', terre: 'Terre & Sel' };
+const THEME_META = { azur: '#031b22', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
 function bindTheme() {
-  document.documentElement.dataset.theme = 'dark';
-  try { localStorage.setItem('gcl-theme', 'dark'); } catch { /* privé */ }
+  let t = 'azur';
+  try { t = localStorage.getItem('gcl-theme') || 'azur'; } catch { /* privé */ }
+  applyTheme(THEME_META[t] ? t : 'azur');
+  $$('#themePicker .tp-btn').forEach(b => {
+    b.addEventListener('click', () => applyTheme(b.dataset.themeSet));
+  });
+}
+function applyTheme(t) {
+  if (!THEME_META[t]) t = 'azur';
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem('gcl-theme', t); } catch { /* privé */ }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', THEME_META[t]);
+  const nameEl = $('#tpName');
+  if (nameEl) nameEl.textContent = THEME_NAMES[t];
+  $$('#themePicker .tp-btn').forEach(b => b.classList.toggle('is-on', b.dataset.themeSet === t));
+  // Les canvas (jauge, 24 h) lisent les couleurs au dessin → on redessine si les données sont là
+  if (state.meteo) {
+    try {
+      const dm0 = dailyMap(), now0 = new Date();
+      const sc0 = scoreFor(now0, dm0);
+      if (sc0) { drawGauge(sc0.total); renderActivityChart(now0, sc0.periods, dm0[dayKey(now0)]); }
+    } catch { /* vue pas encore prête */ }
+  }
 }
 function bindUnits() {
   try {
@@ -836,8 +882,7 @@ function renderAll() {
   const now = new Date();
   // Horloge & entête
   renderClock();
-  const onlineChip = state.online ? '' : ' · hors ligne (cache)';
-  $('#topbarSub').textContent = `Tlemcen · Algérie · ${state.online ? 'données en direct' : 'données en cache'}${onlineChip}`;
+  $('#topbarSub').textContent = `Tlemcen · Algérie · ${state.online ? 'données en direct' : 'données en cache (hors ligne)'}`;
   $('#lastUpdate').textContent = state.lastUpdate ? fmtTime(state.lastUpdate) : '—';
   $('#gaugeDateChip').textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: CONFIG.tz });
 
