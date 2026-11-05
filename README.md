@@ -1,5 +1,7 @@
 # Ghazaouet Calamar Live 🎣 (الغزوات)
 
+**🔴 En ligne : https://mohlinkinpark1-prog.github.io/ghazaouet-calamar-live/**
+
 Application web professionnelle de **prévision de pêche au calamar (encornet, *Loligo vulgaris*)** en direct pour le **port de Ghazaouet** (Tlemcen, Algérie — 35.096° N · 1.860° W · UTC+1, ouverture NW sur la Méditerranée).
 
 > « Le calamar, minute après minute. »
