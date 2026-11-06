@@ -12,9 +12,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261106a">
+<link rel="stylesheet" href="assets/css/style.css?v=20261106b">
 </head>
 <body>
+
+<!-- ═══════════ SPLASH (3 s, logo animé) ═══════════ -->
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="splash-glow"></div>
+  <img class="splash-logo" src="assets/icon.svg" alt="" width="112" height="112">
+  <div class="splash-name">Ghazaouet <strong>Calamar Live</strong></div>
+  <div class="splash-tag">La météo de la pêche, en direct du port</div>
+  <div class="splash-bar"><i></i></div>
+</div>
 
 <!-- ═══════════ SPRITE D'ICÔNES (SVG, stroke = currentColor) ═══════════ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -47,6 +56,8 @@
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></symbol>
     <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 8V3.5h10V8M7 17.5H4.5a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H17"/><path d="M7 14h10v6.5H7z"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M10 6H5.5a1 1 0 0 0-1 1v12.5a1 1 0 0 0 1 1H18a1 1 0 0 0 1-1V14"/></symbol>
+    <symbol id="i-fish" viewBox="0 0 24 24"><path d="M3 12c2.3-3.9 5.4-6 9.2-6 3.5 0 6.3 2.2 8.3 6-2 3.8-4.8 6-8.3 6-3.8 0-6.9-2.1-9.2-6z"/><path d="M3 12 1.2 9M3 12 1.2 15"/><circle cx="6.8" cy="11" r=".5"/></symbol>
+    <symbol id="i-bream" viewBox="0 0 24 24"><path d="M2.8 12c2-4.6 5.2-7 9.2-7 3.6 0 6.4 2.5 8.4 7-2 4.5-4.8 7-8.4 7-4 0-7.2-2.4-9.2-7z"/><path d="M9.2 5.4 10 3.6M12.4 5l0-1.9M15.6 5.4l-.8-1.8"/><path d="M2.8 12 1 9.4M2.8 12 1 14.6"/><circle cx="6.6" cy="10.6" r=".5"/></symbol>
     <symbol id="i-squid" viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 4.4 2.1 4.4 5L15 12H9l-1.4-4.8C7.6 4.3 9.3 2.2 12 2.2z"/><path d="M9.3 12v5.4M12 12v6.2M14.7 12v5.4M8 12.2C6.4 14.4 6.2 16.6 8 19M16 12.2c1.6 2.2 1.8 4.4 0 6.8"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.5 6v6c0 4.6 3 8.4 7.5 10 4.5-1.6 7.5-5.4 7.5-10V6L12 2.8z"/><path d="m9.5 12 2 2 3.5-4"/></symbol>
     <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v3M12 18.2v3M4.1 7l2.6 1.5M17.3 15.5l2.6 1.5M4.1 17l2.6-1.5M17.3 8.5l2.6-1.5" stroke-linecap="round"/></symbol>
@@ -89,6 +100,17 @@
   </div>
 
   <div class="sheet-block">
+    <div class="tp-head"><span class="tp-label">Espèce visée</span><span class="tp-name" id="spName">Calamar</span></div>
+    <div class="sp-picker" id="speciesPicker" role="group" aria-label="Espèce de pêche">
+      <button class="sp-btn is-active" data-sp="calamar"><svg class="ic"><use href="#i-squid"/></svg><span>Calamar</span></button>
+      <button class="sp-btn" data-sp="loup"><svg class="ic"><use href="#i-fish"/></svg><span>Loup bar</span></button>
+      <button class="sp-btn" data-sp="dorade"><svg class="ic"><use href="#i-bream"/></svg><span>Dorade</span></button>
+      <button class="sp-btn" data-sp="sar"><svg class="ic"><use href="#i-bream"/></svg><span>Sar</span></button>
+    </div>
+    <p class="sheet-mini" id="spHint">L'indice s'adapte : barèmes de saison et d'eau propres à chaque espèce.</p>
+  </div>
+
+  <div class="sheet-block">
     <div class="tp-head"><span class="tp-label">Thème</span><span class="tp-name" id="tpName">Mer Azur</span></div>
     <div class="tp-row" id="themePicker" role="group" aria-label="Thème de l'interface">
       <button class="tp-btn" data-theme-set="azur" aria-label="Mer Azur" title="Mer Azur"><i></i></button>
@@ -126,7 +148,7 @@
     <div class="hero card">
       <header class="hero-head">
         <div>
-          <span class="card-kicker">Indice Calamar™</span>
+          <span class="card-kicker" id="gaugeKicker">Indice Calamar™</span>
           <h1 class="hero-title">Aujourd'hui au port</h1>
         </div>
         <span class="chip chip-gold" id="gaugeDateChip">—</span>
@@ -162,7 +184,7 @@
     </article>
 
     <article class="card pad" aria-label="Recommandations">
-      <header class="card-head"><div><span class="card-kicker">Recommandation live</span><h2 class="card-title">Le plan de pêche</h2></div><svg class="ic ic-gold wx-icon"><use href="#i-squid"/></svg></header>
+      <header class="card-head"><div><span class="card-kicker">Recommandation live</span><h2 class="card-title">Le plan de pêche</h2></div><svg class="ic ic-gold wx-icon" id="speciesIcon"><use href="#i-squid"/></svg></header>
       <ol class="reco-list" id="recoList"><li class="reco-item is-skeleton">Analyse croisée lune × météo × mer…</li></ol>
     </article>
 
@@ -421,8 +443,8 @@
   <button class="dock-btn" data-nav="methode"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
 </nav>
 
-<script src="assets/js/engine.js?v=20261106a"></script>
-<script src="assets/js/astro.js?v=20261106a"></script>
-<script src="assets/js/app.js?v=20261106a"></script>
+<script src="assets/js/engine.js?v=20261106b"></script>
+<script src="assets/js/astro.js?v=20261106b"></script>
+<script src="assets/js/app.js?v=20261106b"></script>
 </body>
 </html>

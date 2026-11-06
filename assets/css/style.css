@@ -808,3 +808,45 @@ a{-webkit-tap-highlight-color:transparent}
   .card-foot{border-top-color:#ccc}
   .card-title,.gauge-value,.moon-illum,.wx-temp,.hero-title{color:#000 !important}
 }
+
+/* ═══════════ SÉLECTEUR D'ESPÈCE ═══════════ */
+.sp-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sp-btn{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .15s}
+.sp-btn .ic{width:18px;height:18px;flex:none;opacity:.75}
+.sp-btn:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.25);color:var(--text)}
+.sp-btn.is-active{border-color:var(--strong);color:var(--text);background:rgba(255,255,255,.07);box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+.sp-btn.is-active .ic{opacity:1}
+.sheet-mini{font-size:10.5px;line-height:1.55;color:var(--muted-2);margin:0}
+html[data-theme="clair"] .sp-btn{border-color:rgba(18,58,78,.22)}
+html[data-theme="clair"] .sp-btn.is-active{border-color:#13303c;box-shadow:0 0 0 3px rgba(18,58,78,.12)}
+html[data-theme="clair"] .sp-btn:hover{border-color:rgba(18,58,78,.4)}
+
+/* ═══════════ SPLASH — 3 s de logo animé ═══════════ */
+.splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  background:radial-gradient(120% 90% at 50% 8%, #0b2530 0%, #061420 48%, #03090f 100%);
+  opacity:1;transition:opacity .5s ease}
+.splash.is-done{opacity:0;pointer-events:none}
+body.splash-on{overflow:hidden}
+.splash-glow{position:absolute;top:50%;left:50%;width:340px;height:340px;transform:translate(-50%,-58%);border-radius:50%;
+  background:radial-gradient(circle, rgba(72,227,198,.16) 0%, rgba(255,182,41,.07) 42%, transparent 70%);
+  filter:blur(6px);animation:splash-glow 3s ease-in-out both}
+.splash-logo{width:112px;height:112px;position:relative;
+  filter:drop-shadow(0 0 26px rgba(72,227,198,.55));
+  animation:splash-pop .85s cubic-bezier(.2,1.35,.4,1) both}
+.splash-name{position:relative;font-size:19px;font-weight:400;letter-spacing:.02em;color:#eaf4f6;
+  opacity:0;animation:splash-up .6s ease .55s forwards}
+.splash-name strong{font-weight:750;color:#48E3C6}
+.splash-tag{position:relative;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(220,238,242,.55);
+  opacity:0;animation:splash-up .6s ease .85s forwards}
+.splash-bar{position:relative;width:150px;height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;
+  opacity:0;animation:splash-up .5s ease 1s forwards}
+.splash-bar i{display:block;height:100%;width:100%;border-radius:2px;transform-origin:left;transform:scaleX(0);
+  background:linear-gradient(90deg,#48E3C6,#FFB629);animation:splash-fill 2.3s cubic-bezier(.3,.1,.3,1) .55s forwards}
+@keyframes splash-pop{0%{transform:scale(.55) rotate(-9deg);opacity:0}60%{transform:scale(1.07) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes splash-glow{0%{opacity:0;transform:translate(-50%,-58%) scale(.5)}35%{opacity:1}70%{opacity:.55}100%{opacity:.75;transform:translate(-50%,-58%) scale(1.12)}}
+@keyframes splash-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes splash-fill{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){
+  .splash{display:none}
+  body.splash-on{overflow:auto}
+}

@@ -40,11 +40,26 @@ const COMPASS_FR = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OS
 const state = {
   meteo: null, marine: null, online: true,
   units: { wind: 'kmh', temp: 'c' },
+  species: 'calamar',
   lastUpdate: null,
   selectedDayISO: null,
   calCursor: new Date(),
   refreshTimer: null
 };
+
+/* ─────────── Splish d'accueil : 3 s de logo animé ─────────── */
+function bootSplash() {
+  const s = document.getElementById('splash');
+  if (!s) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { s.remove(); return; }
+  document.body.classList.add('splash-on');
+  setTimeout(() => {
+    s.classList.add('is-done');
+    document.body.classList.remove('splash-on');
+    setTimeout(() => s.remove(), 600);
+  }, 3000);
+}
+
 
 /* ─────────── Utilitaires ─────────── */
 const $ = (s, ctx = document) => ctx.querySelector(s);
@@ -150,9 +165,65 @@ function solunarForDay(date, sunrise, sunset) {
   return out.sort((a, b) => a.center - b.center);
 }
 
+/* ─────────── Espèces — barèmes adaptés (saison 20 · mer 12) ─────────── */
+const SPECIES = {
+  calamar: {
+    name: 'Calamar', plural: 'les calamars', nom: 'le calamar', icon: 'i-squid',
+    season: GCLEngine.SEASON_20, // jan→déc (migration, pontes, recrutement)
+    water: [13, 21], // fenêtre « optimum » affichée
+    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1 ? 4 : w < 1.5 ? 2 : 0, // palier 0,6 m (Baléares 2012)
+    waterPt: t => t < 12 ? 2 : t <= 16 ? 5 : t <= 19 ? 4 : t <= 21 ? 3 : 1,
+    waterPtOff: 3, windMax: 30,
+    darkTxt: 'nuit noire — le lamparo (projecteur) sera décisif ; poissonnez sous le halo.',
+    summerTxt: 'turlutte fine (n° 1.5–2.5) et pêche surtout à l’aube/au crépuscule.',
+    bestTxt: 'les gros sujets se rapprochent de la côte ; privilégiez 20–60 m.',
+  },
+  loup: {
+    name: 'Loup bar', plural: 'les loups', nom: 'le loup', icon: 'i-fish',
+    season: [15, 17, 14, 10, 12, 10, 9, 11, 15, 19, 20, 18], // pic oct–fév, creux estival
+    water: [13, 21],
+    wavePt: w => w < 0.6 ? 7 : w < 1.2 ? 6 : w < 2 ? 4 : w < 2.5 ? 2 : 0, // aime l'eau brassée
+    waterPt: t => t < 10 ? 1 : t <= 13 ? 4 : t <= 18 ? 5 : t <= 22 ? 3 : 1,
+    waterPtOff: 3, windMax: 35,
+    darkTxt: 'nuit noire — leurres bruyants en surface et poisson nageur au bord des flots.',
+    summerTxt: 'descendez la profondeur ; le loup reste actif à la fraîche (aube + nocturne).',
+    bestTxt: 'eau fraîche = gros poissons le long des enrochements ; 5–25 m.',
+  },
+  dorade: {
+    name: 'Dorade', plural: 'les dorades', nom: 'la dorade', icon: 'i-bream',
+    season: [14, 16, 18, 17, 13, 9, 7, 8, 12, 16, 19, 17], // printemps + automne-hiver
+    water: [16, 23],
+    wavePt: w => w < 0.5 ? 7 : w < 0.8 ? 6 : w < 1.2 ? 4 : w < 1.8 ? 2 : 0,
+    waterPt: t => t < 14 ? 1 : t <= 16 ? 4 : t <= 20 ? 5 : t <= 23 ? 4 : 1,
+    waterPtOff: 3, windMax: 30,
+    darkTxt: 'nuit noire — sorties plus productives au lever du jour sur appâts.',
+    summerTxt: 'têtes de ligne légères autour des bouées ; petites dorades sur anchois.',
+    bestTxt: 'fonds sableux et pétoles ; 10–40 m, appâts chinchard & crabe.',
+  },
+  sar: {
+    name: 'Sar', plural: 'les sars', nom: 'le sar', icon: 'i-bream',
+    season: [8, 9, 12, 14, 16, 18, 20, 20, 18, 15, 11, 9], // pleine saison mai–oct
+    water: [16, 24],
+    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1 ? 4 : w < 1.5 ? 2 : 0, // rochers = mer calme
+    waterPt: t => t < 15 ? 1 : t <= 17 ? 3 : t <= 21 ? 5 : t <= 24 ? 4 : 1,
+    waterPtOff: 3, windMax: 30,
+    darkTxt: 'nuit noire — le sar mange de nuit mais l’aube reste le meilleur créneau.',
+    summerTxt: 'pleine saison : rochers et petites passes, appât coquillage à l’étale.',
+    bestTxt: 'mer calme et claire sur les roches ; à pied 1–10 m, coquillages & dure.',
+  },
+};
+const SP = () => SPECIES[state.species] || SPECIES.calamar;
+/* Mer — 12 pts, par espèce (houle + eau, pénalité vent fort) */
+function speciesSeaPoints(wave, sst, windMax) {
+  const sp = SP();
+  let v = (wave == null ? 4 : sp.wavePt(wave)) + (sst == null ? sp.waterPtOff : sp.waterPt(sst));
+  if (windMax != null && windMax > sp.windMax) v -= 2;
+  return clamp(v, 0, 12);
+}
+
 const isPrimeWindow = center => { const h = center.getHours(); return h >= 20 || h < 2; };
 
-/* ─────────── Indice Calamar™ ─────────── */
+/* ─────────── Indice (Calamar™/Loup/Dorade/Sar™) ─────────── */
 function scoreFor(date, dm) {
   const day = dm?.[dayKey(date)] || null;
   const ph = Astro.phaseInfo(date);
@@ -165,13 +236,13 @@ function scoreFor(date, dm) {
   const periods = solunarForDay(date, day?.sunrise, day?.sunset);
   const sol = GCLEngine.solunarPoints(periods, isPrimeWindow);
 
-  // 3) Saison — 20 pts (Méditerranée ouest : migration jan–fév, pontes été/automne)
-  const season = GCLEngine.seasonScore(date.getMonth());
+  // 3) Saison — 20 pts (barème propre à l'espèce sélectionnée)
+  const season = SP().season[date.getMonth()];
 
-  // 4) Mer — 12 pts (vagues ≤ 7 · eau ≤ 5). Étude Baléares 2012 : CPUE plus forte par eau fraîche ; palier dès 0,6 m de houle
+  // 4) Mer — 12 pts (barèmes houle/eau/vent de l'espèce)
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  const meteo = GCLEngine.seaPoints(wave, sst, day?.windMax);
+  const meteo = speciesSeaPoints(wave, sst, day?.windMax);
 
   // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
   const p = state.meteo?.current?.pressure_msl ?? null;
@@ -388,9 +459,10 @@ function renderMer() {
   $('#waveBar').style.left = `${clamp(cur.wave_height / 1.5, 0, 1) * 100}%`;
   const sst = cur.sea_surface_temperature;
   $('#sstValue').textContent = sst.toFixed(1);
-  const verdict = sst < 13 ? 'Eau froide' : sst <= 20 ? 'Optimum calamar' : 'Un peu chaude';
+  const spW = SP().water, [w0, w1] = spW;
+  const verdict = sst < w0 ? 'Eau froide' : sst <= w1 ? `Optimum ${SP().name}` : 'Un peu chaude';
   $('#sstVerdict').textContent = verdict;
-  $('#sstVerdict').className = 'chip ' + (sst < 13 || sst > 20.5 ? 'chip-ghost' : 'chip-sea');
+  $('#sstVerdict').className = 'chip ' + (sst < w0 || sst > w1 + 0.5 ? 'chip-ghost' : 'chip-sea');
   const note = cur.wave_height < 0.3 ? 'Mer belle à légère — conditions idéales pour la turlutte comme pour le lamparo.'
     : cur.wave_height < 0.6 ? 'Petite agitation — agréable en dérive, lamparo déconseillé si le vent forcit.'
     : cur.wave_height < 1.0 ? 'Mer agitée — sorties en barque sportives ; privilégiez la jetée sous le vent.'
@@ -414,6 +486,7 @@ function renderSolunaire(date, periods, rating) {
 
 /* ─────────── Rendu : recommandations ─────────── */
 function renderReco(date, score, dm) {
+  const sp = SP();
   const ph = Astro.phaseInfo(date);
   const today = dm[dayKey(date)];
   const cur = state.meteo?.current;
@@ -421,13 +494,13 @@ function renderReco(date, score, dm) {
   const recos = [];
   const bw = bestWindowFor(score.periods);
   if (bw && bw.night > 0) {
-    recos.push({ cls: 'reco-gold', icon: 'i-squid', html: `<strong>Sortez ${bw.type === 'major' ? 'ce soir' : 'pour la mineure'} :</strong> fenêtre ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'}, ${bw.night} min de nuit).` });
+    recos.push({ cls: 'reco-gold', icon: sp.icon, html: `<strong>Sortez ${bw.type === 'major' ? 'ce soir' : 'pour la mineure'} :</strong> fenêtre ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'}, ${bw.night} min de nuit).` });
   } else {
     recos.push({ cls: '', icon: 'i-clock', html: `<strong>Pas de période majeure dans la nuit</strong> — tentez l'aube ou reportez-vous sur les périodes du calendrier.` });
   }
   // Lune
   const cosAbs = Math.abs(Math.cos(ph.elong * Math.PI / 180));
-  if (cosAbs > 0.85) recos.push({ cls: 'reco-gold', icon: 'i-moon', html: `<strong>${ph.name}</strong> — forte attraction solunaire (coefficient max). Les calamars chassent activement.` });
+  if (cosAbs > 0.85) recos.push({ cls: 'reco-gold', icon: 'i-moon', html: `<strong>${ph.name}</strong> — forte attraction solunaire (coefficient max). ${sp.plural.charAt(0).toUpperCase() + sp.plural.slice(1)} chassent activement.` });
   else if (cosAbs > 0.5) recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (${Math.round(ph.illum * 100)} % éclairée) — activité intermédiaire.` });
   else recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (quadrature) — activité réduite ; misez sur les heures de culmination.` });
   // Météo / mer
@@ -435,12 +508,12 @@ function renderReco(date, score, dm) {
   else if (today && today.code >= 95) recos.push({ cls: 'reco-warn', icon: 'i-alert', html: `<strong>Orages annoncés aujourd'hui</strong> — surveillez le bulletin ONM avant de partir.` });
   else if (wave != null && wave >= 0.6) recos.push({ cls: 'reco-warn', icon: 'i-waves', html: `<strong>Houle ${wave.toFixed(2)} m</strong> — préférez la digue abritée ou reportez la sortie en barque.` });
   else if (cur && cur.wind_speed_10m > 25) recos.push({ cls: 'reco-warn', icon: 'i-wind', html: `<strong>Vent ${fmtWind(cur.wind_speed_10m)}</strong> — dérive difficile, lin­gue lourde conseillée.` });
-  // Saison / eau
+  // Saison / eau — d'après le barème de saison de l'espèce
   const m = date.getMonth();
-  if (m >= 9 || m <= 1) recos.push({ cls: '', icon: 'i-check', html: `<strong>Pleine saison</strong> (oct.–fév.) — les gros sujets se rapprochent de la côte ; privilégiez 20–60 m.` });
-  else if (m >= 5 && m <= 8) recos.push({ cls: '', icon: 'i-info', html: `<strong>Été : petites tailles</strong> — turlutte fine (n° 1.5–2.5) et pêche surtout à l'aube/au crépuscule.` });
+  if (sp.season[m] >= 16) recos.push({ cls: '', icon: 'i-check', html: `<strong>Bonne période pour ${sp.nom}</strong> — ${sp.bestTxt}` });
+  else if (sp.season[m] <= 10) recos.push({ cls: '', icon: 'i-info', html: `<strong>Creux de saison</strong> — ${sp.summerTxt}` });
   // Lumière
-  if (ph.illum < 0.35) recos.push({ cls: '', icon: 'i-sun', html: `<strong>Nuit noire</strong> — le lamparo (projecteur) sera décisif ; poissonnez sous le halo.` });
+  if (ph.illum < 0.35) recos.push({ cls: '', icon: 'i-sun', html: `<strong>Nuit noire</strong> — ${sp.darkTxt}` });
   $('#recoList').innerHTML = recos.slice(0, 5).map(r => `<li class="reco-item ${r.cls}"><svg class="ic"><use href="#${r.icon}"/></svg><span>${r.html}</span></li>`).join('');
 }
 
@@ -862,6 +935,28 @@ function bindUnits() {
   $$('.seg-btn[data-unit-temp]').forEach(b => b.addEventListener('click', () => { state.units.temp = b.dataset.unitTemp; try { localStorage.setItem('gcl-unit-temp', state.units.temp); } catch {} syncSeg(); refreshAll(false); }));
 }
 
+/* ─────────── Espèce ciblée (Calamar · Loup · Dorade · Sar) ─────────── */
+function bindSpecies() {
+  try {
+    const s = localStorage.getItem('gcl-species');
+    if (s && SPECIES[s]) state.species = s;
+  } catch { /* privé */ }
+  syncSpecies();
+  $$('.sp-btn[data-sp]').forEach(b => b.addEventListener('click', () => {
+    state.species = SPECIES[b.dataset.sp] ? b.dataset.sp : 'calamar';
+    try { localStorage.setItem('gcl-species', state.species); } catch { /* privé */ }
+    syncSpecies();
+    refreshAll(false);
+  }));
+}
+function syncSpecies() {
+  const sp = SP();
+  $$('.sp-btn[data-sp]').forEach(b => b.classList.toggle('is-active', b.dataset.sp === state.species));
+  const n = $('#spName'); if (n) n.textContent = sp.name;
+  const k = $('#gaugeKicker'); if (k) k.textContent = `Indice ${sp.name}™`;
+  const ic = $('#speciesIcon'); if (ic) ic.innerHTML = `<use href="#${sp.icon}"/>`;
+}
+
 /* ─────────── Orchestration des données ─────────── */
 async function fetchJSON(url) {
   const r = await fetch(url, { cache: 'no-store' });
@@ -944,7 +1039,8 @@ async function refreshAll(force = true) {
 
 /* ─────────── Démarrage ─────────── */
 function init() {
-  bindNav(); bindTheme(); bindUnits();
+  bindNav(); bindTheme(); bindUnits(); bindSpecies();
+  bootSplash();
   renderSeasonBars(); renderFAQ(); renderMethod();
   $('#btnRefresh').addEventListener('click', () => refreshAll(true));
   $('#btnRefresh2').addEventListener('click', () => refreshAll(true));
