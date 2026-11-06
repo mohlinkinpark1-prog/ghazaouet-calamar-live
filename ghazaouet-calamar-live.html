@@ -824,6 +824,21 @@ a{-webkit-tap-highlight-color:transparent}
   .card-title,.gauge-value,.moon-illum,.wx-temp,.hero-title{color:#000 !important}
 }
 
+/* ═══════════ CARTE « INDICES SCIENTIFIQUES » ═══════════ */
+.sci-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:12px;margin-top:4px}
+.sci-block{display:flex;flex-direction:column;gap:12px;padding:13px 13px 11px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.sci-head{display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.sci-ic{width:26px;height:26px;flex:none;color:var(--strong)}
+.sci-head h4{margin:0;font-size:13px;font-weight:700;line-height:1.25}
+.sci-latin{display:block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin-top:2px}
+.sci-rows{display:flex;flex-direction:column;gap:7px;margin:0}
+.sci-rows>div{display:flex;gap:8px}
+.sci-rows dt{flex:0 0 64px;font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);padding-top:2px}
+.sci-rows dd{margin:0;font-size:11px;line-height:1.5;color:var(--text)}
+.sci-rows strong{color:var(--strong)}
+.sci-ref{margin:0;font-size:9px;line-height:1.55;color:var(--muted-2);border-top:1px solid var(--line);padding-top:8px}
+html[data-theme="clair"] .sci-block{background:rgba(18,58,78,.03)}
+
 /* ═══════════ SÉLECTEUR D'ESPÈCE ═══════════ */
 .sp-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .sp-btn{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .15s}
@@ -1261,6 +1276,52 @@ body.splash-on{overflow:hidden}
         <li><strong>Port de Ghazaouet</strong><span>35.096° N · 1.860° W · UTC+1 · ouverture nord-ouest sur la Méditerranée — bulletins ONM / Météo Algérie avant toute sortie.</span></li>
       </ul>
       <p class="note"><strong>Honnêteté scientifique</strong> — la « théorie solunaire » reste une hypothèse folklorique non validée de façon générale ; l'effet lunaire sur le calamar est, lui, statistiquement démontré — sens variable selon la technique (nouvelle lune pour le lamparo, pleine lune pour la turlutte côtière). L'Indice Calamar™ intègre ces nuances ; il ne garantit rien.</p>
+    </article>
+
+    <article class="card pad" id="s-science">
+      <header class="card-head"><div><span class="card-kicker">Bibliographie vérifiée</span><h3 class="card-title">Indices scientifiques — les trois espèces</h3></div><svg class="ic ic-gold wx-icon"><use href="#i-book"/></svg></header>
+      <p class="note">Ce que la science mesure — pas ce qu'on devine. Trois fiches : biologie, frai, habitat, meilleure fenêtre.</p>
+      <div class="sci-grid">
+        <section class="sci-block">
+          <div class="sci-head">
+            <svg class="ic sci-ic"><use href="#i-fish"/></svg>
+            <div><h4>Loup bar</h4><span class="sci-latin">Dicentrarchus labrax</span></div>
+          </div>
+          <dl class="sci-rows">
+            <div><dt>Frai</dt><dd>Décembre–mars, pic février. Juvéniles : lagunes/estuaires, surf zone &amp; nurseries.</dd></div>
+            <div><dt>Mouvement</dt><dd>Littoral en été, large l’hiver pour frayer/hiverner ; home range ≤ 3 km, fidélité ~93 %.</dd></div>
+            <div><dt>Régime</dt><dd>Mysidacés + petits poissons ; actif à l’aube et au crépuscule ; eau brassée idéale.</dd></div>
+            <div><dt>Meilleure mer</dt><dd><strong>Octobre–mars</strong> ; rochers/digues, 5–25 m ; leurres de surface la nuit.</dd></div>
+          </dl>
+          <p class="sci-ref">Kara MH (1997) Cah. Biol. Mar. 38 — golfe d’Annaba · Doyle TK et al. (2017) Sci Rep 8:45841 · Rodríguez-García C et al. (2024) Fishes 9(5):173 · Dufour V et al. (2009) J. Mar. Biol. Assoc. U.K. 89:1367 · Zarauz L et al. (2015) ICES J. Mar. Sci. DOI 10.1093/icesjms/fsv054</p>
+        </section>
+        <section class="sci-block">
+          <div class="sci-head">
+            <svg class="ic sci-ic"><use href="#i-bream"/></svg>
+            <div><h4>Dorade royale</h4><span class="sci-latin">Sparus aurata</span></div>
+          </div>
+          <dl class="sci-rows">
+            <div><dt>Frai</dt><dd><strong>Octobre–janvier, pic décembre</strong> (Mellah, Algérie) — pré-frai et frai précoce.</dd></div>
+            <div><dt>Maturité</dt><dd>32,6 cm TL ; proterandrie : inversion sexuelle à 44 cm — grosses femelles, à préserver.</dd></div>
+            <div><dt>Habitat</dt><dd>Platiers sablo-vaseux et lagunes ; 10–40 m ; appâts chinchard &amp; crabe ; aube.</dd></div>
+            <div><dt>Meilleure mer</dt><dd><strong>Novembre–décembre</strong> (pré-frai) ; août = creux ; eau 16–23 °C, mer calme.</dd></div>
+          </dl>
+          <p class="sci-ref">Chaoui L, Kara MH (2006) Sci. Mar. 70(3):545–552 — Mellah (Alger). DOI 10.3989/scimar.2006.70n3545 · Frid O et al. (2023) Fishes 8(2):69 — Israël. DOI 10.3390/fishes8020069</p>
+        </section>
+        <section class="sci-block">
+          <div class="sci-head">
+            <svg class="ic sci-ic"><use href="#i-bream"/></svg>
+            <div><h4>Sar commun</h4><span class="sci-latin">Diplodus sargus</span></div>
+          </div>
+          <dl class="sci-rows">
+            <div><dt>Frai</dt><dd>Avril–juillet ; juvéniles gagnent les rochers dès le printemps.</dd></div>
+            <div><dt>Habitat</dt><dd><strong>Rochers battus 1–15 m</strong> ; mer calme et claire ; coquillages &amp; crustacés ; aube.</dd></div>
+            <div><dt>Régime</dt><dd>Coquillages/mollusques + crustacés ; très sensible à la turbidité.</dd></div>
+            <div><dt>Meilleure mer</dt><dd><strong>Juin–septembre</strong> ; houle &lt; 0,8 m, étale ; pêche à pied 1–10 m.</dd></div>
+          </dl>
+          <p class="sci-ref">Quignard JP &amp; Farrugio H (1981) Les poissons de Méditerranée · Ionian Sea Encyclopedia (Springer 2022) — Diplodus sargus sargus. DOI 10.1007/978-3-031-08206-1_210001</p>
+        </section>
+      </div>
     </article>
 
     <article class="card pad">
@@ -1825,7 +1886,7 @@ const SPECIES = {
   },
   dorade: {
     name: 'Dorade', plural: 'les dorades', nom: 'la dorade', icon: 'i-bream',
-    season: [14, 16, 18, 17, 13, 9, 7, 8, 12, 16, 19, 17], // printemps + automne-hiver
+    season: [14, 15, 17, 16, 12, 9, 7, 8, 11, 15, 18, 20], // frai oct.–janv. (pic déc., Mellah) puis hivernal généreux ; creux août
     water: [16, 23],
     wavePt: w => w < 0.5 ? 7 : w < 0.8 ? 6 : w < 1.2 ? 4 : w < 1.8 ? 2 : 0,
     waterPt: t => t < 14 ? 1 : t <= 16 ? 4 : t <= 20 ? 5 : t <= 23 ? 4 : 1,
@@ -1838,12 +1899,12 @@ const SPECIES = {
     name: 'Sar', plural: 'les sars', nom: 'le sar', icon: 'i-bream',
     season: [8, 9, 12, 14, 16, 18, 20, 20, 18, 15, 11, 9], // pleine saison mai–oct
     water: [16, 24],
-    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1 ? 4 : w < 1.5 ? 2 : 0, // rochers = mer calme
+    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 0.8 ? 4 : w < 1.2 ? 2 : 0, // rochers battus = mer calme
     waterPt: t => t < 15 ? 1 : t <= 17 ? 3 : t <= 21 ? 5 : t <= 24 ? 4 : 1,
     waterPtOff: 3, windMax: 30,
     darkTxt: 'nuit noire — le sar mange de nuit mais l’aube reste le meilleur créneau.',
-    summerTxt: 'pleine saison : rochers et petites passes, appât coquillage à l’étale.',
-    bestTxt: 'mer calme et claire sur les roches ; à pied 1–10 m, coquillages & dure.',
+    summerTxt: 'pleine saison : rochers battus et passes, coquillage à l’étale.',
+    bestTxt: 'mer calme, claire et franche sur les rochers battus ; à pied 1–10 m.',
   },
 };
 const SP = () => SPECIES[state.species] || SPECIES.calamar;

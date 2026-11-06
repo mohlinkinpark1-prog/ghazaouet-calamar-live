@@ -191,7 +191,7 @@ const SPECIES = {
   },
   dorade: {
     name: 'Dorade', plural: 'les dorades', nom: 'la dorade', icon: 'i-bream',
-    season: [14, 16, 18, 17, 13, 9, 7, 8, 12, 16, 19, 17], // printemps + automne-hiver
+    season: [14, 15, 17, 16, 12, 9, 7, 8, 11, 15, 18, 20], // frai oct.–janv. (pic déc., Mellah) puis hivernal généreux ; creux août
     water: [16, 23],
     wavePt: w => w < 0.5 ? 7 : w < 0.8 ? 6 : w < 1.2 ? 4 : w < 1.8 ? 2 : 0,
     waterPt: t => t < 14 ? 1 : t <= 16 ? 4 : t <= 20 ? 5 : t <= 23 ? 4 : 1,
@@ -204,12 +204,12 @@ const SPECIES = {
     name: 'Sar', plural: 'les sars', nom: 'le sar', icon: 'i-bream',
     season: [8, 9, 12, 14, 16, 18, 20, 20, 18, 15, 11, 9], // pleine saison mai–oct
     water: [16, 24],
-    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1 ? 4 : w < 1.5 ? 2 : 0, // rochers = mer calme
+    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 0.8 ? 4 : w < 1.2 ? 2 : 0, // rochers battus = mer calme
     waterPt: t => t < 15 ? 1 : t <= 17 ? 3 : t <= 21 ? 5 : t <= 24 ? 4 : 1,
     waterPtOff: 3, windMax: 30,
     darkTxt: 'nuit noire — le sar mange de nuit mais l’aube reste le meilleur créneau.',
-    summerTxt: 'pleine saison : rochers et petites passes, appât coquillage à l’étale.',
-    bestTxt: 'mer calme et claire sur les roches ; à pied 1–10 m, coquillages & dure.',
+    summerTxt: 'pleine saison : rochers battus et passes, coquillage à l’étale.',
+    bestTxt: 'mer calme, claire et franche sur les rochers battus ; à pied 1–10 m.',
   },
 };
 const SP = () => SPECIES[state.species] || SPECIES.calamar;
