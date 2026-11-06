@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Ghazaouet Calamar Live — Meilleurs jours &amp; heures pour pêcher le calamar</title>
-<meta name="description" content="App pro en direct pour la pêche du calamar (encornet) au port de Ghazaouet (Tlemcen, Algérie) : Indice Calamar sur 100, phases lunaires, périodes solunaires majeures et mineures, marée, météo et état de la mer temps réel, calendrier des meilleures journées.">
+<title>Ghazaouet Calamar Live — Meilleurs jours &amp; heures pour pêcher à Ghazaouet (calamar, loup, dorade, sar)</title>
+<meta name="description" content="App pro en direct pour la pêche à Ghazaouet (Tlemcen, Algérie) : Indice pêche sur 100 pour le calamar, le loup bar, la dorade et le sar ; phases lunaires, périodes solunaires, météo et état de la mer temps réel, calendrier des meilleures journées.">
 <meta name="theme-color" content="#050E13">
 <meta name="author" content="Ghazaouet Calamar Live">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261106c">
+<link rel="stylesheet" href="assets/css/style.css?v=20261106d">
 </head>
 <body>
 
@@ -132,7 +132,7 @@
     <button class="btn btn-ghost sheet-ghost" id="btnRefresh2"><svg class="ic"><use href="#i-refresh"/></svg> Actualiser les données</button>
   </div>
 
-  <p class="sheet-foot">Indice Calamar™ v2.0 — outil d'aide à la décision. La mer reste imprévisible&nbsp;; naviguez avec prudence.</p>
+  <p class="sheet-foot">Indice Ghazaouet™ v2.0 — outil d'aide à la décision. La mer reste imprévisible&nbsp;; naviguez avec prudence.</p>
 </aside>
 <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
@@ -155,7 +155,7 @@
       </header>
       <div class="hero-body">
         <div class="gauge-canvas-wrap">
-          <canvas id="gaugeCanvas" width="300" height="212" role="img" aria-label="Jauge de l'indice calamar"></canvas>
+          <canvas id="gaugeCanvas" width="300" height="212" role="img" aria-label="Jauge de l'indice"></canvas>
           <div class="gauge-center">
             <div class="gauge-value" id="gaugeValue">--</div>
             <div class="gauge-max">/ 100</div>
@@ -239,7 +239,7 @@
       <div>
         <span class="card-kicker">Lune</span>
         <h2 class="sec-title" id="calMonthTitle">—</h2>
-        <p class="view-sub">Phase réelle + Indice Calamar™ jour par jour. Les cases dorées : vos meilleures sorties. * au-delà de 16 jours.</p>
+        <p class="view-sub" id="luneSub">Phase réelle + Indice Calamar™ jour par jour. Les cases dorées : vos meilleures sorties. * au-delà de 16 jours.</p>
       </div>
       <div class="cal-nav">
         <button class="icon-btn" id="calPrev" aria-label="Mois précédent"><svg class="ic"><use href="#i-chev-l"/></svg></button>
@@ -286,64 +286,40 @@
     <header class="sec-head">
       <div>
         <span class="card-kicker">Guide expert</span>
-        <h2 class="sec-title">Pêcher le calamar ici</h2>
-        <p class="view-sub">Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.</p>
+        <h2 class="sec-title" id="guideTitle">Pêcher le calamar ici</h2>
+        <p class="view-sub" id="guideSub">Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.</p>
       </div>
     </header>
 
-    <div class="fact-strip" aria-label="Fiche espèce">
-      <div class="fact"><small>Espèce</small><strong>Loligo vulgaris</strong></div>
-      <div class="fact"><small>Profondeur</small><strong>20 – 250 m</strong></div>
-      <div class="fact"><small>Eau idéale</small><strong>13 – 20 °C</strong></div>
-      <div class="fact"><small>Moment</small><strong>Nuit</strong></div>
-      <div class="fact"><small>Fonds</small><strong>Sable &amp; vase</strong></div>
-      <div class="fact"><small>Activité</small><strong>Crépuscule → aube</strong></div>
-    </div>
+    <div class="fact-strip" id="factStrip" aria-label="Fiche espèce"></div>
 
     <details class="fold" open>
       <summary class="fold-q"><span>Quand sortir, mois par mois</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
       <div class="fold-a">
         <div class="season-bars" id="seasonBars" aria-label="Qualité par mois"></div>
-        <p class="note">Migration côtière des gros sujets dès janvier–février ; petites tailles en été ; ponte majeure début d'été et début d'automne (Rocha &amp; Guerra 1996) ; recrutement février–mars et juillet–septembre. Automne–début d'hiver = le meilleur de l'année à Ghazaouet — CPUE plus élevées en mois froids (Baléares 2012). (Sources : FAO / AdriaMed, SeaLifeBase, Cabanellas-Reboredo et al. 2012.)</p>
+        <p class="note" id="moisNote"></p>
       </div>
     </details>
 
     <details class="fold">
       <summary class="fold-q"><span>Les rythmes d'une nuit</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
       <div class="fold-a">
-        <ul class="hour-slots">
-          <li><span class="hs-time">17h – 19h</span><div class="hs-bar is-good"><div style="width:72%"></div></div><span class="hs-note">Crépuscule — créneau validé par la science</span></li>
-          <li><span class="hs-time">19h – 22h</span><div class="hs-bar is-peak"><div style="width:96%"></div></div><span class="hs-note">Prime time — turlutte &amp; lumière</span></li>
-          <li><span class="hs-time">22h – 02h</span><div class="hs-bar is-good"><div style="width:78%"></div></div><span class="hs-note">Pleine nuit — activité soutenue</span></li>
-          <li><span class="hs-time">02h – 04h</span><div class="hs-bar is-good"><div style="width:60%"></div></div><span class="hs-note">Second souffle — calme plat souvent</span></li>
-          <li><span class="hs-time">04h – 07h</span><div class="hs-bar"><div style="width:30%"></div></div><span class="hs-note">Aube — touches sporadiques</span></li>
-          <li><span class="hs-time">07h – 17h</span><div class="hs-bar is-low"><div style="width:8%"></div></div><span class="hs-note">Journée — le calamar redescend (20–250 m)</span></li>
-        </ul>
-        <p class="note"><strong>Preuve scientifique</strong> — Cabanellas-Reboredo et al. (2012, <em>ICES J. Mar. Sci.</em>, Baléares) : CPUE maximale dans un <strong>créneau étroit autour du coucher du soleil</strong>, meilleure en <strong>mois froids</strong>, favorisée par eau fraîche + vent faible + <strong>basse pression</strong> + jours proches de la <strong>nouvelle lune</strong>. Ulas &amp; Aydin (2011, <em>Afr. J. Biotechnol.</em>, Égée) : turluttes <strong>rouges</strong> supérieures (p&lt;0.01) et pleine lune positive (p&lt;0.01) pour la turlutte côtière.</p>
+        <ul class="hour-slots" id="hourSlots"></ul>
+        <p class="note" id="preuveNote"></p>
       </div>
     </details>
 
     <details class="fold">
       <summary class="fold-q"><span>4 façons de le prendre</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
       <div class="fold-a">
-        <div class="tech-grid">
-          <div class="tech"><div class="tech-num">01</div><h4>Turlutte de nuit</h4><p>Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.</p><p class="tech-pro">Tailles 2.0–3.5 · <strong>rouge d'abord</strong> (étude Égée, p&lt;0.01 ; orange ensuite, blanc moins bon) · phosphorescent en nuit noire · fond sableux 20–60 m. Pleine lune = turluttes plus efficaces (p&lt;0.01).</p></div>
-          <div class="tech"><div class="tech-num">02</div><h4>Pêche au lamparo</h4><p>Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.</p><p class="tech-pro">Nouvelle lune &gt; pleine lune pour le lamparo (contraste maxi) · LED <strong>bleue &gt; blanche</strong> (Indonésie 2021, p&lt;0.05) · 3e quartier souvent productif sous LED.</p></div>
-          <div class="tech"><div class="tech-num">03</div><h4>Dérive sur les chasses</h4><p>Repérer chasses de thons/dorades ou zones de courant (cassures, pointes). Dérive lente, turlutte profonde. Calamars en chasse active.</p><p class="tech-pro">Eaux 13–20 °C, houle &lt; 0,5 m = activité maximale.</p></div>
-          <div class="tech"><div class="tech-num">04</div><h4>Du bord (digue/jetée)</h4><p>Sur la digue du port ou le môle : lampes, calamars montent aux points lumineux. Petits leurres, fil fin, épuisette longue.</p><p class="tech-pro">Évitez les soirs de grosse houle d'ouest — le port est exposé nord-ouest.</p></div>
-        </div>
+        <div class="tech-grid" id="techGrid"></div>
       </div>
     </details>
 
     <details class="fold">
       <summary class="fold-q"><span>Spots autour de Ghazaouet</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
       <div class="fold-a">
-        <ul class="spot-list">
-          <li><div class="spot-rank">A</div><div class="spot-body"><strong>Jetée ouest &amp; digue du phare « Les Deux Frères »</strong><span>Accès à pied · 5–15 m · lampes du port · idéal lamparo par nuit calme. Attention aux glissades.</span></div></li>
-          <li><div class="spot-rank">B</div><div class="spot-body"><strong>Le large du port (cassure 30 → 80 m)</strong><span>En barque · pente du plateau · dérive sur chasses · meilleur secteur automne–hiver.</span></div></li>
-          <li><div class="spot-rank">C</div><div class="spot-body"><strong>Baie de Honaïne (10 km à l'ouest)</strong><span>Fonds sableux 15–40 m · abritée de la houle d'ouest · très bonne densité octobre–décembre.</span></div></li>
-          <li><div class="spot-rank">D</div><div class="spot-body"><strong>Marsa Ben M'Hidi (à l'est, frontière)</strong><span>Spot historique · vérifier zones autorisées et réglementation locale.</span></div></li>
-        </ul>
+        <ul class="spot-list" id="spotList"></ul>
         <div class="safety-box"><svg class="ic"><use href="#i-shield"/></svg><div><strong>Sécurité avant tout</strong><ul><li>Gilet + 2 moyens de communication (téléphone chargé / VHF) ; prévenez un proche de l'heure de retour.</li><li>Jamais de sortie par alerte orage / mer formée (bandeau du tableau de bord).</li><li>Bulletin météo marine ONM / Météo Algérie avant de prendre la mer.</li><li>Nuit = plus de risque : feux de navigation obligatoires en barque.</li></ul></div></div>
       </div>
     </details>
@@ -354,15 +330,7 @@
         <div class="table-wrap">
           <table class="gear-table">
             <thead><tr><th>Élément</th><th>Recommandation</th><th>Budget</th></tr></thead>
-            <tbody>
-              <tr><td>Canne</td><td>Turlutte / spinning 2,4–3,0 m · médium-fast · 80–150 g</td><td>€€</td></tr>
-              <tr><td>Moulinet</td><td>4000–5000 · frein fin · 200 m tresse PE 0.8–1.2</td><td>€€</td></tr>
-              <tr><td>Leader</td><td>Fluorocarbone 0,25–0,35 mm · 1,5 m · discret en eau claire</td><td>€</td></tr>
-              <tr><td>Turluttes</td><td>N° 2.0 à 3.5 · rose, orange, blanc, phospho (nuit)</td><td>€</td></tr>
-              <tr><td>Émerillons</td><td>Agrafe + baril (change rapide)</td><td>€</td></tr>
-              <tr><td>Lampe</td><td>Frontale rouge (préserve la vision nocturne) + projecteur 12 V</td><td>€ – €€</td></tr>
-              <tr><td>Divers</td><td>Épuisette longue · seau à couvercle · couteau · eau douce</td><td>€</td></tr>
-            </tbody>
+            <tbody id="gearRows"></tbody>
           </table>
         </div>
       </div>
@@ -380,13 +348,13 @@
       <div>
         <span class="card-kicker">Transparence</span>
         <h2 class="sec-title">Méthode, données &amp; limites</h2>
-        <p class="view-sub">Comment l'Indice Calamar™ est calculé, d'où viennent les données, pourquoi rien ne garantit une capture.</p>
+        <p class="view-sub" id="methodeSub">Comment l'Indice est calculé, d'où viennent les données, pourquoi rien ne garantit une capture.</p>
       </div>
       <button class="btn btn-gold" id="btnPrint"><svg class="ic"><use href="#i-printer"/></svg> Imprimer la fiche du jour</button>
     </header>
 
     <article class="card pad">
-      <header class="card-head"><div><span class="card-kicker">L'Indice Calamar™</span><h3 class="card-title">5 facteurs, 100 points</h3></div></header>
+      <header class="card-head"><div><span class="card-kicker" id="methodKicker">L'Indice Calamar™</span><h3 class="card-title">5 facteurs, 100 points</h3></div></header>
       <ol class="method-list" id="methodList"></ol>
       <p class="note">Le solunaire est pondéré par la présence des périodes majeures/mineures dans la nuit locale (coucher → lever). Conditions « mer » : chute dès 0,6 m de houle ; barème « pression » privilégiant <strong>baisses nettes et basses pressions</strong> (Baléares 2012). Pour le loup bar, la dorade et le sar, les seuils (saison, eau, houle) suivent la <strong>biologie de l'espèce</strong> et se calibreront avec le retour des pêcheurs — voir le niveau de preuve ci-dessous. L'indice est recalculé à chaque actualisation (toutes les 10 min). Calcul lunaire : élongation réelle soleil–lune (solveur Newton–Raphson), âge précis à la minute près. Météo &amp; mer : Open-Meteo (ECMWF/ICON, CC BY 4.0), données brutes non modifiées.</p>
     </article>
@@ -477,7 +445,7 @@
 
   <footer class="footer">
     <img src="assets/icon.svg" alt="" width="34" height="34">
-    <div><strong>Ghazaouet Calamar Live</strong><span>La météo du calamar, en direct du port.</span></div>
+    <div><strong>Ghazaouet Calamar Live</strong><span id="footTag">La météo de la pêche, en direct du port.</span></div>
   </footer>
 </main>
 
@@ -490,8 +458,8 @@
   <button class="dock-btn" data-nav="methode"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
 </nav>
 
-<script src="assets/js/engine.js?v=20261106c"></script>
-<script src="assets/js/astro.js?v=20261106c"></script>
-<script src="assets/js/app.js?v=20261106c"></script>
+<script src="assets/js/engine.js?v=20261106d"></script>
+<script src="assets/js/astro.js?v=20261106d"></script>
+<script src="assets/js/app.js?v=20261106d"></script>
 </body>
 </html>

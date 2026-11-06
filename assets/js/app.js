@@ -221,6 +221,203 @@ function speciesSeaPoints(wave, sst, windMax) {
   return clamp(v, 0, 12);
 }
 
+/* ─────────── Contenu « Guide » par espèce (fiche · mois · nuit · techniques · spots · matériel · FAQ) ─────────── */
+const GUIDES = {
+  calamar: {
+    title: 'Pêcher le calamar ici',
+    sub: 'Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.',
+    facts: [['Espèce', 'Loligo vulgaris'], ['Profondeur', '20 – 250 m'], ['Eau idéale', '13 – 21 °C'], ['Moment', 'Nuit'], ['Fonds', 'Sable & vase'], ['Activité', 'Crépuscule → aube']],
+    moisNote: 'Migration côtière des gros sujets dès janvier–février ; petites tailles en été ; ponte majeure début d’été et début d’automne (Rocha & Guerra 1996) ; recrutement février–mars et juillet–septembre. Automne–début d’hiver = le meilleur de l’année à Ghazaouet — CPUE plus élevées en mois froids (Baléares 2012). (Sources : FAO / AdriaMed, SeaLifeBase, Cabanellas-Reboredo et al. 2012.)',
+    slots: [
+      ['17h – 19h', 72, 'is-good', 'Crépuscule — créneau validé par la science'],
+      ['19h – 22h', 96, 'is-peak', 'Prime time — turlutte &amp; lumière'],
+      ['22h – 02h', 78, 'is-good', 'Pleine nuit — activité soutenue'],
+      ['02h – 04h', 60, 'is-good', 'Second souffle — calme plat souvent'],
+      ['04h – 07h', 30, '', 'Aube — touches sporadiques'],
+      ['07h – 17h', 8, 'is-low', 'Journée — le calamar redescend (20–250 m)'],
+    ],
+    preuveNote: '<strong>Preuve scientifique</strong> — Cabanellas-Reboredo et al. (2012, <em>ICES J. Mar. Sci.</em>, Baléares) : CPUE maximale dans un <strong>créneau étroit autour du coucher du soleil</strong>, meilleure en <strong>mois froids</strong>, favorisée par eau fraîche + vent faible + <strong>basse pression</strong> + jours proches de la <strong>nouvelle lune</strong>. Ulas &amp; Aydin (2011, <em>Afr. J. Biotechnol.</em>, Égée) : turluttes <strong>rouges</strong> supérieures (p&lt;0.01) et pleine lune positive (p&lt;0.01) pour la turlutte côtière.',
+    tech: [
+      ['01', 'Turlutte de nuit', 'Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.', 'Tailles 2.0–3.5 · <strong>rouge d’abord</strong> (étude Égée, p&lt;0.01 ; orange ensuite, blanc moins bon) · phospho en nuit noire · fond sableux 20–60 m. Pleine lune = turluttes plus efficaces (p&lt;0.01).'],
+      ['02', 'Pêche au lamparo', 'Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.', 'Nouvelle lune &gt; pleine lune pour le lamparo (contraste maxi) · LED <strong>bleue &gt; blanche</strong> (Indonésie 2021, p&lt;0.05) · 3e quartier souvent productif sous LED.'],
+      ['03', 'Dérive sur les chasses', 'Repérer chasses de thons/dorades ou zones de courant (cassures, pointes). Dérive lente, turlutte profonde. Calamars en chasse active.', 'Eaux 13–20 °C, houle &lt; 0,5 m = activité maximale.'],
+      ['04', 'Du bord (digue/jetée)', 'Sur la digue du port ou le môle : lampes, calamars montent aux points lumineux. Petits leurres, fil fin, épuisette longue.', 'Évitez les soirs de grosse houle d’ouest — le port est exposé nord-ouest.'],
+    ],
+    spots: [
+      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Accès à pied · 5–15 m · lampes du port · idéal lamparo par nuit calme. Attention aux glissades.'],
+      ['B', 'Le large du port (cassure 30 → 80 m)', 'En barque · pente du plateau · dérive sur chasses · meilleur secteur automne–hiver.'],
+      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux 15–40 m · abritée de la houle d’ouest · très bonne densité octobre–décembre.'],
+      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
+    ],
+    gear: [
+      ['Canne', 'Turlutte / spinning 2,4–3,0 m · médium-fast · 80–150 g', '€€'],
+      ['Moulinet', '4000–5000 · frein fin · 200 m tresse PE 0.8–1.2', '€€'],
+      ['Leader', 'Fluorocarbone 0,25–0,35 mm · 1,5 m · discret en eau claire', '€'],
+      ['Turluttes', 'N° 2.0 à 3.5 · rose, orange, blanc, phospho (nuit)', '€'],
+      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
+      ['Lampe', 'Frontale rouge (préserve la vision nocturne) + projecteur 12 V', '€ – €€'],
+      ['Divers', 'Épuisette longue · seau à couvercle · couteau · eau douce', '€'],
+    ],
+    faq: [
+      { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Ça dépend de la technique — la science est nette : (1) Turlutte sans lampe : la pleine lune renforce les captures (étude mer Égée, p<0.01), turluttes rouges devant. (2) Lamparo / LEDs : les nuits sombres gagnent — nouvelle lune idéale ; sous LEDs clignotantes, le 3e quartier est le plus productif (étude Indonésie 2021, p<0.05) ; LED bleue > blanche. (3) Sans technique définie, l’étude méditerranéenne de référence (Baléares, ICES 2012) montre des CPUE supérieures près de la nouvelle lune + mois froids. Dans tous les cas : syzygie (± 2 jours) = pic d’activité.' },
+      { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
+      { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
+      { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
+      { q: 'Quel leurre et quelle animation ?', a: 'Turlutte 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Pas d’ardillon — la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
+      { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
+      { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau trop chaude (> 21 °C) égalisent l’effet lunaire — les études montrent des CPUE faibles dès que la mer se forme ou que la pression monte. C’est exactement ce que synthétise l’Indice (lune 35 + solunaire 25 + saison 20 + mer 12 + pression 8). Et si la pression baisse nette (−0,7 hPa/3 h), c’est souvent bon signe : l’étude des Baléares l’associe à de meilleures touches.' },
+    ],
+    saisonTxt: 'Barème /20 (pic novembre ; nov–déc–janv généreux) : migration côtière des gros sujets jan–fév ; ponte échelonnée printemps et automne (Rocha & Guerra 1996) ; recrutement fév–mars et juil–sept ; CPUE supérieures en mois froids (Baléares 2012).',
+    meteoTxt: 'Vagues 7 pts (<0,3 m = 7 ; 0,6–1 m = 4 ; ≥1,5 m = 0) + eau 5 pts (≤16 °C = 5 ; 17–19 °C = 4 ; 19–21 °C = 3 ; >21 °C = 1). Étude Baléares : CPUE plus forte par mer fraîche et houle faible ; l’été fait chuter l’activité.',
+    moonTxt: 'Proximité de la syzygie (nouvelle OU pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. Effet lunaire statistiquement établi chez le calamar (Égée 2011 p<0.01, Indonésie 2021 p<0.05, Baléares 2012). Sens optimal : nouvelle lune (lamparo) vs pleine lune (turlutte sans lampe) — l’indice les traite à égalité ; le guide détaille.',
+  },
+  loup: {
+    title: 'Pêcher le loup bar ici',
+    sub: 'Tout sur <em>Dicentrarchus labrax</em> : saisons, heures, techniques, spots, matériel, sécurité.',
+    facts: [['Espèce', 'Dicentrarchus labrax'], ['Profondeur', '5 – 50 m (adultes au large)'], ['Eau idéale', '13 – 21 °C'], ['Moment', 'Aube &amp; crépuscule'], ['Fonds', 'Enrochements &amp; digues'], ['Activité', 'Aube → crépuscule']],
+    moisNote: 'Kara MH (1997, golfe d’Annaba) : le loup gagne la côte en hiver pour frayer (déc.–mars, pic févr.) — il est donc <strong>plus nombreux et plus proche</strong> à Ghazaouet en hiver–début de printemps. L’été, il rejoint le large (Doyle 2017 : home range ≤ 3 km, fidélité 93 % aux zones de chasse). Automne–début d’hiver = meilleur ; août = creux mais aube et chasses restent pêchants.',
+    slots: [
+      ['06h – 08h', 78, 'is-good', 'Aube — créneau n°1 sur enrochements'],
+      ['08h – 17h', 10, 'is-low', 'Journée — le loup descend'],
+      ['17h – 20h', 92, 'is-peak', 'Crépuscule — chasses de sardines/mulets'],
+      ['20h – 23h', 72, 'is-good', 'Nuit — leurres de surface'],
+      ['23h – 02h', 58, 'is-good', 'Pleine nuit — vent frais, eau brassée'],
+      ['02h – 06h', 32, '', 'Aube 2e — touches sporadiques'],
+    ],
+    preuveNote: '<strong>Preuve scientifique</strong> — Kara MH (1997, <em>Cah. Biol. Mar.</em> 38, golfe d’Annaba) : frai déc.–mars, pic févr. Doyle TK et al. (2017, <em>Sci Rep</em> 8:45841) : résidence côtière l’été → large l’hiver ; home range ≤ 3 km, fidélité inter-annuelle 93 %. Rodríguez-García C et al. (2024, <em>Fishes</em> 9:173) : mysidacés + poissons-fourrage ; l’alimentation varie avec l’heure et la saison. Dufour V et al. (2009, <em>JMBA UK</em> 89) : nurseries du golfe du Lion — juvéniles en surf zone.',
+    tech: [
+      ['01', 'Leurres de surface', 'Poppers / walk-the-dog 8–12 cm au crépuscule ; aube sur enrochements ; récupération saccadée + pauses.', 'Eau brassée (houle 0,5–1,5 m) = couleurs vives ; eau claire = teintes naturelles ; crépuscule avant tout.'],
+      ['02', 'Crankbaits profonds', '5–15 m de plongée sur cassures &amp; digue ; récupération rapide, pêches agressives.', 'Idéal eau fraîche (13–17 °C) d’octobre à février.'],
+      ['03', 'Jerkbaits &amp; shads', 'Leurres coulées lentes et twitches sur chasses ; l’été au large sur bancs de sardines.', 'Eau 13 °C + sardines = loup en chasse franche ; lancer au vent.'],
+      ['04', 'Shore casting digues', 'Canne forte 80–150 g, leurres 30–70 g projetés loin ; très rentable sur enrochements aube.', 'Sécurité digues : vagues hautes et glissades — chaussures grip.'],
+    ],
+    spots: [
+      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Crépuscule sur enrochements — leurres de surface au bord de lame ; lampes utiles en pénombre.'],
+      ['B', 'Le large du port (cassure 30 → 80 m)', 'En barque · dérive sur chasses · fin d’été–automne ; gros sujets 2–6 kg.'],
+      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux abrités de la houle d’ouest · automne–hiver — loup y descend des chasses.'],
+      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
+    ],
+    gear: [
+      ['Canne', 'Spinning 2,7–3,2 m · médium-heavy · 14–42 g', '€€'],
+      ['Moulinet', '3000–4000 · 200 m tresse PE 1.0–1.5', '€€'],
+      ['Leader', 'Fluorocarbone 0,35–0,45 mm · 1 m', '€'],
+      ['Leurres', 'Poppers 90–120 mm · jigs 20–40 g · crankbaits', '€€'],
+      ['Émerillons', 'Agrafe + anneau (change rapide)', '€'],
+      ['Lampe', 'Frontale rouge (aube) · évitez la lumière blanche sur l’eau', '€'],
+      ['Divers', 'Épuisette long manche · pince · plombs drop-shot', '€'],
+    ],
+    faq: [
+      { q: 'Quel est le meilleur moment pour le loup ?', a: 'Aube et crépuscule — c’est la règle d’or. L’aube : ~2 h autour du lever (à Ghazaouet, sortie avant que le soleil monte) ; le crépuscule : 1 h avant à 1 h après le couchant. Hiver–début printemps (nov.–mars) = meilleure saison ; l’été, le loup s’éloigne au large et ne vient au bord qu’aux chasses.' },
+      { q: 'Quelle profondeur / quel spot ?', a: 'Enrochements et digues 5–25 m sur le bord ; au large 30–80 m en dérive sur cassures. La digue du port (Ghazaouet) au petit matin est un très bon rapport risque/prise quand mer légère–modérée.' },
+      { q: 'Faut-il un bateau ?', a: 'Non — la digue et les enrochements marchent très bien au crépuscule. La barque n’est nécessaire que pour les chasses au large (juillet–octobre) et le traîné profond des hivers.' },
+      { q: 'Quels leurres et quelle récupération ?', a: 'Poppers 90–120 mm au crépuscule (eau brassée : couleurs vives) ; crankbaits profonds 5–15 m ; jerkbaits sur chasses. Récupération : 2–4 twitches + pause ; le loup tape souvent à la pause. Eau claire = coloris naturels ; eau brassée = flashy.' },
+      { q: 'Quelle réglementation ?', a: 'Tailles minimales, repos biologique et zones classées encadrés par la wilaya de Tlemcen — renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture (DPA) avant chaque sortie. Évitez de garder des poissons < 30 cm (jeunesse) — relâchez.' },
+      { q: 'Pourquoi rien du tout malgré la lune ?', a: 'Aucune preuve CPUE pour le loup ; mais deux facteurs dominants : la température (eau > 22 °C = baisse d’activité) et la mer (houle > 2 m = poissons inaccessibles). L’indice synthétise seulement la biologie ; en vrai, parlez aux professionnels du port — leur œil vaut plus que toute courbe.' },
+      { q: 'Le loup est-il sensible à la lune ?', a: 'Pas démontré. La lune sert ici de repère temporel (syzygie = jours plus actifs en général, solunaire), pas de garantie. Priorité : aube/crépuscule + mer + saison.' },
+    ],
+    saisonTxt: 'Barème /20 (pic nov–jan ; creux estival) : approche hivernale côtière documentée — frai déc.–mars, pic févr. (Kara 1997, golfe d’Annaba) ; large l’été (Doyle 2017) ; home range ≤ 3 km, fidélité 93 %.',
+    meteoTxt: 'Vagues 7 pts (<0,6 m = 7 ; <1,2 m = 6 ; <2 m = 4 ; <2,5 m = 2 ; ≥2,5 m = 0) — le loup <strong>aime l’eau brassée</strong> — + eau 5 pts (10–13 °C = 4 ; 13–18 °C = 5 ; 18–22 °C = 3 ; >22 °C = 1). Vent toléré jusqu’à 35 km/h.',
+    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée pour le loup — la syzygie sert de descripteur horaire croisé avec les fenêtres aube/crépuscule, pas de garantie.',
+  },
+  dorade: {
+    title: 'Pêcher la dorade ici',
+    sub: 'Tout sur <em>Sparus aurata</em> : saisons, heures, techniques, spots, matériel, sécurité.',
+    facts: [['Espèce', 'Sparus aurata'], ['Profondeur', '10 – 40 m'], ['Eau idéale', '16 – 23 °C'], ['Moment', 'Aube'], ['Fonds', 'Sable &amp; vase'], ['Activité', 'Aube → crépuscule']],
+    moisNote: 'La dorade arrive sur la côte algérienne à l’automne ; elle fraie d’<strong>octobre à janvier, avec un pic en décembre</strong> (Chaoui &amp; Kara 2006 — Mellah, Algérie). Les grosses (>44 cm) sont des <strong>femelles</strong> — à préserver : plus la dorade est grosse, plus elle apporte à la population. Août = creux (eau > 22 °C → descente au large).',
+    slots: [
+      ['06h – 09h', 92, 'is-peak', 'Aube — prime time'],
+      ['09h – 13h', 46, 'is-good', 'Matinée — dérive sur fond'],
+      ['13h – 16h', 18, 'is-low', 'Midday — dorade descend'],
+      ['16h – 19h', 66, 'is-good', 'Crépuscule — second créneau'],
+      ['19h – 23h', 30, '', 'Nuit — touches rares'],
+      ['23h – 06h', 8, 'is-low', 'Nuit — dorade inactive'],
+    ],
+    preuveNote: '<strong>Preuve scientifique</strong> — Chaoui L &amp; Kara MH (2006, <em>Scientia Marina</em> 70(3):545–552 — Mellah, Algérie) : frai oct.–janv., <strong>pic décembre</strong> ; maturité 32,6 cm TL ; <strong>inversion sexuelle à 44 cm</strong> (proterandrie — grosses femelles). Appâts clés : chinchard, crabe, anchois ; aube prioritaire ; fonds sablo-vaseux 10–40 m ; mer calme.',
+    tech: [
+      ['01', 'Appâts en dérive', 'Chinchard &amp; crabe en vif sur fond, ligne légère, hameçon n°1/0–3/0 ; prospecter 10–40 m.', 'Dérive lente ; mer calme ; aube uniquement en saison froide.'],
+      ['02', 'La tomber (tomber)', 'Poser en douceur au bord des enrochements ou autour des bouées ; touche souvent à l’arrêt.', 'Idéal jetée aube ; appât frais obligatoire.'],
+      ['03', 'Leurres souples lents', 'Swimbaits 7–10 cm, récupération millimétrée (drapeau) sur fond.', 'Eau claire ; approche silencieuse ; patience.'],
+      ['04', 'Surfcasting digue', 'Petit plomb + appât posé à 15–40 m sur sable ; crépuscule ou aube.', 'Houle faible exigée — la dorade suit la clarté.'],
+    ],
+    spots: [
+      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Appâts au tomber devant enrochements ; aube ; appât frais ; mer calme obligatoire.'],
+      ['B', 'Le large du port (cassure 30 → 80 m)', 'Charnière du plateau · utile en déc. (dérive) ; hors frai la dorade est au large — peu de prise du bord.'],
+      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux 15–40 m — <strong>LE spot dorade oct.–déc.</strong> · abritée, eau claire.'],
+      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
+    ],
+    gear: [
+      ['Canne', 'Spinning 2,4–2,7 m · médium · 7–25 g', '€€'],
+      ['Moulinet', '3000–4000 · 150–200 m PE 0.8–1.0', '€€'],
+      ['Leader', 'Fluorocarbone 0,30–0,40 mm · 1 m', '€'],
+      ['Hameçons', 'n° 1/0 – 3/0 · longshank', '€'],
+      ['Appâts', 'Chinchard · crabe · anchois · coquillage', '€'],
+      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
+      ['Divers', 'Épuisette · seau-appât · pince · frontale rouge', '€'],
+    ],
+    faq: [
+      { q: 'Quel est le meilleur moment ?', a: 'Octobre–janvier, avec un pic marqué en décembre (frai — Mellah, Chaoui & Kara 2006). Aube avant tout : 2 h autour du lever. En plein été (août), la dorade descend au large et l’appétit chute.' },
+      { q: 'Profondeur et spot ?', a: '10–40 m sur sable et vase — Honaïne (fonds sableux 15–40 m) est LE secteur de l’automne. Du bord, appâts au tomber sur le fond devant enrochements.' },
+      { q: 'Bateau obligatoire ?', a: 'Non pour la digue (aube, appâts) ; oui pour les grands fonds et les chasses de déc. — sinon la dorade ne s’y rend pas. Vérifiez toujours la météo avant.' },
+      { q: 'Appâts gagnants ?', a: 'Chinchard frais, crabe, anchois ; la dorade aime la proie qui bouge. Ligne légère, hameçon longshank, touche souvent « à l’arrêt ».' },
+      { q: 'Quelle réglementation ?', a: 'Algérie : encadrement strict (DPA Tlemcen) — tailles, repos biologique. La dorade atteignant 32,6 cm à maturité (puis inversion à 44 cm) : libérez les grosses, ce sont les femelles productives.' },
+      { q: 'Pourquoi juillet–août, rien ?', a: 'Eau > 22 °C = descente au large et coupure d’appétit. La dorade est un poisson d’eau fraîche ; chaque degré compte.' },
+      { q: 'Et la lune ?', a: 'Aucune mesure CPUE pour la dorade. Aube + pression + saison pèsent. La syzygie ne nuit jamais — mais ne remplace pas l’aube.' },
+    ],
+    saisonTxt: 'Barème /20 (pic décembre — nov–déc–oct généreux ; août creux) : frai oct.–janv., pic déc. ; maturité 32,6 cm ; inversion sexuelle 44 cm (Chaoui & Kara 2006, Mellah — Algérie).',
+    meteoTxt: 'Vagues 7 pts (<0,5 m = 7 ; <0,8 m = 6 ; <1,2 m = 4 ; <1,8 m = 2 ; ≥1,8 m = 0) + eau 5 pts (≤16 °C = 4 ; 16–20 °C = 5 ; 20–23 °C = 4 ; >23 °C = 1). Mer fraîche–tiède et calme ; aube essentielle.',
+    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée — la syzygie sert de descripteur horaire ; l’aube reste déterminante.',
+  },
+  sar: {
+    title: 'Pêcher le sar ici',
+    sub: 'Tout sur <em>Diplodus sargus</em> : saisons, heures, techniques, spots, matériel, sécurité.',
+    facts: [['Espèce', 'Diplodus sargus'], ['Profondeur', '1 – 15 m'], ['Eau idéale', '16 – 24 °C'], ['Moment', 'Aube (étale)'], ['Fonds', 'Rochers battus'], ['Activité', 'Aube → étale']],
+    moisNote: 'Frai <strong>avril–juillet</strong> (Quignard &amp; Farrugio 1981 — Ionian Sea Encyclopedia, Springer 2022) ; juvéniles gagnent les rochers dès le printemps. Juin–septembre = plein pic ; houle <strong>< 0,8 m</strong> et eau claire indispensables ; la pêche à pied sur rochers battus (coquillage, patelle) ; le sar est sédentaire.',
+    slots: [
+      ['06h – 09h', 92, 'is-peak', 'Aube — prime time'],
+      ['09h – 12h', 58, 'is-good', 'Matinée — étale coquillages'],
+      ['12h – 15h', 22, 'is-low', 'Midday — chaleur, sar au trou'],
+      ['15h – 18h', 48, 'is-good', 'Fin d’après-midi — bon pari'],
+      ['18h – 21h', 40, '', 'Crépuscule — dernière carte'],
+      ['21h – 06h', 10, 'is-low', 'Nuit — sar inactif'],
+    ],
+    preuveNote: '<strong>Preuve scientifique</strong> — Quignard JP &amp; Farrugio H (1981) : frai avril–juillet ; juvéniles sur substrats rocheux dès le printemps. Ionian Sea Encyclopedia (Springer 2022, DOI 10.1007/978-3-031-08206-1_210001) : côte rocheuse battue, mollusques de base ; eau claire ; aube. Sous-espèce <em>cadenati</em> (Atlantique) commune au nord-ouest.',
+    tech: [
+      ['01', 'À l’étale — patelle', 'Pêche à pied sur rochers battus ; coquillage posé devant les trous ; approche discrète, eau claire.', 'Le sar se nourrit à marée basse — l’étale du matin est roi.'],
+      ['02', 'Basket feeding', 'Amorce coquillage pilé + appât posé ; la sar se regroupe ; technique n°1 sur rochers.', 'Appât frais (patelle, moule, crabe) ; patience ; calme.'],
+      ['03', 'La tomber sur rochers', 'Poser coquillage en douceur devant les fissures ; touche à l’arrêt.', 'Idéal aube ; houle nulle ; eau claire.'],
+      ['04', 'Surfcasting léger', 'Petit plomb + coquillage à 15–30 m de la côte rocheuse.', 'Mer calme obligatoire ; houle > 0,8 m = rien.'],
+    ],
+    spots: [
+      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Rochers battus aube — à pied, pas besoin de barque ; houle < 0,8 m'],
+      ['B', 'Le large du port (cassure 30 → 80 m)', 'Peu d’intérêt pour le sar (sédentaire côtier) ; barque inutile ici.'],
+      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Uniquement si rochers présents dans le secteur — sinon dorade prioritaire.'],
+      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
+    ],
+    gear: [
+      ['Canne', 'Surfcasting 3,6–4,5 m · medium-heavy · 50–150 g', '€€'],
+      ['Moulinet', '5000–6000 · 250 m tresse PE 1.2–1.5', '€'],
+      ['Leader', 'Fluorocarbone 0,35–0,45 mm · 1 m', '€'],
+      ['Hameçons', 'n° 6 – 10 · longshank', '€'],
+      ['Appâts', 'Patelle · moule · crabe · coquillage', '€'],
+      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
+      ['Divers', 'Pioche · seau coquillages · frontale rouge', '€'],
+    ],
+    faq: [
+      { q: 'Meilleur moment ?', a: 'Juin–septembre, à l’aube (2 h autour du lever) et à l’étale du matin. Houle < 0,8 m et eau claire = non négociable. Le sar est un poisson de rockpool — à pied c’est le plus rentable.' },
+      { q: 'Profondeur / spot ?', a: '1–15 m sur rochers battus ; la digue et les enrochements marchent — 5–10 m de fond suffit. Aucun intérêt au large.' },
+      { q: 'Bateau ?', a: 'Non — la pêche à pied sur rochers battus suffit et c’est même la meilleure approche (eau claire, appât posé).' },
+      { q: 'Appâts ?', a: 'Patelle (chapeau chinois), moule, coquillage, crabe. L’amorce coquillage pilé fait venir la sar de loin — basket feeding est la technique n°1.' },
+      { q: 'Réglementation ?', a: 'DPA Tlemcen — tailles min et zones classées ; le sar étant sédentaire, évitez de vider un même rocher ; variez vos spots.' },
+      { q: 'Pourquoi, certaines fois, rien du tout ?', a: 'Houle > 0,8 m = turbidité = zéro touche. Et la chaleur (> 24 °C en plein cagnard) le fait rentrer au trou à midi — anticipez aube ou 18 h.' },
+      { q: 'La lune compte-t-elle ?', a: 'Pas démontré pour le sar. L’aube et l’étale priment. Syzygie = bonus solunaire seulement.' },
+    ],
+    saisonTxt: 'Barème /20 (pic juin–septembre) : frai avril–juillet ; juvéniles gagnent les rochers ; densités maximales mer calme &amp; claire ; aube prioritaire (Quignard &amp; Farrugio 1981).',
+    meteoTxt: 'Vagues 7 pts (<0,3 m = 7 ; <0,6 m = 6 ; <0,8 m = 4 ; <1,2 m = 2 ; ≥1,2 m = 0) + eau 5 pts (17–21 °C = 5 ; 15–17 °C = 3 ; 21–24 °C = 4 ; <15 °C = 1 ; >24 °C = 1). La turbidité annule le score — eau claire obligatoire.',
+    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée — syzygie = descripteur horaire ; aube + étale priment.',
+  },
+};
+const GUIDE = () => GUIDES[state.species] || GUIDES.calamar;
+
 const isPrimeWindow = center => { const h = center.getHours(); return h >= 20 || h < 2; };
 
 /* ─────────── Indice (Calamar™/Loup/Dorade/Sar™) ─────────── */
@@ -798,7 +995,7 @@ function renderCalendar(dm) {
 function renderSeasonBars() {
   const max = Math.max(...GCLEngine.SEASON_20);
   const topMonths = [9, 10, 0, 1, 11]; // oct, nov, jan, fév, déc
-  $('#seasonBars').innerHTML = GCLEngine.SEASON_20.map((v, i) => {
+  $('#seasonBars').innerHTML = SP().season.map((v, i) => {
     const top = topMonths.includes(i);
     return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
   }).join('');
@@ -806,20 +1003,12 @@ function renderSeasonBars() {
   $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; });
 }
 
-/* ─────────── Rendu : FAQ ─────────── */
-const FAQ = [
-  { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Ça dépend de la technique — la science est nette : (1) Turlutte sans lampe : la pleine lune renforce les captures (étude mer Égée, p<0.01), turluttes rouges devant. (2) Lamparo / LEDs : les nuits sombres gagnent — nouvelle lune idéale ; sous LEDs clignotantes, le 3e quartier est le plus productif (étude Indonésie 2021, p<0.05) ; LED bleue > blanche. (3) Sans technique définie, l’étude méditerranéenne de référence (Baléares, ICES 2012) montre des CPUE supérieures près de la nouvelle lune + mois froids. Dans tous les cas : lune en phase syzygie (± 2 jours) = pic d’activité.' },
-  { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
-  { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
-  { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
-  { q: 'Quel leurre et quelle animation ?', a: 'Turlutte (turlutte) 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Silure interdit ? Non — mais pas d’ardillon : la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
-  { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
-  { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau trop chaude (> 21 °C) égalisent l’effet lunaire — les études montrent des CPUE faibles dès que la mer se forme ou que la pression monte. C’est exactement ce que synthétise l’Indice Calamar™ (lune 35 + solunaire 25 + saison 20 + mer 12 + pression 8). Et si la pression baisse nette (−0,7 hPa/3 h), c’est souvent bon signe : l’étude des Baléares l’associe à de meilleures touches.' }
-];
+/* ─────────── Rendu : FAQ (par espèce) ─────────── */
 function renderFAQ() {
-  $('#faqList').innerHTML = FAQ.map((f, i) => `
+  const sp = SP();
+  $('#faqList').innerHTML = GUIDE().faq.map((f, i) => `
     <div class="faq-item ${i === 0 ? 'is-open' : ''}">
-      <button class="faq-q" aria-expanded="${i === 0}"><span>${f.q}</span><svg class="ic"><use href="#i-squid"/></svg></button>
+      <button class="faq-q" aria-expanded="${i === 0}"><span>${f.q}</span><svg class="ic"><use href="#${sp.icon}"/></svg></button>
       <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
     </div>`).join('');
   $$('.faq-q').forEach(btn => btn.addEventListener('click', () => {
@@ -829,17 +1018,32 @@ function renderFAQ() {
   }));
 }
 
-/* ─────────── Rendu : méthode ─────────── */
-const METHOD = [
-  { h: 'Lune — 35 points', p: 'Proximité de la syzygie (nouvelle OU pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. Effet lunaire statistiquement établi chez le calamar (Égée 2011 p<0.01, Indonésie 2021 p<0.05, Baléares 2012). Sens optimal : nouvelle lune (lamparo/approche globale) vs pleine lune (turlutte sans lampe) — l’indice les traite à égalité et le guide détaille.', w: '35 pts' },
-  { h: 'Périodes solunaires — 25 points', p: 'Chaque majeure recouvrant la nuit rapporte jusqu’à 8 pts, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Honnêteté : Knight (1926) est une hypothèse folklorique non validée en général (revues : effet modeste, ~5 % sur trophées) ; elle reste le meilleur descripteur horaire disponible, croisé ici avec la preuve lunaire directe.', w: '25 pts' },
-  { h: 'Saison — 20 points', p: 'Barème /20 (oct–déc–jan ≈ 20, nov max) : migration côtière des gros sujets jan–fév ; ponte échelonnée printemps et automne (Rocha & Guerra 1996) ; recrutement fév–mars et juil–sept ; CPUE supérieures en mois froids (Baléares 2012).', w: '20 pts' },
-  { h: 'Mer — 12 points', p: 'Vagues 7 pts (<0,3 m = 7 ; 0,6–1 m = 4 ; ≥1,5 m = 0) + eau 5 pts (≤16 °C = 5 ; 17–19 °C = 4 ; 19–21 °C = 3 ; >21 °C = 1). Étude Baléares : CPUE plus forte par mer fraîche et houle faible ; l’été (eau chaude) fait chuter l’activité.', w: '12 pts' },
-  { h: 'Pression — 8 points', p: 'En baisse nette (3 h, Δ<−0,7 hPa) = 8 pts (favorable, étude Baléares 2012) ; basse stable ≤1012 hPa = 7 ; neutre 1012–1018 = 5 ; haute ou en hausse = 4. Les régimes dépressionnaires stimulent la chasse de surface.', w: '8 pts' }
-];
+/* ─────────── Rendu : méthode (par espèce) ─────────── */
 function renderMethod() {
-  $('#methodList').innerHTML = METHOD.map(m => `
+  const sp = SP();
+  const items = [
+    { h: 'Lune — 35 points', p: GUIDE().moonTxt, w: '35 pts' },
+    { h: 'Périodes solunaires — 25 points', p: 'Chaque majeure recouvrant la nuit rapporte jusqu’à 8 pts, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Honnêteté : Knight (1926) est une hypothèse folklorique non validée en général (revues : effet modeste, ~5 % sur trophées) ; elle reste le meilleur descripteur horaire disponible, croisé ici avec la preuve lunaire.', w: '25 pts' },
+    { h: `Saison — 20 points (${sp.name})`, p: GUIDE().saisonTxt, w: '20 pts' },
+    { h: `Mer — 12 points (${sp.name})`, p: GUIDE().meteoTxt, w: '12 pts' },
+    { h: 'Pression — 8 points', p: 'En baisse nette (3 h, Δ<−0,7 hPa) = 8 pts ; basse stable ≤1012 hPa = 7 ; neutre 1012–1018 = 5 ; haute ou en hausse = 4. Les régimes dépressionnaires stimulent la chasse (démontré pour le calamar — Baléares 2012 ; prudentiel pour les autres).', w: '8 pts' },
+  ];
+  $('#methodList').innerHTML = items.map(m => `
     <li class="method-item"><div><h4>${m.h}</h4><p>${m.p}</p></div><div class="method-weight">${m.w}<small>poids</small></div></li>`).join('');
+}
+
+/* ─────────── Rendu : Guide espèce (fiche · nuit · techniques · spots · matériel) ─────────── */
+function renderGuide() {
+  const g = GUIDE();
+  const gt = $('#guideTitle'); if (gt) gt.textContent = g.title;
+  const gs = $('#guideSub'); if (gs) gs.innerHTML = g.sub;
+  $('#factStrip').innerHTML = g.facts.map(([k, v]) => `<div class="fact"><small>${k}</small><strong>${v}</strong></div>`).join('');
+  $('#moisNote').innerHTML = g.moisNote;
+  $('#hourSlots').innerHTML = g.slots.map(([t, w, cls, n]) => `<li><span class="hs-time">${t}</span><div class="hs-bar ${cls}"><div style="width:${w}%"></div></div><span class="hs-note">${n}</span></li>`).join('');
+  $('#preuveNote').innerHTML = g.preuveNote;
+  $('#techGrid').innerHTML = g.tech.map(([num, name, desc, pro]) => `<div class="tech"><div class="tech-num">${num}</div><h4>${name}</h4><p>${desc}</p><p class="tech-pro">${pro}</p></div>`).join('');
+  $('#spotList').innerHTML = g.spots.map(([rank, name, detail]) => `<li><div class="spot-rank">${rank}</div><div class="spot-body"><strong>${name}</strong><span>${detail}</span></div></li>`).join('');
+  $('#gearRows').innerHTML = g.gear.map(([el, reco, budget]) => `<tr><td>${el}</td><td>${reco}</td><td>${budget}</td></tr>`).join('');
 }
 
 /* ─────────── Navigation — story verticale : scroll + scroll-spy ─────────── */
@@ -955,6 +1159,12 @@ function syncSpecies() {
   const n = $('#spName'); if (n) n.textContent = sp.name;
   const k = $('#gaugeKicker'); if (k) k.textContent = `Indice ${sp.name}™`;
   const ic = $('#speciesIcon'); if (ic) ic.innerHTML = `<use href="#${sp.icon}"/>`;
+  const set = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
+  set('#luneSub', `Phase réelle + Indice ${sp.name}™ jour par jour. Les cases dorées : vos meilleures sorties. * au-delà de 16 jours.`);
+  set('#methodKicker', `L'Indice ${sp.name}™`);
+  set('#methodeSub', `Comment l'Indice ${sp.name}™ est calculé, d'où viennent les données, pourquoi rien ne garantit une capture.`);
+  set('#footTag', 'La météo de la pêche, en direct du port.');
+  renderSeasonBars(); renderFAQ(); renderMethod(); renderGuide();
 }
 
 /* ─────────── Orchestration des données ─────────── */
