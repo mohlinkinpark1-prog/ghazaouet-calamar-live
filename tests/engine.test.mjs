@@ -1,130 +1,119 @@
-/* Tests du moteur de notation — GCLEngine
-   Chaque test décrit un COMPORTEMENT attendu par les pêcheurs. */
-'use strict';
+/* Tests du moteur Indice Calamar v3 — écrits avant l'implémentation (TDD). */
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import GCLEngine from '../assets/js/engine.js';
 
-let Engine = null;
-try { Engine = await import('../assets/js/engine.js'); Engine = Engine.default ?? Engine; } catch { /* RED */ }
-
-/* ── Slice A : notation d'un indice ── */
-
-test('le moteur est importable sous Node et dans le navigateur', () => {
-  assert.ok(Engine, 'assets/js/engine.js doit être chargeable');
+test('lune : syzygie = 40 pts, quadrature = 12 pts, nouvelle = pleine', () => {
+  const { moonScore } = GCLEngine;
+  assert.equal(typeof moonScore, 'function');
+  assert.equal(moonScore(0), 40);
+  assert.equal(moonScore(Math.PI), 40);
+  assert.equal(moonScore(Math.PI / 2), 12);
+  for (let a = 0; a <= Math.PI; a += 0.05) {
+    const v = moonScore(a);
+    assert.ok(v >= 12 && v <= 40, `hors bornes pour ${a}: ${v}`);
+  }
 });
 
-test('clamp() ramène toute valeur dans l’intervalle demandé', () => {
-  assert.equal(Engine.clamp(120, 0, 100), 100);
-  assert.equal(Engine.clamp(-5, 0, 100), 0);
-  assert.equal(Engine.clamp(72, 0, 100), 72);
+test('mer : paliers de houle (10 pts, Baléares 2012)', () => {
+  const { wavePoints } = GCLEngine;
+  assert.equal(typeof wavePoints, 'function');
+  assert.equal(wavePoints(null), 7, 'donnée manquante = valeur neutre');
+  assert.equal(wavePoints(0.29), 10);
+  assert.equal(wavePoints(0.3), 8);
+  assert.equal(wavePoints(0.59), 8);
+  assert.equal(wavePoints(0.6), 6);
+  assert.equal(wavePoints(0.99), 6);
+  assert.equal(wavePoints(1), 3);
+  assert.equal(wavePoints(1.49), 3);
+  assert.equal(wavePoints(1.5), 0);
+  assert.equal(wavePoints(2), 0);
 });
 
-test('39/100 reste « Faible » et la couleur la annonce', () => {
-  assert.deepEqual(Engine.ratingOf(39), { label: 'Faible', level: 'low' });
-  assert.equal(Engine.bandOf(39), 'low');
+test('mer : paliers de température (10 pts, eau fraîche favorable)', () => {
+  const { waterPoints } = GCLEngine;
+  assert.equal(typeof waterPoints, 'function');
+  assert.equal(waterPoints(null), 6, 'donnée manquante = valeur neutre');
+  assert.equal(waterPoints(11), 4);
+  assert.equal(waterPoints(12), 10);
+  assert.equal(waterPoints(16), 10);
+  assert.equal(waterPoints(17), 8);
+  assert.equal(waterPoints(19), 8);
+  assert.equal(waterPoints(20), 6);
+  assert.equal(waterPoints(21), 6);
+  assert.equal(waterPoints(22), 2);
 });
 
-test('40/100 passe « Correct » — le seuil de reprise est net', () => {
-  assert.equal(Engine.ratingOf(40).label, 'Correct');
-  assert.equal(Engine.ratingOf(40).level, 'mid');
+test('mer : vent > 30 km/h retire 4 pts, hiérarchie et bornes', () => {
+  const { seaPoints } = GCLEngine;
+  assert.equal(typeof seaPoints, 'function');
+  assert.equal(seaPoints(0.1, 15, 10), 20, '10 houle + 10 eau');
+  assert.equal(seaPoints(0.1, 15, 30), 20, 'vent 30 = pas de pénalité');
+  assert.equal(seaPoints(0.1, 15, 31), 16, 'vent 31 = -4');
+  assert.equal(seaPoints(null, null, null), 13);
+  assert.ok(seaPoints(-1, -1, 99) >= 0);
+  assert.ok(seaPoints(0, 15, 0) <= 25);
 });
 
-test('58/100 passe « Bon »', () => {
-  assert.equal(Engine.ratingOf(58).label, 'Bon');
+test('pression : baisse nette 10, hausse 5, basse stable 9 (Baléares 2012)', () => {
+  const { pressurePoints } = GCLEngine;
+  assert.equal(typeof pressurePoints, 'function');
+  assert.equal(pressurePoints(1015, -0.8), 10, 'baisse nette');
+  assert.equal(pressurePoints(1015, 0.8), 5, 'hausse nette');
+  assert.equal(pressurePoints(null, 0), 6, 'donnée manquante = neutre');
+  assert.equal(pressurePoints(1012, 0), 9, 'basse stable');
+  assert.equal(pressurePoints(1015, 0), 6, 'neutre');
+  assert.equal(pressurePoints(1020, 0), 5, 'haute');
+  assert.equal(pressurePoints(1015, -0.8), 10, 'la tendance prime sur le niveau');
 });
 
-test('70/100 passe « Excellent »', () => {
-  assert.equal(Engine.ratingOf(70).label, 'Excellent');
+test('solunaire : 25 pts max, majeure 8, mineure 2, bonus fenêtre 20h–02h', () => {
+  const { solunarPoints } = GCLEngine;
+  assert.equal(typeof solunarPoints, 'function');
+  const d = new Date('2026-11-06T22:00:00+01:00');
+  const prime = c => c.getHours() >= 20 || c.getHours() < 2;
+  const never = () => false;
+  assert.equal(solunarPoints([], prime), 0);
+  assert.equal(solunarPoints([{ type: 'major', nightMin: 120, center: d }], never), 8);
+  assert.equal(solunarPoints([{ type: 'minor', nightMin: 120, center: d }], never), 2);
+  assert.equal(solunarPoints([{ type: 'major', nightMin: 30, center: d }], never), 2);
+  assert.equal(solunarPoints([{ type: 'major', nightMin: 120, center: d }], prime), 13, '8 + 5');
+  assert.equal(solunarPoints([
+    { type: 'major', nightMin: 120, center: d },
+    { type: 'major', nightMin: 120, center: d },
+    { type: 'minor', nightMin: 120, center: d },
+  ], prime), 23);
+  assert.equal(solunarPoints(new Array(10).fill({ type: 'major', nightMin: 120, center: d }), prime), 25, 'plafond');
+  assert.equal(solunarPoints([{ type: 'major', nightMin: 10, center: d }], prime), 0.6666666666666666);
 });
 
-test('85/100 passe « Exceptionnel » — la nuit rare', () => {
-  assert.equal(Engine.ratingOf(85).label, 'Exceptionnel');
-  assert.equal(Engine.bandOf(92), 'epic');
+test('paliers : 40 / 58 / 70 / 85 et niveaux associés', () => {
+  const { ratingOf, bandOf, scoreColor } = GCLEngine;
+  assert.equal(typeof ratingOf, 'function');
+  assert.deepEqual(ratingOf(39), { label: 'Faible', level: 'low' });
+  assert.equal(ratingOf(40).label, 'Correct');
+  assert.equal(ratingOf(57).label, 'Correct');
+  assert.equal(ratingOf(58).label, 'Bon');
+  assert.equal(ratingOf(69).label, 'Bon');
+  assert.equal(ratingOf(70).label, 'Excellent');
+  assert.equal(ratingOf(84).label, 'Excellent');
+  assert.equal(ratingOf(85).label, 'Exceptionnel');
+  assert.equal(bandOf(0), 'low');
+  assert.equal(bandOf(100), 'epic');
+  assert.equal(scoreColor(70), 'var(--band-great)');
 });
 
-/* ── Slice B : mer (vagues + eau + vent) et pression ── */
-
-test('houle calme < 0,3 m vaut 7 pts, ≥ 1,5 m vaut 0 — sortie inutile', () => {
-  assert.equal(Engine.wavePoints(0.15), 7);
-  assert.equal(Engine.wavePoints(0.29), 7);
-  assert.equal(Engine.wavePoints(0.5), 6);
-  assert.equal(Engine.wavePoints(0.9), 4);
-  assert.equal(Engine.wavePoints(1.4), 2);
-  assert.equal(Engine.wavePoints(2.2), 0);
-});
-
-test('sans donnée de houle, on reste prudent : 4 pts', () => {
-  assert.equal(Engine.wavePoints(null), 4);
-});
-
-test('eau fraîche payante : 5 pts à 16 °C, 1 pt au-delà de 21 °C', () => {
-  assert.equal(Engine.waterPoints(15), 5);
-  assert.equal(Engine.waterPoints(17.5), 4);
-  assert.equal(Engine.waterPoints(20.5), 3);
-  assert.equal(Engine.waterPoints(24), 1);
-});
-
-test('eau trop froide (<12 °C) ralentit l’activité : 2 pts', () => {
-  assert.equal(Engine.waterPoints(10.5), 2);
-  assert.equal(Engine.waterPoints(null), 3);
-});
-
-test('mer totale bornée 0–12 et vent > 30 km/h retire 2 pts', () => {
-  assert.equal(Engine.seaPoints(0.2, 15, 12), 12);   // cap atteint 7+5=12
-  assert.equal(Engine.seaPoints(2.0, 24, 12), 1);    // 0+1, pas de vent
-  assert.equal(Engine.seaPoints(0.5, 17, 35), 8);    // 6+4-2
-  assert.equal(Engine.seaPoints(2.5, 1, 40), 0);     // 0+2-2 → clamp 0
-});
-
-test('pression en baisse nette = favorable (8 pts) — étude Baléares 2012', () => {
-  assert.equal(Engine.pressurePoints(1013, -1.0), 8);
-  assert.equal(Engine.pressurePoints(1013, 1.0), 4);   // en hausse nette
-  assert.equal(Engine.pressurePoints(1010, 0.2), 7);   // basse stable
-  assert.equal(Engine.pressurePoints(1015, 0), 5);     // neutre
-  assert.equal(Engine.pressurePoints(1022, 0), 4);     // haute stable
-  assert.equal(Engine.pressurePoints(null, 0), 5);     // sans donnée
-});
-
-/* ── Slice C : lune, périodes solunaires, saison, total ── */
-
-test('lune pleine ou nouvelle = 35 pts ; quartier = 10,5 pts', () => {
-  assert.equal(Engine.moonScore(0), 35);                       // conjonction
-  assert.equal(Engine.moonScore(Math.PI), 35);                 // opposition
-  assert.ok(Math.abs(Engine.moonScore(Math.PI / 2) - 10.5) < 1e-9); // quadrant
-  assert.ok(Engine.moonScore(Math.PI / 4) > 10.5);             // gibbeuse >
-});
-
-test('période majeure avec 110 min de nuit ≈ 7,33 pts — cap 8 à 2 h de nuit', () => {
-  const t = new Date('2026-11-05T22:00:00');
-  assert.equal(Engine.solunarPoints([{ type: 'major', nightMin: 110, center: t }], () => false), Math.min(8, 110 / 15));
-  assert.equal(Engine.solunarPoints([{ type: 'major', nightMin: 150, center: t }], () => false), 8);
-  assert.equal(Engine.solunarPoints([{ type: 'minor', nightMin: 60, center: t }], () => false), 2);
-  assert.equal(Engine.solunarPoints([{ type: 'minor', nightMin: 15, center: t }], () => false), 0.5);
-});
-
-test('majeure de nuit > 15 min dans la fenêtre prime 20h–2h : +5 pts, plafond 25', () => {
-  const t = new Date('2026-11-05T22:00:00');
-  const periods = [
-    { type: 'major', nightMin: 120, center: t },
-    { type: 'major', nightMin: 120, center: t }
-  ];
-  assert.equal(Engine.solunarPoints(periods, () => true), 21);    // 8 + 8 + 5
-  assert.equal(Engine.solunarPoints(periods, () => false), 16);   // sans la prime
-  const many = periods.concat([{ type: 'major', nightMin: 150, center: t }]);
-  assert.equal(Engine.solunarPoints(many, () => true), 25);       // plafond
-});
-
-test('saison : janvier 17, juillet 11, sommet octobre–novembre 20 exactement', () => {
-  assert.equal(Engine.seasonScore(0), 17);
-  assert.equal(Engine.seasonScore(6), 11);
-  assert.equal(Engine.seasonScore(9), 20);
-  assert.equal(Engine.seasonScore(10), 20);
-  for (let m = 0; m < 12; m++) assert.ok(Engine.seasonScore(m) <= 20, 'jamais au-delà du maximum');
-});
-
-test('total : somme arrondie, bornée 0–100', () => {
-  assert.equal(Engine.totalScore({ moon: 25, sol: 14, season: 20, meteo: 5, pres: 8 }), 72);
-  assert.equal(Engine.totalScore({ moon: 35, sol: 25, season: 20, meteo: 12, pres: 8 }), 100);
-  assert.equal(Engine.totalScore({ moon: 0, sol: 0, season: 0, meteo: 0, pres: 0 }), 0);
-  assert.equal(Engine.totalScore({ moon: 50, sol: 40, season: 20, meteo: 12, pres: 8 }), 100); // clamp
+test('total : 4 facteurs, 0–100, aucun champ saison, invariant au mois', () => {
+  const { totalScore } = GCLEngine;
+  assert.equal(typeof totalScore, 'function');
+  const parts = { moon: 31.4, sol: 14.2, meteo: 14, pres: 10 };
+  assert.equal(totalScore(parts), 70, '31.4 + 14.2 + 14 + 10 = 69.6 → 70');
+  assert.equal(totalScore(), 0);
+  assert.equal(totalScore({ moon: 999, sol: 999, meteo: 999, pres: 999 }), 100);
+  assert.equal(totalScore({ moon: -5, sol: -5, meteo: -5, pres: -5 }), 0);
+  const janvier = totalScore({ ...parts, season: 0 });
+  const novembre = totalScore({ ...parts, season: 20 });
+  assert.equal(janvier, novembre, 'un champ season même fourni est ignoré');
+  const jump = totalScore({ moon: 40, sol: 25, meteo: 25, pres: 10 });
+  assert.equal(jump, 100);
 });

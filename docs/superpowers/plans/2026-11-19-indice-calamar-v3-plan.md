@@ -52,7 +52,7 @@ Fichiers : `tests/astro.test.mjs` (nouveau), `assets/js/astro.js` (réécrit).
 - Réécriture de `astro.js` en préservant exactement les algorithmes (Meeus, solveur
   Newton–Raphson pour l'âge lunaire) ; l'API utilisée par `app.js` reste documentée.
 
-Checkpoint : `node --test tests/` → tout vert.
+Checkpoint : `node --test tests/engine.test.mjs tests/astro.test.mjs` → tout vert (`node --test tests/` n'est pas supporté par cette version de Node).
 
 ## Étape 4 — Structure HTML réécrite
 

@@ -1,14 +1,14 @@
 /* ============================================================
-   GHAZAOUET CALAMAR LIVE — Moteur astronomique & solunaire
-   Phases lunaires, levées/couchers, passages (culminations),
-   périodes solunaires et Indice Calamar.
-   Précision : ~0,3° sur la longitude lunaire → erreur < 5 min
-   sur les heures de lever/coucher ; âge lunaire exact par solveur.
-   Approximatif, sans garantie.
+   INDICE CALAMAR v3 — Module astronomique pur
+   Phases, élongation, âge lunaire (Newton–Raphson), levers/couchers,
+   culminations et périodes solunaires.
+   Précision visée : ~0,3° sur la longitude lunaire → < 5 min sur les
+   levers/couchers ; âge lunaire exact par solveur. Approximatif.
+   Aucun accès DOM/réseau/horloge courante.
    ============================================================ */
 'use strict';
 
-const Astro = (() => {
+(function (global) {
   const RAD = Math.PI / 180;
   const DEG = 180 / Math.PI;
   const norm360 = d => ((d % 360) + 360) % 360;
@@ -16,23 +16,17 @@ const Astro = (() => {
   const SYNODIC = 29.530588853;
   const jdFromDate = date => date.getTime() / 86400000 + 2440587.5;
 
-  /* ---------- Élongation signée (degrés, -180..180] ---------- */
   const signedElong = date => {
     const s = sunCoords(date), m = moonCoords(date);
-    let e = m.lambda - s.lambda;
-    return ((e + 540) % 360) - 180;
+    return ((m.lambda - s.lambda + 540) % 360) - 180;
   };
 
-  /* ---------- Âge précis de la lune (solveur Newton–Raphson) ---------- */
-  const ELONG_RATE = 360 / SYNODIC; // ≈ 12,1907°/jour
+  const ELONG_RATE = 360 / SYNODIC;
   function moonAgePrecise(date) {
     let t = date.getTime();
-    for (let i = 0; i < 10; i++) {
-      t -= (signedElong(new Date(t)) / ELONG_RATE) * 86400000;
-    }
+    for (let i = 0; i < 10; i++) t -= (signedElong(new Date(t)) / ELONG_RATE) * 86400000;
     let age = (date.getTime() - t) / 86400000;
-    age = ((age % SYNODIC) + SYNODIC) % SYNODIC; // racine la plus proche → âge positif
-    return age;
+    return ((age % SYNODIC) + SYNODIC) % SYNODIC;
   }
 
   function sunCoords(date) {
@@ -41,11 +35,9 @@ const Astro = (() => {
     const M = norm360(357.52911 + 35999.05029 * T) * RAD;
     const C = 1.914602 * Math.sin(M) + 0.019993 * Math.sin(2 * M) + 0.000289 * Math.sin(3 * M);
     const omega = 125.04 - 1934.136 * T;
-    const lambda = norm360(L0 + C - 0.00569 - 0.00478 * Math.sin(omega * RAD));
-    return { lambda };
+    return { lambda: norm360(L0 + C - 0.00569 - 0.00478 * Math.sin(omega * RAD)) };
   }
 
-  /* ---------- Lune ---------- */
   function moonCoords(date) {
     const T = (jdFromDate(date) - 2451545.0) / 36525;
     const Lp = norm360(218.3164477 + 481267.88123421 * T);
@@ -54,7 +46,6 @@ const Astro = (() => {
     const Mp = norm360(134.9633964 + 477198.8675055 * T) * RAD;
     const F = norm360(93.2720950 + 483202.0175233 * T) * RAD;
     const E = 1 - 0.002516 * T - 0.0000074 * T * T;
-
     const lon = norm360(
       Lp
       + 6.289 * Math.sin(Mp)
@@ -73,11 +64,9 @@ const Astro = (() => {
       + 0.015 * Math.sin(2 * F - 2 * D)
       + 0.011 * Math.sin(Mp - 4 * D)
     );
-    // Latitude écliptique (terme principal — largement suffisant ici)
     return { lambda: lon, beta: 5.128 * Math.sin(F) };
   }
 
-  /* ---------- Écliptique → équatoriale ---------- */
   const OBL = 23.4392911 * RAD;
   function eclToEqu(lambdaDeg, betaDeg) {
     const lam = lambdaDeg * RAD, bet = betaDeg * RAD;
@@ -86,13 +75,8 @@ const Astro = (() => {
     return { ra: norm360(ra * DEG), dec: dec * DEG };
   }
 
-  /* ---------- Temps sidéral moyen de Greenwich (degrés) ---------- */
-  function gmst(date) {
-    const jd = jdFromDate(date);
-    return norm360(280.46061837 + 360.98564736629 * (jd - 2451545.0));
-  }
+  const gmst = date => norm360(280.46061837 + 360.98564736629 * (jdFromDate(date) - 2451545.0));
 
-  /* ---------- Hauteur & azimut d'un astre ---------- */
   function altAz(date, latDeg, lonDeg, lambdaDeg, betaDeg) {
     const { ra, dec } = eclToEqu(lambdaDeg, betaDeg);
     const H = (gmst(date) + lonDeg - ra) * RAD;
@@ -102,25 +86,17 @@ const Astro = (() => {
     return { alt: alt * DEG, az, ra, dec };
   }
 
-  const moonAlt = (date, lat, lon) => {
-    const m = moonCoords(date);
-    return altAz(date, lat, lon, m.lambda, m.beta).alt;
-  };
-  const sunAlt = (date, lat, lon) => {
-    const s = sunCoords(date);
-    return altAz(date, lat, lon, s.lambda, 0).alt;
-  };
+  const moonAlt = (date, lat, lon) => altAz(date, lat, lon, moonCoords(date).lambda, moonCoords(date).beta).alt;
+  const sunAlt = (date, lat, lon) => altAz(date, lat, lon, sunCoords(date).lambda, 0).alt;
 
-  /* ---------- Crossings (lever/coucher) pour un jour local ---------- */
-  const H0_SUN = -0.833;   // réfraction + demi-diamètre
-  const H0_MOON = -0.125;  // réfraction + parallaxe lunaire corrigée
+  const H0_SUN = -0.833;
+  const H0_MOON = -0.125;
 
   function dayCrossings(date, lat, lon, altFn, h0) {
     const start = new Date(date); start.setHours(0, 0, 0, 0);
     const end = new Date(start); end.setDate(end.getDate() + 1);
     const tStart = start.getTime(), tEnd = end.getTime();
-    const step = 5 * 60 * 1000;
-    const pad = 10 * 3600 * 1000;
+    const step = 5 * 60 * 1000, pad = 10 * 3600 * 1000;
     const samples = [];
     for (let t = tStart - pad; t <= tEnd + pad; t += step) {
       samples.push({ t, alt: altFn(new Date(t), lat, lon) });
@@ -149,33 +125,28 @@ const Astro = (() => {
       maxAlt: hiE ? hiE.time : new Date(tStart + 12 * 3600e3),
       minAlt: loE ? loE.time : new Date(tStart),
       hi: hiE ? hiE.alt : -90,
-      lo: loE ? loE.alt : 90
+      lo: loE ? loE.alt : 90,
     };
   }
 
   const moonDay = (date, lat, lon) => dayCrossings(date, lat, lon, moonAlt, H0_MOON);
-  const sunDay  = (date, lat, lon) => dayCrossings(date, lat, lon, sunAlt,  H0_SUN);
+  const sunDay = (date, lat, lon) => dayCrossings(date, lat, lon, sunAlt, H0_SUN);
 
-  /* ---------- Phase, illumination, âge ---------- */
   function phaseInfo(date) {
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
-    const psi = Math.acos(clamp(cosPsi, -1, 1)); // élongation 0..π
+    const psi = Math.acos(clamp(cosPsi, -1, 1));
     const illum = (1 - Math.cos(psi)) / 2;
-    const elongDeg = psi * DEG; // 0 = nouvelle, 180 = pleine
     const age = moonAgePrecise(date);
     const idx = Math.floor(((age / SYNODIC) * 8) + 0.5) % 8;
     const names = ['Nouvelle lune', 'Premier croissant', 'Premier quartier', 'Gibbeuse croissante',
-                   'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'];
+      'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'];
     return {
-      age, illum, elong: elongDeg, idx,
-      name: names[idx],
-      waxing: age < SYNODIC / 2,
-      phaseAngle: psi
+      age, illum, elong: psi * DEG, idx, name: names[idx],
+      waxing: age < SYNODIC / 2, phaseAngle: psi,
     };
   }
 
-  /* Prochain événement majeur (nouvelle ou pleine lune) — solveur de passage */
   function nextSyzygy(date) {
     const step = 4 * 3600e3;
     let t = date.getTime();
@@ -196,31 +167,27 @@ const Astro = (() => {
     return { label: 'Nouvelle lune', days: SYNODIC / 2, time: null };
   }
 
-  /* ---------- Périodes solunaires ---------- */
   function solunarPeriods(date, lat, lon) {
-    const periods = [];
-    const offsets = [-1, 0, 1];
     const transits = [];
-
-    for (const off of offsets) {
+    for (const off of [-1, 0, 1]) {
       const d = new Date(date); d.setDate(d.getDate() + off);
       const m = moonDay(d, lat, lon);
       transits.push({ time: m.maxAlt, kind: 'major' });
       transits.push({ time: m.minAlt, kind: 'major' });
     }
     transits.sort((a, b) => a.time - b.time);
-
-    // Mineures : à mi-chemin entre deux culminations successives
+    const periods = [];
     for (let i = 0; i < transits.length - 1; i++) {
       const a = transits[i].time.getTime(), b = transits[i + 1].time.getTime();
       const mid = new Date((a + b) / 2);
-      periods.push({ type: 'minor', center: mid, start: new Date(mid.getTime() - 45 * 60000), end: new Date(mid.getTime() + 45 * 60000) });
+      periods.push({ type: 'minor', center: mid,
+        start: new Date(mid.getTime() - 45 * 60000), end: new Date(mid.getTime() + 45 * 60000) });
     }
     for (const t of transits) {
       const half = 55 * 60000;
-      periods.push({ type: 'major', center: t.time, start: new Date(t.time.getTime() - half), end: new Date(t.time.getTime() + half) });
+      periods.push({ type: 'major', center: t.time,
+        start: new Date(t.time.getTime() - half), end: new Date(t.time.getTime() + half) });
     }
-    // Ne garder que celles qui chevauchent le jour local
     const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1);
     return periods
@@ -228,20 +195,20 @@ const Astro = (() => {
       .sort((a, b) => a.center - b.center);
   }
 
-  /* ---------- Indice solunaire du jour (qualité générale, %) ---------- */
+  /* Indice solunaire général du jour (%) — descriptif, non validé scientifiquement. */
   function solunarRating(date) {
     const s = sunCoords(date), m = moonCoords(date);
     const cosPsi = Math.cos(m.beta * RAD) * Math.cos((m.lambda - s.lambda) * RAD);
     const psi = Math.acos(clamp(cosPsi, -1, 1));
-    const coef = Math.pow(Math.abs(Math.cos(psi)), 1.6); // syzygie ≈ 1, quadrature ≈ 0
-    return Math.round(42 + 55 * coef);
+    return Math.round(42 + 55 * Math.pow(Math.abs(Math.cos(psi)), 1.6));
   }
 
-  return {
-    jdFromDate, norm360, clamp,
+  const Astro = {
+    jdFromDate, norm360, clamp, SYNODIC,
     sunCoords, moonCoords, altAz, moonAlt, sunAlt, signedElong, moonAgePrecise,
-    moonDay, sunDay, phaseInfo, nextSyzygy,
-    solunarPeriods, solunarRating,
-    SYNODIC
+    moonDay, sunDay, phaseInfo, nextSyzygy, solunarPeriods, solunarRating,
   };
-})();
+
+  if (global) global.Astro = Astro;
+  if (typeof module !== 'undefined' && module.exports) module.exports = Astro;
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : null));

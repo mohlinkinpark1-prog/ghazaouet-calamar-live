@@ -1,16 +1,17 @@
 /* ============================================================
-   GHAZAOUET CALAMAR LIVE — Application
-   Données live : Open-Meteo (météo + mer) · Astronomie : moteur
-   interne (assets/js/astro.js) · Mise en cache 10 min.
+   INDICE CALAMAR v3 — Application
+   Données : Open-Meteo Forecast + Marine · Astronomie : Astro
+   Calcul : GCLEngine (lune 40 · solunaire 25 · mer 25 · pression 10)
+   Aucun facteur de saison dans le score.
    ============================================================ */
 'use strict';
 
-/* ─────────── Configuration port de Ghazaouet ─────────── */
+/* ─────────── Configuration ─────────── */
 const CONFIG = {
   lat: 35.096, lon: -1.860,
   tz: 'Africa/Algiers',
   place: 'Port de Ghazaouet',
-  refreshMs: 10 * 60 * 1000
+  refreshMs: 10 * 60 * 1000,
 };
 const METEO_URL = 'https://api.open-meteo.com/v1/forecast?latitude=35.096&longitude=-1.860'
   + '&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover'
@@ -21,35 +22,73 @@ const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine?latitude=35.096&
   + '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature'
   + '&hourly=sea_surface_temperature&daily=wave_height_max&forecast_days=8&timezone=Africa%2FAlgiers';
 
-/* Saison : source unique dans le moteur (GCLEngine.SEASON_20) */
-const MONTH_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-const MONTH_SHORT = ['JAN','FÉV','MAR','AVR','MAI','JUN','JUL','AOÛ','SEP','OCT','NOV','DÉC'];
+const MONTH_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+const MONTH_SHORT = ['JAN', 'FÉV', 'MAR', 'AVR', 'MAI', 'JUN', 'JUL', 'AOÛ', 'SEP', 'OCT', 'NOV', 'DÉC'];
+/* Informations de saison — affichées, JAMAIS notées (Rocha & Guerra 1996 ; FAO). */
+const SEASON_INFO = [
+  'Janvier : gros sujets qui remontent vers la côte — période connue, non notée.',
+  'Février : migration côtière et recrutement — période connue, non notée.',
+  'Mars : fin de migration — période connue, non notée.',
+  'Avril : pontes échelonnées — période connue, non notée.',
+  'Mai : reproduction — période connue, non notée.',
+  'Juin : pontes d’été — période connue, non notée.',
+  'Juillet : petites tailles, recrutement — période connue, non notée.',
+  'Août : creux estival — période connue, non notée.',
+  'Septembre : début de retour automnal — période connue, non notée.',
+  'Octobre : retour des grands sujets — période connue, non notée.',
+  'Novembre : automne productif — période connue, non notée.',
+  'Décembre : fin d’année recherchée — période connue, non notée.',
+];
 const WMO = {
-  0:['Ciel dégagé','i-sun'],1:['Plutôt dégagé','i-sun'],2:['Partiellement nuageux','i-cloud'],3:['Couvert','i-cloud'],
-  45:['Brouillard','i-cloud'],48:['Brouillard givrant','i-cloud'],
-  51:['Bruine légère','i-rain'],53:['Bruine','i-rain'],55:['Bruine forte','i-rain'],56:['Bruine verglaçante','i-rain'],57:['Bruine verglaçante','i-rain'],
-  61:['Pluie faible','i-rain'],63:['Pluie modérée','i-rain'],65:['Pluie forte','i-rain'],66:['Pluie verglaçante','i-rain'],67:['Pluie verglaçante','i-rain'],
-  71:['Neige faible','i-cloud'],73:['Neige','i-cloud'],75:['Neige forte','i-cloud'],77:['Grésil','i-cloud'],
-  80:['Averses faibles','i-rain'],81:['Averses','i-rain'],82:['Averses violentes','i-rain'],
-  85:['Averses de neige','i-cloud'],86:['Averses de neige','i-cloud'],
-  95:['Orage','i-rain'],96:['Orage + grêle','i-rain'],99:['Orage + grêle','i-rain']
+  0: ['Ciel dégagé', 'i-sun'], 1: ['Plutôt dégagé', 'i-sun'], 2: ['Partiellement nuageux', 'i-cloud'], 3: ['Couvert', 'i-cloud'],
+  45: ['Brouillard', 'i-cloud'], 48: ['Brouillard givrant', 'i-cloud'],
+  51: ['Bruine légère', 'i-rain'], 53: ['Bruine', 'i-rain'], 55: ['Bruine forte', 'i-rain'],
+  61: ['Pluie faible', 'i-rain'], 63: ['Pluie', 'i-rain'], 65: ['Forte pluie', 'i-rain'],
+  80: ['Averses', 'i-rain'], 81: ['Averses', 'i-rain'], 82: ['Averses violentes', 'i-rain'],
+  95: ['Orage', 'i-alert'], 96: ['Orage + grêle', 'i-alert'], 99: ['Orage violent', 'i-alert'],
 };
-const COMPASS_FR = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+const THEME_NAMES = { azur: 'Mer Azur', abyssal: 'Abyssal', clair: 'Jour Mer (clair)', nuit: 'Nuit Noire', phare: 'Phare Bleu', terre: 'Terre & Sel' };
+const THEME_META = { azur: '#050E13', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
 
-/* ─────────── État global ─────────── */
 const state = {
-  meteo: null, marine: null, online: true,
+  meteo: null, marine: null,
   units: { wind: 'kmh', temp: 'c' },
-  species: 'calamar',
   lastUpdate: null,
   selectedDayISO: null,
   calCursor: new Date(),
-  refreshTimer: null
+  refreshTimer: null,
 };
 
-/* ─────────── Splish d'accueil : 3 s de logo animé ─────────── */
+/* ─────────── Utilitaires ─────────── */
+const $ = (s, ctx = document) => ctx.querySelector(s);
+const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const pad2 = n => String(n).padStart(2, '0');
+const parseLocalISO = s => new Date(s + ':00+01:00');
+const dayKey = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const fromKey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const fmtTime = d => d ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: CONFIG.tz }) : '—';
+const fmtDateLong = d => d ? d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: CONFIG.tz }) : '—';
+const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
+const isPrimeWindow = center => { const h = center.getHours(); return h >= 20 || h < 2; };
+const wmoInfo = code => WMO[code] || ['Conditions diverses', 'i-cloud'];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function markIcons() {
+  $$('svg.ic:not([aria-hidden])').forEach(el => el.setAttribute('aria-hidden', 'true'));
+}
+function fmtWind(kmh) {
+  if (kmh == null) return '—';
+  return state.units.wind === 'kts' ? `${Math.round(kmh / 1.852)} nds` : `${Math.round(kmh)} km/h`;
+}
+function fmtTemp(c) {
+  if (c == null) return '—';
+  return state.units.temp === 'f' ? `${Math.round(c * 9 / 5 + 32)} °F` : `${Math.round(c)} °C`;
+}
+
+/* ─────────── Splash 3 s ─────────── */
 function bootSplash() {
-  const s = document.getElementById('splash');
+  const s = $('#splash');
   if (!s) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { s.remove(); return; }
   document.body.classList.add('splash-on');
@@ -60,955 +99,503 @@ function bootSplash() {
   }, 3000);
 }
 
-
-/* ─────────── Utilitaires ─────────── */
-const $ = (s, ctx = document) => ctx.querySelector(s);
-const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
-const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-const pad2 = n => String(n).padStart(2, '0');
-const parseLocal = s => new Date(s.length === 10 ? s + 'T12:00:00+01:00' : (s.length === 16 ? s + ':00+01:00' : s));
-const parseLocalISO = s => new Date(s + ':00+01:00');
-const dayKey = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
-const fmtTime = d => d ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: CONFIG.tz }) : '—';
-const fmtTimeFull = d => d ? d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: CONFIG.tz }) : '—';
-const fmtDateLong = d => d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: CONFIG.tz });
-const fmtDayShort = d => d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: CONFIG.tz });
-const degToCompass = deg => COMPASS_FR[Math.round(((deg % 360) + 360) % 360 / 22.5) % 16];
-const wmoDesc = code => (WMO[code] || ['Conditions variables', 'i-cloud'])[0];
-const wmoIcon = (code, isDay) => (code === 0 || code === 1) && !isDay ? 'i-moon' : (WMO[code] || ['', 'i-cloud'])[1];
-const toTemp = c => state.units.temp === 'f' ? Math.round(c * 9 / 5 + 32) : Math.round(c);
-const tempUnit = () => state.units.temp === 'f' ? '°F' : '°C';
-const windVal = kmh => state.units.wind === 'kn' ? (kmh / 1.852) : kmh;
-const windUnit = () => state.units.wind === 'kn' ? 'kn' : 'km/h';
-const fmtWind = kmh => `${windVal(kmh).toFixed(state.units.wind === 'kn' ? 1 : 0)} ${windUnit()}`;
-const nearestMinutes = d => d.getHours() * 60 + d.getMinutes();
-
-/* Couleur du thème actif (canvas ne connaît pas les variables CSS) */
-const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-function themeColors() {
-  return {
-    gold: cssv('--gold') || '#f0b429',
-    goldHi: cssv('--gold-hi') || '#ffe9a8',
-    goldRgb: cssv('--gold-rgb') || '240,180,41',
-    sea: cssv('--sea') || '#34c6dd',
-    sea2: cssv('--sea-2') || '#8cebfa',
-    seaRgb: cssv('--sea-rgb') || '52,198,221',
-    red: cssv('--red') || '#ff7a52',
-    amber: cssv('--amber') || '#ffc247',
-    bg2: cssv('--bg2') || '#0a1f33',
-    track: cssv('--track') || 'rgba(255,255,255,.07)',
-    tick: cssv('--tick') || 'rgba(255,255,255,.25)',
-    needle: cssv('--needle') || '#f4f8fc'
-  };
+/* ─────────── Thèmes, unités, feuille ─────────── */
+function applyTheme(t) {
+  if (!THEME_META[t]) t = 'azur';
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem('gcl-theme', t); } catch { /* privé */ }
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', THEME_META[t]);
+  const n = $('#tpName'); if (n) n.textContent = THEME_NAMES[t];
+  $$('#themePicker .tp-btn').forEach(b => b.classList.toggle('is-on', b.dataset.themeSet === t));
+  if (state.meteo) { try { renderAll(); } catch { /* pas prêt */ } }
 }
-
-/* Tendance de pression sur 3 h (hPa) — négative = pression en baisse */
-function pressureTrendNow() {
-  const hourly = state.meteo?.hourly?.pressure_msl, times = state.meteo?.hourly?.time;
-  if (!hourly || !times || !times.length) return 0;
-  const idx = times.findIndex(t => parseLocalISO(t) >= new Date());
-  const nowIdx = idx > 0 ? idx - 1 : 0;
-  const prevIdx = Math.max(0, nowIdx - 3);
-  const cur = hourly[nowIdx], prev = hourly[prevIdx];
-  if (cur == null || prev == null) return 0;
-  return cur - prev;
-}
-
-function wmoStorm(code) { return code >= 95; }
-
-function cacheRead() {
+function bindSettings() {
+  let t = 'azur';
+  try { t = localStorage.getItem('gcl-theme') || 'azur'; } catch { /* privé */ }
+  applyTheme(t);
+  $$('#themePicker .tp-btn').forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.themeSet)));
   try {
-    const raw = localStorage.getItem('gcl-cache-v1');
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (Date.now() - parsed.ts > CONFIG.refreshMs) return { stale: true, ...parsed };
-    return parsed;
-  } catch { return null; }
+    const w = localStorage.getItem('gcl-unit-wind'); if (w) state.units.wind = w;
+    const c = localStorage.getItem('gcl-unit-temp'); if (c) state.units.temp = c;
+  } catch { /* privé */ }
+  syncUnits();
+  $$('.seg-btn[data-unit-wind]').forEach(b => b.addEventListener('click', () => {
+    state.units.wind = b.dataset.unitWind;
+    try { localStorage.setItem('gcl-unit-wind', state.units.wind); } catch { /* privé */ }
+    syncUnits(); renderAll();
+  }));
+  $$('.seg-btn[data-unit-temp]').forEach(b => b.addEventListener('click', () => {
+    state.units.temp = b.dataset.unitTemp;
+    try { localStorage.setItem('gcl-unit-temp', state.units.temp); } catch { /* privé */ }
+    syncUnits(); renderAll();
+  }));
+  const sheet = $('#sidebar'), overlay = $('#sidebarOverlay');
+  const open = () => { sheet.classList.add('is-open'); overlay.classList.add('is-on'); };
+  const close = () => { sheet.classList.remove('is-open'); overlay.classList.remove('is-on'); };
+  $('#btnMenu').addEventListener('click', open);
+  $('#btnClose').addEventListener('click', close);
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  $('#btnRefresh').addEventListener('click', () => refreshAll(true));
+  $('#btnRefresh2').addEventListener('click', () => { close(); refreshAll(true); });
+  $('#btnPrint').addEventListener('click', () => window.print());
 }
-function cacheWrite(meteo, marine) {
-  try { localStorage.setItem('gcl-cache-v1', JSON.stringify({ ts: Date.now(), meteo, marine })); } catch { /* quota */ }
+function syncUnits() {
+  $$('.seg-btn[data-unit-wind]').forEach(b => b.classList.toggle('is-active', b.dataset.unitWind === state.units.wind));
+  $$('.seg-btn[data-unit-temp]').forEach(b => b.classList.toggle('is-active', b.dataset.unitTemp === state.units.temp));
 }
 
-/* ─────────── Données journalières agrégées (météo + mer) ─────────── */
+/* ─────────── Navigation story ─────────── */
+const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
+let spyPiloting = false;
+function setDockActive(name) {
+  $$('.dock-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
+  try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
+}
+function activateView(name) {
+  if (!VIEW_IDS.includes(name)) name = 'dashboard';
+  setDockActive(name);
+  spyPiloting = true;
+  const target = document.getElementById('s-' + name);
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const disarm = () => { spyPiloting = false; };
+  if ('onscrollend' in window) document.addEventListener('scrollend', disarm, { once: true, capture: true });
+  setTimeout(disarm, 1300);
+}
+function spyTick() {
+  if (spyPiloting) return;
+  const line = window.scrollY + window.innerHeight * 0.38;
+  let active = VIEW_IDS[0];
+  for (const id of VIEW_IDS) {
+    const el = document.getElementById('s-' + id);
+    if (el && el.offsetTop <= line) active = id;
+  }
+  setDockActive(active);
+}
+function bindNav() {
+  $$('.dock-btn[data-nav]').forEach(b => b.addEventListener('click', () => activateView(b.dataset.nav)));
+  window.addEventListener('scroll', () => requestAnimationFrame(spyTick), { passive: true });
+  const hash = location.hash.replace('#', '');
+  if (VIEW_IDS.includes(hash)) setTimeout(() => activateView(hash), 1200);
+}
+
+/* ─────────── Données Open-Meteo ─────────── */
+async function fetchJSON(url) {
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function loadData(force = false) {
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem('gcl-cache-v3') || 'null');
+      if (cached && Date.now() - cached.ts < CONFIG.refreshMs && cached.meteo && cached.marine) {
+        state.meteo = cached.meteo; state.marine = cached.marine;
+        state.lastUpdate = cached.ts; return;
+      }
+    } catch { /* cache illisible */ }
+  }
+  const [meteo, marine] = await Promise.all([fetchJSON(METEO_URL), fetchJSON(MARINE_URL)]);
+  if (!meteo?.current || !marine?.current) throw new Error('Données incomplètes');
+  state.meteo = meteo; state.marine = marine; state.lastUpdate = Date.now();
+  try { localStorage.setItem('gcl-cache-v3', JSON.stringify({ ts: state.lastUpdate, meteo, marine })); } catch { /* quota */ }
+}
+async function refreshAll(force = true) {
+  const btn = $('#btnRefresh');
+  btn.classList.add('is-spinning');
+  try { await loadData(force); renderAll(); }
+  catch (e) { console.warn('Données indisponibles', e); }
+  finally { btn.classList.remove('is-spinning'); }
+}
 function dailyMap() {
   const map = {};
   const d = state.meteo?.daily;
-  if (d?.time) {
-    d.time.forEach((t, i) => {
-      map[t] = {
-        tMax: d.temperature_2m_max?.[i], tMin: d.temperature_2m_min?.[i],
-        code: d.weather_code?.[i], sunrise: parseLocalISO(d.sunrise[i]), sunset: parseLocalISO(d.sunset[i]),
-        windMax: d.wind_speed_10m_max?.[i], gustMax: d.wind_gusts_10m_max?.[i],
-        windDir: d.wind_direction_10m_dominant?.[i], precip: d.precipitation_sum?.[i],
-        cloud: d.cloud_cover_mean?.[i],
-        waveMax: state.marine?.daily?.wave_height_max?.[state.marine.daily.time.indexOf(t)] ?? null
-      };
-    });
-  }
+  if (d?.time) d.time.forEach((t, i) => {
+    map[t] = {
+      tMax: d.temperature_2m_max?.[i], tMin: d.temperature_2m_min?.[i],
+      code: d.weather_code?.[i], sunrise: parseLocalISO(d.sunrise[i]), sunset: parseLocalISO(d.sunset[i]),
+      windMax: d.wind_speed_10m_max?.[i], gustMax: d.wind_gusts_10m_max?.[i],
+      windDir: d.wind_direction_10m_dominant?.[i], precip: d.precipitation_sum?.[i],
+      cloud: d.cloud_cover_mean?.[i],
+      waveMax: state.marine?.daily?.wave_height_max?.[state.marine.daily.time.indexOf(t)] ?? null,
+    };
+  });
   return map;
 }
-
-/* Périodes solunaires d'un jour, avec minutes de nuit (00:00→lever, coucher→24:00) */
+function pressureTrendNow() {
+  const h = state.meteo?.hourly;
+  if (!h?.time?.length) return 0;
+  const now = Date.now();
+  let idx = 0, best = Infinity;
+  h.time.forEach((t, i) => {
+    const diff = Math.abs(parseLocalISO(t).getTime() - now);
+    if (diff < best) { best = diff; idx = i; }
+  });
+  const nowP = h.pressure_msl?.[idx], before = h.pressure_msl?.[Math.max(0, idx - 3)];
+  return (nowP != null && before != null) ? nowP - before : 0;
+}
 function solunarForDay(date, sunrise, sunset) {
   const periods = Astro.solunarPeriods(date, CONFIG.lat, CONFIG.lon);
-  const srMin = sunrise ? nearestMinutes(sunrise) : 400;
-  const ssMin = sunset ? nearestMinutes(sunset) : 1080;
+  let srMin = sunrise ? nearestMinutes(sunrise) : 420;
+  let ssMin = sunset ? nearestMinutes(sunset) : 1140;
   const dayStart = new Date(date); dayStart.setHours(0, 0, 0, 0);
   const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1);
-  const relMin = t => Math.round((t - dayStart.getTime()) / 60000);
-  const out = periods.map(p => {
-    const a = clamp(relMin(Math.max(p.start.getTime(), dayStart.getTime())), 0, 1440);
-    const b = clamp(relMin(Math.min(p.end.getTime(), dayEnd.getTime())), 0, 1440);
-    const night = Math.max(0, Math.min(b, srMin) - a) + Math.max(0, b - Math.max(a, ssMin));
-    return { ...p, nightMin: Math.round(night) };
+  const sr = sunrise ? sunrise.getTime() : dayStart.getTime() + 7 * 3600e3;
+  const ss = sunset ? sunset.getTime() : dayStart.getTime() + 19 * 3600e3;
+  const overlap = (a, b, c, d) => Math.max(0, Math.min(b, d) - Math.max(a, c));
+  return periods.filter(p => p.end > dayStart && p.start < dayEnd).map(p => {
+    const a = Math.max(p.start.getTime(), dayStart.getTime());
+    const b = Math.min(p.end.getTime(), dayEnd.getTime());
+    // Nuit = 00:00→lever + coucher→24:00 (et non toute la période).
+    const night = overlap(a, b, dayStart.getTime(), sr) + overlap(a, b, ss, dayEnd.getTime());
+    return { ...p, nightMin: Math.round(night / 60000) };
   });
-  return out.sort((a, b) => a.center - b.center);
 }
 
-/* ─────────── Espèces — barèmes adaptés (saison 20 · mer 12) ─────────── */
-const SPECIES = {
-  calamar: {
-    name: 'Calamar', plural: 'les calamars', nom: 'le calamar', icon: 'i-squid',
-    season: GCLEngine.SEASON_20, // jan→déc (migration, pontes, recrutement)
-    water: [13, 21], // fenêtre « optimum » affichée
-    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 1 ? 4 : w < 1.5 ? 2 : 0, // palier 0,6 m (Baléares 2012)
-    waterPt: t => t < 12 ? 2 : t <= 16 ? 5 : t <= 19 ? 4 : t <= 21 ? 3 : 1,
-    waterPtOff: 3, windMax: 30,
-    darkTxt: 'nuit noire — le lamparo (projecteur) sera décisif ; poissonnez sous le halo.',
-    summerTxt: 'turlutte fine (n° 1.5–2.5) et pêche surtout à l’aube/au crépuscule.',
-    bestTxt: 'les gros sujets se rapprochent de la côte ; privilégiez 20–60 m.',
-  },
-  loup: {
-    name: 'Loup bar', plural: 'les loups', nom: 'le loup', icon: 'i-fish',
-    season: [15, 17, 14, 10, 12, 10, 9, 11, 15, 19, 20, 18], // pic oct–fév, creux estival
-    water: [13, 21],
-    wavePt: w => w < 0.6 ? 7 : w < 1.2 ? 6 : w < 2 ? 4 : w < 2.5 ? 2 : 0, // aime l'eau brassée
-    waterPt: t => t < 10 ? 1 : t <= 13 ? 4 : t <= 18 ? 5 : t <= 22 ? 3 : 1,
-    waterPtOff: 3, windMax: 35,
-    darkTxt: 'nuit noire — leurres bruyants en surface et poisson nageur au bord des flots.',
-    summerTxt: 'descendez la profondeur ; le loup reste actif à la fraîche (aube + nocturne).',
-    bestTxt: 'eau fraîche = gros poissons le long des enrochements ; 5–25 m.',
-  },
-  dorade: {
-    name: 'Dorade', plural: 'les dorades', nom: 'la dorade', icon: 'i-bream',
-    season: [14, 15, 17, 16, 12, 9, 7, 8, 11, 15, 18, 20], // frai oct.–janv. (pic déc., Mellah) puis hivernal généreux ; creux août
-    water: [16, 23],
-    wavePt: w => w < 0.5 ? 7 : w < 0.8 ? 6 : w < 1.2 ? 4 : w < 1.8 ? 2 : 0,
-    waterPt: t => t < 14 ? 1 : t <= 16 ? 4 : t <= 20 ? 5 : t <= 23 ? 4 : 1,
-    waterPtOff: 3, windMax: 30,
-    darkTxt: 'nuit noire — sorties plus productives au lever du jour sur appâts.',
-    summerTxt: 'têtes de ligne légères autour des bouées ; petites dorades sur anchois.',
-    bestTxt: 'fonds sableux et pétoles ; 10–40 m, appâts chinchard & crabe.',
-  },
-  sar: {
-    name: 'Sar', plural: 'les sars', nom: 'le sar', icon: 'i-bream',
-    season: [8, 9, 12, 14, 16, 18, 20, 20, 18, 15, 11, 9], // pleine saison mai–oct
-    water: [16, 24],
-    wavePt: w => w < 0.3 ? 7 : w < 0.6 ? 6 : w < 0.8 ? 4 : w < 1.2 ? 2 : 0, // rochers battus = mer calme
-    waterPt: t => t < 15 ? 1 : t <= 17 ? 3 : t <= 21 ? 5 : t <= 24 ? 4 : 1,
-    waterPtOff: 3, windMax: 30,
-    darkTxt: 'nuit noire — le sar mange de nuit mais l’aube reste le meilleur créneau.',
-    summerTxt: 'pleine saison : rochers battus et passes, coquillage à l’étale.',
-    bestTxt: 'mer calme, claire et franche sur les rochers battus ; à pied 1–10 m.',
-  },
-};
-const SP = () => SPECIES[state.species] || SPECIES.calamar;
-/* Mer — 12 pts, par espèce (houle + eau, pénalité vent fort) */
-function speciesSeaPoints(wave, sst, windMax) {
-  const sp = SP();
-  let v = (wave == null ? 4 : sp.wavePt(wave)) + (sst == null ? sp.waterPtOff : sp.waterPt(sst));
-  if (windMax != null && windMax > sp.windMax) v -= 2;
-  return clamp(v, 0, 12);
-}
-
-/* ─────────── Contenu « Guide » par espèce (fiche · mois · nuit · techniques · spots · matériel · FAQ) ─────────── */
-const GUIDES = {
-  calamar: {
-    title: 'Pêcher le calamar ici',
-    sub: 'Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.',
-    facts: [['Espèce', 'Loligo vulgaris'], ['Profondeur', '20 – 250 m'], ['Eau idéale', '13 – 21 °C'], ['Moment', 'Nuit'], ['Fonds', 'Sable & vase'], ['Activité', 'Crépuscule → aube']],
-    moisNote: 'Migration côtière des gros sujets dès janvier–février ; petites tailles en été ; ponte majeure début d’été et début d’automne (Rocha & Guerra 1996) ; recrutement février–mars et juillet–septembre. Automne–début d’hiver = le meilleur de l’année à Ghazaouet — CPUE plus élevées en mois froids (Baléares 2012). (Sources : FAO / AdriaMed, SeaLifeBase, Cabanellas-Reboredo et al. 2012.)',
-    slots: [
-      ['17h – 19h', 72, 'is-good', 'Crépuscule — créneau validé par la science'],
-      ['19h – 22h', 96, 'is-peak', 'Prime time — turlutte &amp; lumière'],
-      ['22h – 02h', 78, 'is-good', 'Pleine nuit — activité soutenue'],
-      ['02h – 04h', 60, 'is-good', 'Second souffle — calme plat souvent'],
-      ['04h – 07h', 30, '', 'Aube — touches sporadiques'],
-      ['07h – 17h', 8, 'is-low', 'Journée — le calamar redescend (20–250 m)'],
-    ],
-    preuveNote: '<strong>Preuve scientifique</strong> — Cabanellas-Reboredo et al. (2012, <em>ICES J. Mar. Sci.</em>, Baléares) : CPUE maximale dans un <strong>créneau étroit autour du coucher du soleil</strong>, meilleure en <strong>mois froids</strong>, favorisée par eau fraîche + vent faible + <strong>basse pression</strong> + jours proches de la <strong>nouvelle lune</strong>. Ulas &amp; Aydin (2011, <em>Afr. J. Biotechnol.</em>, Égée) : turluttes <strong>rouges</strong> supérieures (p&lt;0.01) et pleine lune positive (p&lt;0.01) pour la turlutte côtière.',
-    tech: [
-      ['01', 'Turlutte de nuit', 'Leurre sans ardillon, couronne de poils. Lancer–ramener saccadé, animations courtes, pauses longues. Idéal du bord ou en barque lente.', 'Tailles 2.0–3.5 · <strong>rouge d’abord</strong> (étude Égée, p&lt;0.01 ; orange ensuite, blanc moins bon) · phospho en nuit noire · fond sableux 20–60 m. Pleine lune = turluttes plus efficaces (p&lt;0.01).'],
-      ['02', 'Pêche au lamparo', 'Projecteur blanc/bleu sous la coque ou sur la jetée : le calamar monte dans le halo. Ligne fine + petit turlutte. Très efficace en nuit noire.', 'Nouvelle lune &gt; pleine lune pour le lamparo (contraste maxi) · LED <strong>bleue &gt; blanche</strong> (Indonésie 2021, p&lt;0.05) · 3e quartier souvent productif sous LED.'],
-      ['03', 'Dérive sur les chasses', 'Repérer chasses de thons/dorades ou zones de courant (cassures, pointes). Dérive lente, turlutte profonde. Calamars en chasse active.', 'Eaux 13–20 °C, houle &lt; 0,5 m = activité maximale.'],
-      ['04', 'Du bord (digue/jetée)', 'Sur la digue du port ou le môle : lampes, calamars montent aux points lumineux. Petits leurres, fil fin, épuisette longue.', 'Évitez les soirs de grosse houle d’ouest — le port est exposé nord-ouest.'],
-    ],
-    spots: [
-      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Accès à pied · 5–15 m · lampes du port · idéal lamparo par nuit calme. Attention aux glissades.'],
-      ['B', 'Le large du port (cassure 30 → 80 m)', 'En barque · pente du plateau · dérive sur chasses · meilleur secteur automne–hiver.'],
-      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux 15–40 m · abritée de la houle d’ouest · très bonne densité octobre–décembre.'],
-      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
-    ],
-    gear: [
-      ['Canne', 'Turlutte / spinning 2,4–3,0 m · médium-fast · 80–150 g', '€€'],
-      ['Moulinet', '4000–5000 · frein fin · 200 m tresse PE 0.8–1.2', '€€'],
-      ['Leader', 'Fluorocarbone 0,25–0,35 mm · 1,5 m · discret en eau claire', '€'],
-      ['Turluttes', 'N° 2.0 à 3.5 · rose, orange, blanc, phospho (nuit)', '€'],
-      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
-      ['Lampe', 'Frontale rouge (préserve la vision nocturne) + projecteur 12 V', '€ – €€'],
-      ['Divers', 'Épuisette longue · seau à couvercle · couteau · eau douce', '€'],
-    ],
-    faq: [
-      { q: 'Quelle est la meilleure lune pour le calamar ?', a: 'Ça dépend de la technique — la science est nette : (1) Turlutte sans lampe : la pleine lune renforce les captures (étude mer Égée, p<0.01), turluttes rouges devant. (2) Lamparo / LEDs : les nuits sombres gagnent — nouvelle lune idéale ; sous LEDs clignotantes, le 3e quartier est le plus productif (étude Indonésie 2021, p<0.05) ; LED bleue > blanche. (3) Sans technique définie, l’étude méditerranéenne de référence (Baléares, ICES 2012) montre des CPUE supérieures près de la nouvelle lune + mois froids. Dans tous les cas : syzygie (± 2 jours) = pic d’activité.' },
-      { q: 'Quelles heures exactement ?', a: 'La fenêtre reine court du crépuscule jusqu’à ~3 h après la tombée de la nuit (19 h – 23 h en novembre à Ghazaouet). Les passages solunaires majeurs (lune au zénith puis au nadir, ≈ 12 h 25 min d’écart) doublent les touches ; une mineure encadre chaque majeure. Deuxième créneau : 02 h – 04 h du matin. Le poisson diminue nettement entre 10 h et 17 h.' },
-      { q: 'Quelle profondeur faut-il viser ?', a: 'Le calamar commun vit de la surface à 500 m, mais il chasse surtout entre 20 et 80 m la nuit, près du fond. À Ghazaouet : la pente du plateau (30 → 80 m) au large du port et les fonds sableux de Honaïne sont des valeurs sûres. En journée il redescend : moins de touches du bord.' },
-      { q: 'Faut-il obligatoirement un bateau ?', a: 'Non. La digue et la jetée ouest fonctionnent très bien pour le lamparo et la turlutte lancée sous les lampes du port, mer calme. La barque ouvre en revanche les 30–80 m et les chasses. Dans tous les cas : gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
-      { q: 'Quel leurre et quelle animation ?', a: 'Turlutte 2.0–3.5, coloris rose/orange/blanc phosphorescent. Lancer–ramener saccadé (2–4 twitches), longue pause (3–6 s), répété. Le calamar attaque souvent à la descente ou pendant la pause. Pas d’ardillon — la turlutte crochète. Émerillon agrafe pour changer vite selon la couleur du moment.' },
-      { q: 'Quelle réglementation à respecter ?', a: 'La pêche récréative en Algérie est encadrée : tailles minimales, repos biologique (généralement en été), zones classées, permis selon engin. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen (ou la Chambre de Pêche) avant chaque sortie. Les professionnels du port de Ghazaouet restent la meilleure source locale.' },
-      { q: 'Pourquoi certaines nuits « mortes » malgré une belle lune ?', a: 'La lune n’est qu’un facteur : une houle d’ouest > 0,6 m, un vent > 25 km/h, un orage ou une eau trop chaude (> 21 °C) égalisent l’effet lunaire — les études montrent des CPUE faibles dès que la mer se forme ou que la pression monte. C’est exactement ce que synthétise l’Indice (lune 35 + solunaire 25 + saison 20 + mer 12 + pression 8). Et si la pression baisse nette (−0,7 hPa/3 h), c’est souvent bon signe : l’étude des Baléares l’associe à de meilleures touches.' },
-    ],
-    saisonTxt: 'Barème /20 (pic novembre ; nov–déc–janv généreux) : migration côtière des gros sujets jan–fév ; ponte échelonnée printemps et automne (Rocha & Guerra 1996) ; recrutement fév–mars et juil–sept ; CPUE supérieures en mois froids (Baléares 2012).',
-    meteoTxt: 'Vagues 7 pts (<0,3 m = 7 ; 0,6–1 m = 4 ; ≥1,5 m = 0) + eau 5 pts (≤16 °C = 5 ; 17–19 °C = 4 ; 19–21 °C = 3 ; >21 °C = 1). Étude Baléares : CPUE plus forte par mer fraîche et houle faible ; l’été fait chuter l’activité.',
-    moonTxt: 'Proximité de la syzygie (nouvelle OU pleine lune) : |cos(élongation)|^1.8, planchée à 30 %. Effet lunaire statistiquement établi chez le calamar (Égée 2011 p<0.01, Indonésie 2021 p<0.05, Baléares 2012). Sens optimal : nouvelle lune (lamparo) vs pleine lune (turlutte sans lampe) — l’indice les traite à égalité ; le guide détaille.',
-  },
-  loup: {
-    title: 'Pêcher le loup bar ici',
-    sub: 'Tout sur <em>Dicentrarchus labrax</em> : saisons, heures, techniques, spots, matériel, sécurité.',
-    facts: [['Espèce', 'Dicentrarchus labrax'], ['Profondeur', '5 – 50 m (adultes au large)'], ['Eau idéale', '13 – 21 °C'], ['Moment', 'Aube &amp; crépuscule'], ['Fonds', 'Enrochements &amp; digues'], ['Activité', 'Aube → crépuscule']],
-    moisNote: 'Kara MH (1997, golfe d’Annaba) : le loup gagne la côte en hiver pour frayer (déc.–mars, pic févr.) — il est donc <strong>plus nombreux et plus proche</strong> à Ghazaouet en hiver–début de printemps. L’été, il rejoint le large (Doyle 2017 : home range ≤ 3 km, fidélité 93 % aux zones de chasse). Automne–début d’hiver = meilleur ; août = creux mais aube et chasses restent pêchants.',
-    slots: [
-      ['06h – 08h', 78, 'is-good', 'Aube — créneau n°1 sur enrochements'],
-      ['08h – 17h', 10, 'is-low', 'Journée — le loup descend'],
-      ['17h – 20h', 92, 'is-peak', 'Crépuscule — chasses de sardines/mulets'],
-      ['20h – 23h', 72, 'is-good', 'Nuit — leurres de surface'],
-      ['23h – 02h', 58, 'is-good', 'Pleine nuit — vent frais, eau brassée'],
-      ['02h – 06h', 32, '', 'Aube 2e — touches sporadiques'],
-    ],
-    preuveNote: '<strong>Preuve scientifique</strong> — Kara MH (1997, <em>Cah. Biol. Mar.</em> 38, golfe d’Annaba) : frai déc.–mars, pic févr. Doyle TK et al. (2017, <em>Sci Rep</em> 8:45841) : résidence côtière l’été → large l’hiver ; home range ≤ 3 km, fidélité inter-annuelle 93 %. Rodríguez-García C et al. (2024, <em>Fishes</em> 9:173) : mysidacés + poissons-fourrage ; l’alimentation varie avec l’heure et la saison. Dufour V et al. (2009, <em>JMBA UK</em> 89) : nurseries du golfe du Lion — juvéniles en surf zone.',
-    tech: [
-      ['01', 'Leurres de surface', 'Poppers / walk-the-dog 8–12 cm au crépuscule ; aube sur enrochements ; récupération saccadée + pauses.', 'Eau brassée (houle 0,5–1,5 m) = couleurs vives ; eau claire = teintes naturelles ; crépuscule avant tout.'],
-      ['02', 'Crankbaits profonds', '5–15 m de plongée sur cassures &amp; digue ; récupération rapide, pêches agressives.', 'Idéal eau fraîche (13–17 °C) d’octobre à février.'],
-      ['03', 'Jerkbaits &amp; shads', 'Leurres coulées lentes et twitches sur chasses ; l’été au large sur bancs de sardines.', 'Eau 13 °C + sardines = loup en chasse franche ; lancer au vent.'],
-      ['04', 'Shore casting digues', 'Canne forte 80–150 g, leurres 30–70 g projetés loin ; très rentable sur enrochements aube.', 'Sécurité digues : vagues hautes et glissades — chaussures grip.'],
-    ],
-    spots: [
-      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Crépuscule sur enrochements — leurres de surface au bord de lame ; lampes utiles en pénombre.'],
-      ['B', 'Le large du port (cassure 30 → 80 m)', 'En barque · dérive sur chasses · fin d’été–automne ; gros sujets 2–6 kg.'],
-      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux abrités de la houle d’ouest · automne–hiver — loup y descend des chasses.'],
-      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
-    ],
-    gear: [
-      ['Canne', 'Spinning 2,7–3,2 m · médium-heavy · 14–42 g', '€€'],
-      ['Moulinet', '3000–4000 · 200 m tresse PE 1.0–1.5', '€€'],
-      ['Leader', 'Fluorocarbone 0,35–0,45 mm · 1 m', '€'],
-      ['Leurres', 'Poppers 90–120 mm · jigs 20–40 g · crankbaits', '€€'],
-      ['Émerillons', 'Agrafe + anneau (change rapide)', '€'],
-      ['Lampe', 'Frontale rouge (aube) · évitez la lumière blanche sur l’eau', '€'],
-      ['Divers', 'Épuisette long manche · pince · plombs drop-shot', '€'],
-    ],
-    faq: [
-      { q: 'Quel est le meilleur moment pour le loup ?', a: 'Aube et crépuscule — c’est la règle d’or. L’aube : ~2 h autour du lever (à Ghazaouet, sortie avant que le soleil monte) ; le crépuscule : 1 h avant à 1 h après le couchant. Hiver–début printemps (nov.–mars) = meilleure saison ; l’été, le loup s’éloigne au large et ne vient au bord qu’aux chasses.' },
-      { q: 'Quelle profondeur / quel spot ?', a: 'Enrochements et digues 5–25 m sur le bord ; au large 30–80 m en dérive sur cassures. La digue du port (Ghazaouet) au petit matin est un très bon rapport risque/prise quand mer légère–modérée.' },
-      { q: 'Faut-il un bateau ?', a: 'Non — la digue et les enrochements marchent très bien au crépuscule. La barque n’est nécessaire que pour les chasses au large (juillet–octobre) et le traîné profond des hivers.' },
-      { q: 'Quels leurres et quelle récupération ?', a: 'Poppers 90–120 mm au crépuscule (eau brassée : couleurs vives) ; crankbaits profonds 5–15 m ; jerkbaits sur chasses. Récupération : 2–4 twitches + pause ; le loup tape souvent à la pause. Eau claire = coloris naturels ; eau brassée = flashy.' },
-      { q: 'Quelle réglementation ?', a: 'Tailles minimales, repos biologique et zones classées encadrés par la wilaya de Tlemcen — renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture (DPA) avant chaque sortie. Évitez de garder des poissons < 30 cm (jeunesse) — relâchez.' },
-      { q: 'Pourquoi rien du tout malgré la lune ?', a: 'Aucune preuve CPUE pour le loup ; mais deux facteurs dominants : la température (eau > 22 °C = baisse d’activité) et la mer (houle > 2 m = poissons inaccessibles). L’indice synthétise seulement la biologie ; en vrai, parlez aux professionnels du port — leur œil vaut plus que toute courbe.' },
-      { q: 'Le loup est-il sensible à la lune ?', a: 'Pas démontré. La lune sert ici de repère temporel (syzygie = jours plus actifs en général, solunaire), pas de garantie. Priorité : aube/crépuscule + mer + saison.' },
-    ],
-    saisonTxt: 'Barème /20 (pic nov–jan ; creux estival) : approche hivernale côtière documentée — frai déc.–mars, pic févr. (Kara 1997, golfe d’Annaba) ; large l’été (Doyle 2017) ; home range ≤ 3 km, fidélité 93 %.',
-    meteoTxt: 'Vagues 7 pts (<0,6 m = 7 ; <1,2 m = 6 ; <2 m = 4 ; <2,5 m = 2 ; ≥2,5 m = 0) — le loup <strong>aime l’eau brassée</strong> — + eau 5 pts (10–13 °C = 4 ; 13–18 °C = 5 ; 18–22 °C = 3 ; >22 °C = 1). Vent toléré jusqu’à 35 km/h.',
-    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée pour le loup — la syzygie sert de descripteur horaire croisé avec les fenêtres aube/crépuscule, pas de garantie.',
-  },
-  dorade: {
-    title: 'Pêcher la dorade ici',
-    sub: 'Tout sur <em>Sparus aurata</em> : saisons, heures, techniques, spots, matériel, sécurité.',
-    facts: [['Espèce', 'Sparus aurata'], ['Profondeur', '10 – 40 m'], ['Eau idéale', '16 – 23 °C'], ['Moment', 'Aube'], ['Fonds', 'Sable &amp; vase'], ['Activité', 'Aube → crépuscule']],
-    moisNote: 'La dorade arrive sur la côte algérienne à l’automne ; elle fraie d’<strong>octobre à janvier, avec un pic en décembre</strong> (Chaoui &amp; Kara 2006 — Mellah, Algérie). Les grosses (>44 cm) sont des <strong>femelles</strong> — à préserver : plus la dorade est grosse, plus elle apporte à la population. Août = creux (eau > 22 °C → descente au large).',
-    slots: [
-      ['06h – 09h', 92, 'is-peak', 'Aube — prime time'],
-      ['09h – 13h', 46, 'is-good', 'Matinée — dérive sur fond'],
-      ['13h – 16h', 18, 'is-low', 'Midday — dorade descend'],
-      ['16h – 19h', 66, 'is-good', 'Crépuscule — second créneau'],
-      ['19h – 23h', 30, '', 'Nuit — touches rares'],
-      ['23h – 06h', 8, 'is-low', 'Nuit — dorade inactive'],
-    ],
-    preuveNote: '<strong>Preuve scientifique</strong> — Chaoui L &amp; Kara MH (2006, <em>Scientia Marina</em> 70(3):545–552 — Mellah, Algérie) : frai oct.–janv., <strong>pic décembre</strong> ; maturité 32,6 cm TL ; <strong>inversion sexuelle à 44 cm</strong> (proterandrie — grosses femelles). Appâts clés : chinchard, crabe, anchois ; aube prioritaire ; fonds sablo-vaseux 10–40 m ; mer calme.',
-    tech: [
-      ['01', 'Appâts en dérive', 'Chinchard &amp; crabe en vif sur fond, ligne légère, hameçon n°1/0–3/0 ; prospecter 10–40 m.', 'Dérive lente ; mer calme ; aube uniquement en saison froide.'],
-      ['02', 'La tomber (tomber)', 'Poser en douceur au bord des enrochements ou autour des bouées ; touche souvent à l’arrêt.', 'Idéal jetée aube ; appât frais obligatoire.'],
-      ['03', 'Leurres souples lents', 'Swimbaits 7–10 cm, récupération millimétrée (drapeau) sur fond.', 'Eau claire ; approche silencieuse ; patience.'],
-      ['04', 'Surfcasting digue', 'Petit plomb + appât posé à 15–40 m sur sable ; crépuscule ou aube.', 'Houle faible exigée — la dorade suit la clarté.'],
-    ],
-    spots: [
-      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Appâts au tomber devant enrochements ; aube ; appât frais ; mer calme obligatoire.'],
-      ['B', 'Le large du port (cassure 30 → 80 m)', 'Charnière du plateau · utile en déc. (dérive) ; hors frai la dorade est au large — peu de prise du bord.'],
-      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Fonds sableux 15–40 m — <strong>LE spot dorade oct.–déc.</strong> · abritée, eau claire.'],
-      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
-    ],
-    gear: [
-      ['Canne', 'Spinning 2,4–2,7 m · médium · 7–25 g', '€€'],
-      ['Moulinet', '3000–4000 · 150–200 m PE 0.8–1.0', '€€'],
-      ['Leader', 'Fluorocarbone 0,30–0,40 mm · 1 m', '€'],
-      ['Hameçons', 'n° 1/0 – 3/0 · longshank', '€'],
-      ['Appâts', 'Chinchard · crabe · anchois · coquillage', '€'],
-      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
-      ['Divers', 'Épuisette · seau-appât · pince · frontale rouge', '€'],
-    ],
-    faq: [
-      { q: 'Quel est le meilleur moment ?', a: 'Octobre–janvier, avec un pic marqué en décembre (frai — Mellah, Chaoui & Kara 2006). Aube avant tout : 2 h autour du lever. En plein été (août), la dorade descend au large et l’appétit chute.' },
-      { q: 'Profondeur et spot ?', a: '10–40 m sur sable et vase — Honaïne (fonds sableux 15–40 m) est LE secteur de l’automne. Du bord, appâts au tomber sur le fond devant enrochements.' },
-      { q: 'Bateau obligatoire ?', a: 'Non pour la digue (aube, appâts) ; oui pour les grands fonds et les chasses de déc. — sinon la dorade ne s’y rend pas. Vérifiez toujours la météo avant.' },
-      { q: 'Appâts gagnants ?', a: 'Chinchard frais, crabe, anchois ; la dorade aime la proie qui bouge. Ligne légère, hameçon longshank, touche souvent « à l’arrêt ».' },
-      { q: 'Quelle réglementation ?', a: 'Algérie : encadrement strict (DPA Tlemcen) — tailles, repos biologique. La dorade atteignant 32,6 cm à maturité (puis inversion à 44 cm) : libérez les grosses, ce sont les femelles productives.' },
-      { q: 'Pourquoi juillet–août, rien ?', a: 'Eau > 22 °C = descente au large et coupure d’appétit. La dorade est un poisson d’eau fraîche ; chaque degré compte.' },
-      { q: 'Et la lune ?', a: 'Aucune mesure CPUE pour la dorade. Aube + pression + saison pèsent. La syzygie ne nuit jamais — mais ne remplace pas l’aube.' },
-    ],
-    saisonTxt: 'Barème /20 (pic décembre — nov–déc–oct généreux ; août creux) : frai oct.–janv., pic déc. ; maturité 32,6 cm ; inversion sexuelle 44 cm (Chaoui & Kara 2006, Mellah — Algérie).',
-    meteoTxt: 'Vagues 7 pts (<0,5 m = 7 ; <0,8 m = 6 ; <1,2 m = 4 ; <1,8 m = 2 ; ≥1,8 m = 0) + eau 5 pts (≤16 °C = 4 ; 16–20 °C = 5 ; 20–23 °C = 4 ; >23 °C = 1). Mer fraîche–tiède et calme ; aube essentielle.',
-    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée — la syzygie sert de descripteur horaire ; l’aube reste déterminante.',
-  },
-  sar: {
-    title: 'Pêcher le sar ici',
-    sub: 'Tout sur <em>Diplodus sargus</em> : saisons, heures, techniques, spots, matériel, sécurité.',
-    facts: [['Espèce', 'Diplodus sargus'], ['Profondeur', '1 – 15 m'], ['Eau idéale', '16 – 24 °C'], ['Moment', 'Aube (étale)'], ['Fonds', 'Rochers battus'], ['Activité', 'Aube → étale']],
-    moisNote: 'Frai <strong>avril–juillet</strong> (Quignard &amp; Farrugio 1981 — Ionian Sea Encyclopedia, Springer 2022) ; juvéniles gagnent les rochers dès le printemps. Juin–septembre = plein pic ; houle <strong>< 0,8 m</strong> et eau claire indispensables ; la pêche à pied sur rochers battus (coquillage, patelle) ; le sar est sédentaire.',
-    slots: [
-      ['06h – 09h', 92, 'is-peak', 'Aube — prime time'],
-      ['09h – 12h', 58, 'is-good', 'Matinée — étale coquillages'],
-      ['12h – 15h', 22, 'is-low', 'Midday — chaleur, sar au trou'],
-      ['15h – 18h', 48, 'is-good', 'Fin d’après-midi — bon pari'],
-      ['18h – 21h', 40, '', 'Crépuscule — dernière carte'],
-      ['21h – 06h', 10, 'is-low', 'Nuit — sar inactif'],
-    ],
-    preuveNote: '<strong>Preuve scientifique</strong> — Quignard JP &amp; Farrugio H (1981) : frai avril–juillet ; juvéniles sur substrats rocheux dès le printemps. Ionian Sea Encyclopedia (Springer 2022, DOI 10.1007/978-3-031-08206-1_210001) : côte rocheuse battue, mollusques de base ; eau claire ; aube. Sous-espèce <em>cadenati</em> (Atlantique) commune au nord-ouest.',
-    tech: [
-      ['01', 'À l’étale — patelle', 'Pêche à pied sur rochers battus ; coquillage posé devant les trous ; approche discrète, eau claire.', 'Le sar se nourrit à marée basse — l’étale du matin est roi.'],
-      ['02', 'Basket feeding', 'Amorce coquillage pilé + appât posé ; la sar se regroupe ; technique n°1 sur rochers.', 'Appât frais (patelle, moule, crabe) ; patience ; calme.'],
-      ['03', 'La tomber sur rochers', 'Poser coquillage en douceur devant les fissures ; touche à l’arrêt.', 'Idéal aube ; houle nulle ; eau claire.'],
-      ['04', 'Surfcasting léger', 'Petit plomb + coquillage à 15–30 m de la côte rocheuse.', 'Mer calme obligatoire ; houle > 0,8 m = rien.'],
-    ],
-    spots: [
-      ['A', 'Jetée ouest &amp; digue du phare « Les Deux Frères »', 'Rochers battus aube — à pied, pas besoin de barque ; houle < 0,8 m'],
-      ['B', 'Le large du port (cassure 30 → 80 m)', 'Peu d’intérêt pour le sar (sédentaire côtier) ; barque inutile ici.'],
-      ['C', 'Baie de Honaïne (10 km à l’ouest)', 'Uniquement si rochers présents dans le secteur — sinon dorade prioritaire.'],
-      ['D', 'Marsa Ben M’Hidi (à l’est, frontière)', 'Spot historique · vérifier zones autorisées et réglementation locale.'],
-    ],
-    gear: [
-      ['Canne', 'Surfcasting 3,6–4,5 m · medium-heavy · 50–150 g', '€€'],
-      ['Moulinet', '5000–6000 · 250 m tresse PE 1.2–1.5', '€'],
-      ['Leader', 'Fluorocarbone 0,35–0,45 mm · 1 m', '€'],
-      ['Hameçons', 'n° 6 – 10 · longshank', '€'],
-      ['Appâts', 'Patelle · moule · crabe · coquillage', '€'],
-      ['Émerillons', 'Agrafe + baril (change rapide)', '€'],
-      ['Divers', 'Pioche · seau coquillages · frontale rouge', '€'],
-    ],
-    faq: [
-      { q: 'Meilleur moment ?', a: 'Juin–septembre, à l’aube (2 h autour du lever) et à l’étale du matin. Houle < 0,8 m et eau claire = non négociable. Le sar est un poisson de rockpool — à pied c’est le plus rentable.' },
-      { q: 'Profondeur / spot ?', a: '1–15 m sur rochers battus ; la digue et les enrochements marchent — 5–10 m de fond suffit. Aucun intérêt au large.' },
-      { q: 'Bateau ?', a: 'Non — la pêche à pied sur rochers battus suffit et c’est même la meilleure approche (eau claire, appât posé).' },
-      { q: 'Appâts ?', a: 'Patelle (chapeau chinois), moule, coquillage, crabe. L’amorce coquillage pilé fait venir la sar de loin — basket feeding est la technique n°1.' },
-      { q: 'Réglementation ?', a: 'DPA Tlemcen — tailles min et zones classées ; le sar étant sédentaire, évitez de vider un même rocher ; variez vos spots.' },
-      { q: 'Pourquoi, certaines fois, rien du tout ?', a: 'Houle > 0,8 m = turbidité = zéro touche. Et la chaleur (> 24 °C en plein cagnard) le fait rentrer au trou à midi — anticipez aube ou 18 h.' },
-      { q: 'La lune compte-t-elle ?', a: 'Pas démontré pour le sar. L’aube et l’étale priment. Syzygie = bonus solunaire seulement.' },
-    ],
-    saisonTxt: 'Barème /20 (pic juin–septembre) : frai avril–juillet ; juvéniles gagnent les rochers ; densités maximales mer calme &amp; claire ; aube prioritaire (Quignard &amp; Farrugio 1981).',
-    meteoTxt: 'Vagues 7 pts (<0,3 m = 7 ; <0,6 m = 6 ; <0,8 m = 4 ; <1,2 m = 2 ; ≥1,2 m = 0) + eau 5 pts (17–21 °C = 5 ; 15–17 °C = 3 ; 21–24 °C = 4 ; <15 °C = 1 ; >24 °C = 1). La turbidité annule le score — eau claire obligatoire.',
-    moonTxt: 'Proximité de la syzygie (|cos(élongation)|^1.8). Aucune étude CPUE dédiée — syzygie = descripteur horaire ; aube + étale priment.',
-  },
-};
-const GUIDE = () => GUIDES[state.species] || GUIDES.calamar;
-
-const isPrimeWindow = center => { const h = center.getHours(); return h >= 20 || h < 2; };
-
-/* ─────────── Indice (Calamar™/Loup/Dorade/Sar™) ─────────── */
+/* ─────────── Indice (4 facteurs, sans saison) ─────────── */
 function scoreFor(date, dm) {
   const day = dm?.[dayKey(date)] || null;
   const ph = Astro.phaseInfo(date);
-  const elong = ph.elong * Math.PI / 180;
-
-  // 1) Lune — 35 pts (syzygie = plein score)
-  const moon = GCLEngine.moonScore(elong);
-
-  // 2) Solunaire — 25 pts (recouvrement nocturne + fenêtre prime 20h→02h)
+  const moon = GCLEngine.moonScore(ph.elong * Math.PI / 180);
   const periods = solunarForDay(date, day?.sunrise, day?.sunset);
   const sol = GCLEngine.solunarPoints(periods, isPrimeWindow);
-
-  // 3) Saison — 20 pts (barème propre à l'espèce sélectionnée)
-  const season = SP().season[date.getMonth()];
-
-  // 4) Mer — 12 pts (barèmes houle/eau/vent de l'espèce)
   const wave = day?.waveMax ?? state.marine?.current?.wave_height ?? null;
   const sst = state.marine?.current?.sea_surface_temperature ?? null;
-  const meteo = speciesSeaPoints(wave, sst, day?.windMax);
-
-  // 5) Pression — 8 pts. Étude Baléares 2012 : basse pression (ou en baisse) = touches meilleures
-  const p = state.meteo?.current?.pressure_msl ?? null;
-  const dp = pressureTrendNow();
-  const pres = GCLEngine.pressurePoints(p, dp);
-
-  const parts = { moon: Math.round(moon), sol: Math.round(sol), season: Math.round(season), meteo: Math.round(meteo), pres: Math.round(pres) };
-  const total = GCLEngine.totalScore(parts);
-  return { total, parts, phase: ph, periods, day };
+  const meteo = GCLEngine.seaPoints(wave, sst, day?.windMax);
+  const pres = dayKey(date) === dayKey(new Date())
+    ? GCLEngine.pressurePoints(state.meteo?.current?.pressure_msl ?? null, pressureTrendNow())
+    : GCLEngine.pressurePoints(null, 0);
+  const parts = { moon: Math.round(moon), sol: Math.round(sol), meteo: Math.round(meteo), pres: Math.round(pres) };
+  return { total: GCLEngine.totalScore(parts), parts, phase: ph, periods, day };
+}
+function bestWindowFor(periods) {
+  const ranked = periods.filter(p => p.type === 'major' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
+  if (!ranked.length) return null;
+  const p = ranked[0];
+  return { start: fmtTime(p.start), end: fmtTime(p.end), night: p.nightMin, type: p.type, center: p.center };
 }
 
-const ratingOf = GCLEngine.ratingOf;
-
-const bestWindowFor = periods => {
-  const nightMajors = periods.filter(p => p.type === 'major' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
-  const nightMinors = periods.filter(p => p.type === 'minor' && p.nightMin > 0).sort((a, b) => b.nightMin - a.nightMin);
-  const pick = nightMajors[0] || nightMinors[0] || null;
-  if (!pick) return null;
-  return { start: fmtTime(pick.start), end: fmtTime(pick.end), type: pick.type, center: pick.center, night: pick.nightMin };
-};
-
-/* ─────────── Rendu : horloge sidebar ─────────── */
-function renderClock() {
-  const now = new Date();
-  $('#sideClock').textContent = fmtTimeFull(now);
-  $('#sideDate').textContent = fmtDateLong(now);
+/* ─────────── Jauge ─────────── */
+let gaugeAnim = null;
+function renderGauge(value) {
+  const cv = $('#gaugeCanvas');
+  if (!cv) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = 300, H = 212;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = '100%'; cv.style.height = 'auto';
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const cx = W / 2, cy = H * 0.62, r = 92;
+  const css = getComputedStyle(document.documentElement);
+  const col = n => css.getPropertyValue(n).trim() || '#48e3c6';
+  const bands = [col('--band-low'), col('--band-mid'), col('--band-good'), col('--band-great'), col('--band-epic')];
+  const A0 = Math.PI * 0.78, A1 = Math.PI * 2.22;
+  const draw = v => {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 13; ctx.lineCap = 'round';
+    const grad = ctx.createLinearGradient(20, 40, W - 20, H);
+    bands.forEach((c, i) => grad.addColorStop(i / 4, c));
+    ctx.strokeStyle = 'rgba(128,150,160,.16)';
+    ctx.beginPath(); ctx.arc(cx, cy, r, A0, A1); ctx.stroke();
+    ctx.strokeStyle = grad;
+    ctx.beginPath(); ctx.arc(cx, cy, r, A0, A0 + (A1 - A0) * clamp(v / 100, 0, 1)); ctx.stroke();
+    ctx.strokeStyle = 'rgba(160,190,200,.35)'; ctx.lineWidth = 1.5;
+    for (let i = 0; i <= 10; i++) {
+      const a = A0 + (A1 - A0) * (i / 10);
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * (r - 11), cy + Math.sin(a) * (r - 11));
+      ctx.lineTo(cx + Math.cos(a) * (r - 19), cy + Math.sin(a) * (r - 19));
+      ctx.stroke();
+    }
+    const a = A0 + (A1 - A0) * clamp(v / 100, 0, 1);
+    ctx.strokeStyle = col('--strong'); ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * (r - 26), cy + Math.sin(a) * (r - 26)); ctx.stroke();
+    ctx.fillStyle = col('--gold'); ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2); ctx.fill();
+  };
+  if (gaugeAnim) cancelAnimationFrame(gaugeAnim);
+  let start = null;
+  const frame = t => {
+    if (start === null) start = t;
+    const k = clamp((t - start) / 600, 0, 1);
+    draw(value * (1 - Math.pow(1 - k, 3)));
+    $('#gaugeValue').textContent = Math.round(value * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) gaugeAnim = requestAnimationFrame(frame);
+  };
+  gaugeAnim = requestAnimationFrame(frame);
 }
 
-/* ─────────── Rendu : jauge ─────────── */
-let gaugeAnim = { from: 0, to: 0, start: 0 };
-function drawGauge(score) {
-  const canvas = $('#gaugeCanvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-  const cx = W / 2;
-  // Pivot calculé pour que l'arc complet 270° (extrémités rondes incluses) tienne dans le canvas.
-  // Contraintes : cy − r ≥ 16 (haut) et cy + 0,707·r ≤ H − 10 (bas).
-  const cy = (H - 4.7) / 1.707;
-  const r = cy - 16;
-  const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25; // 270°
-  const tc = themeColors();
-  // Piste
-  ctx.lineWidth = 20; ctx.lineCap = 'round';
-  ctx.strokeStyle = tc.track;
-  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a1); ctx.stroke();
-  // Arc valeur (dégradé)
-  const frac = clamp(score, 0, 100) / 100;
-  const grad = ctx.createLinearGradient(0, cy, W, cy);
-  grad.addColorStop(0, tc.red); grad.addColorStop(0.35, tc.amber); grad.addColorStop(0.68, tc.sea); grad.addColorStop(1, tc.gold);
-  ctx.strokeStyle = grad;
-  ctx.shadowColor = `rgba(${tc.goldRgb},.45)`; ctx.shadowBlur = 18;
-  ctx.beginPath(); ctx.arc(cx, cy, r, a0, a0 + (a1 - a0) * frac); ctx.stroke();
-  ctx.shadowBlur = 0;
-  // Graduations
-  ctx.strokeStyle = tc.tick; ctx.lineWidth = 2;
-  for (let i = 0; i <= 10; i++) {
-    const a = a0 + (a1 - a0) * (i / 10);
-    ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(a) * (r - 14), cy + Math.sin(a) * (r - 14));
-    ctx.lineTo(cx + Math.cos(a) * (r - 22), cy + Math.sin(a) * (r - 22));
-    ctx.stroke();
+/* ─────────── Lune (canvas) ─────────── */
+function drawMoon(date) {
+  const cv = $('#moonCanvas');
+  if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, S = 120;
+  cv.width = S * dpr; cv.height = S * dpr;
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+  const css = getComputedStyle(document.documentElement);
+  const glow = css.getPropertyValue('--aqua').trim() || '#48e3c6';
+  const cx = S / 2, cy = S / 2, r = 48;
+  const ph = Astro.phaseInfo(date);
+  ctx.clearRect(0, 0, S, S);
+  const g = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.35);
+  g.addColorStop(0, 'rgba(255,255,255,.10)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r * 1.35, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(160,190,200,.16)'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  const k = 1 - 2 * ph.illum;
+  ctx.fillStyle = '#f3f0e2';
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2);
+  if (ph.waxing) ctx.ellipse(cx, cy, r * Math.abs(k), r, 0, Math.PI / 2, -Math.PI / 2, k > 0);
+  else ctx.ellipse(cx, cy, r * Math.abs(k), r, 0, Math.PI / 2, -Math.PI / 2, k < 0);
+  ctx.fill();
+  ctx.strokeStyle = glow; ctx.globalAlpha = .55; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
+/* ─────────── Courbe d'activité ─────────── */
+function renderActivity(now, periods, today) {
+  const cv = $('#activityChart');
+  if (!cv) return;
+  const wrap = cv.parentElement;
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.max(300, wrap.clientWidth - 32), H = 180;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = '100%'; cv.style.height = H + 'px';
+  const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, W, H);
+  const sr = today?.sunrise ? nearestMinutes(today.sunrise) : 440;
+  const ss = today?.sunset ? nearestMinutes(today.sunset) : 1140;
+  const xOf = m => 28 + (m / 1440) * (W - 44);
+  const yOf = v => H - 28 - v * (H - 52);
+  ctx.fillStyle = 'rgba(110,130,255,.09)';
+  ctx.fillRect(xOf(0), 8, xOf(sr) - xOf(0), H - 34);
+  ctx.fillRect(xOf(ss), 8, xOf(1440) - xOf(ss), H - 34);
+  ctx.strokeStyle = 'rgba(150,180,190,.18)'; ctx.lineWidth = 1;
+  for (let h = 0; h <= 24; h += 4) {
+    const x = xOf(h * 60);
+    ctx.beginPath(); ctx.moveTo(x, 14); ctx.lineTo(x, H - 24); ctx.stroke();
   }
-  // Aiguille
-  const na = a0 + (a1 - a0) * frac;
-  ctx.strokeStyle = tc.needle; ctx.lineWidth = 3.4;
-  ctx.beginPath(); ctx.moveTo(cx + Math.cos(na) * 18, cy + Math.sin(na) * 18); ctx.lineTo(cx + Math.cos(na) * (r - 30), cy + Math.sin(na) * (r - 30)); ctx.stroke();
-  ctx.fillStyle = tc.gold;
-  ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = tc.bg2; ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
-}
-function animateGauge(target) {
-  gaugeAnim = { from: gaugeAnim.to ?? 0, to: target, start: performance.now() };
-  // Peinture synchrone de la valeur finale — garantie même si rAF est gelé (onglet caché / headless)
-  drawGauge(target);
-  $('#gaugeValue').textContent = Math.round(target);
-  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (document.hidden || reduced || !window.requestAnimationFrame) return;
-  const dur = 900;
-  const from = gaugeAnim.from;
-  const t0 = performance.now();
-  function frame(t) {
-    const k = clamp((t - t0) / dur, 0, 1);
-    const e = 1 - Math.pow(2, -10 * k);
-    const val = from + (target - from) * (k === 1 ? 1 : e);
-    drawGauge(val);
-    $('#gaugeValue').textContent = Math.round(val);
-    if (k < 1) requestAnimationFrame(frame);
+  const valueAt = minute => {
+    let v = .12;
+    for (const p of periods) {
+      const c = nearestMinutes(p.center);
+      v += (p.type === 'major' ? .55 : .25) * Math.exp(-Math.pow(minute - c, 2) / (2 * 70 * 70));
+    }
+    if (minute >= sr && minute <= ss) v *= .45;
+    return clamp(v, 0, 1);
+  };
+  const grad = ctx.createLinearGradient(0, 14, 0, H - 24);
+  grad.addColorStop(0, 'rgba(72,227,198,.55)'); grad.addColorStop(1, 'rgba(72,227,198,0)');
+  ctx.beginPath(); ctx.moveTo(xOf(0), yOf(0));
+  for (let m = 0; m <= 1440; m += 10) ctx.lineTo(xOf(m), yOf(valueAt(m)));
+  ctx.lineTo(xOf(1440), yOf(0)); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+  ctx.beginPath();
+  for (let m = 0; m <= 1440; m += 10) {
+    const x = xOf(m), y = yOf(valueAt(m));
+    if (m === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   }
-  requestAnimationFrame(frame);
+  const css = getComputedStyle(document.documentElement);
+  ctx.strokeStyle = css.getPropertyValue('--aqua').trim() || '#48e3c6'; ctx.lineWidth = 2; ctx.stroke();
+  const nowMin = nearestMinutes(now);
+  ctx.strokeStyle = css.getPropertyValue('--gold').trim() || '#ffb629'; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(xOf(nowMin), 12); ctx.lineTo(xOf(nowMin), H - 22); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = css.getPropertyValue('--muted-2').trim() || '#7e9ba5';
+  ctx.font = '9px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (let h = 0; h <= 24; h += 6) ctx.fillText(String(h).padStart(2, '0') + 'h', xOf(h * 60), H - 8);
 }
+
+/* ─────────── Rendus de l'accueil ─────────── */
 function renderFactors(parts) {
-  const max = { moon: 35, sol: 25, season: 20, meteo: 12, pres: 8 };
-  const labels = { moon: 'Lune', sol: 'Solunaire', season: 'Saison', meteo: 'Mer', pres: 'Pression' };
+  const max = { moon: 40, sol: 25, meteo: 25, pres: 10 };
+  const labels = { moon: 'Lune', sol: 'Solunaire', meteo: 'Mer', pres: 'Pression' };
   $('#factorList').innerHTML = Object.keys(max).map(k => `
     <li class="factor"><small>${labels[k]}</small>
-      <div class="factor-track"><div class="factor-fill" style="width:${(parts[k] / max[k]) * 100}%"></div></div>
+      <div class="factor-track"><div class="factor-fill" style="width:${clamp(parts[k] / max[k] * 100, 0, 100)}%"></div></div>
       <span class="factor-val">${parts[k]}/${max[k]}</span></li>`).join('');
 }
-
-/* ─────────── Rendu : lune (canvas) ─────────── */
-function drawMoonOn(cv, date, glow = true) {
-  const ctx = cv.getContext('2d');
-  const W = cv.width, H = cv.height, cx = W / 2, cy = H / 2, r = Math.min(W, H) / 2 - 4;
-  const ph = Astro.phaseInfo(date);
-  ctx.clearRect(0, 0, W, H);
-  if (glow) {
-    const g = ctx.createRadialGradient(cx, cy, r * 0.4, cx, cy, r * 1.6);
-    g.addColorStop(0, 'rgba(240,235,215,.34)'); g.addColorStop(1, 'rgba(240,235,215,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+function renderSea() {
+  const cur = state.meteo?.current, m = state.marine?.current;
+  if (!m) return;
+  const wave = m.wave_height;
+  $('#waveHeight').textContent = wave != null ? wave.toFixed(2) : '—';
+  $('#waveBar').style.left = `${clamp((wave ?? 0) / 1.5, 0, 1) * 100}%`;
+  $('#seaDetail').innerHTML = [
+    `Direction ${m.wave_direction != null ? Math.round(m.wave_direction) + '°' : '—'}`,
+    `Période ${m.wave_period != null ? m.wave_period.toFixed(1) + ' s' : '—'}`,
+    `Houle ${m.swell_wave_height != null ? m.swell_wave_height.toFixed(2) + ' m' : '—'}`,
+  ].map(s => `<span>${s}</span>`).join('');
+  const sst = m.sea_surface_temperature;
+  $('#sstValue').textContent = sst != null ? sst.toFixed(1) : '—';
+  const verdict = sst == null ? '—' : sst < 13 ? 'Eau froide' : sst <= 21 ? 'Optimum calamar' : 'Un peu chaude';
+  const vEl = $('#sstVerdict');
+  vEl.textContent = verdict;
+  vEl.className = 'chip ' + (sst != null && sst >= 13 && sst <= 21 ? 'chip-sea' : 'chip-ghost');
+  $('#seaNote').textContent = wave == null ? 'Données marines en cours…'
+    : wave < 0.3 ? 'Mer belle à légère — conditions idéales pour la turlutte comme pour le lamparo.'
+      : wave < 0.6 ? 'Petite agitation — agréable en dérive, lamparo déconseillé si le vent forcit.'
+        : 'Houle significative — privilégiez la digue abritée ou reportez la sortie en barque.';
+  if (cur) {
+    const info = wmoInfo(cur.weather_code);
+    $('#wxDesc').textContent = info[0];
+    $('#wxIcon use').setAttribute('href', '#' + info[1]);
+    $('#wxTemp').textContent = state.units.temp === 'f' ? Math.round(cur.temperature_2m * 9 / 5 + 32) : Math.round(cur.temperature_2m);
+    $('#wxTemp').nextElementSibling.textContent = state.units.temp === 'f' ? '°F' : '°C';
+    $('#wxFeels').textContent = 'Ressenti ' + fmtTemp(cur.apparent_temperature);
+    $('#wxGrid').innerHTML = [
+      ['Vent', fmtWind(cur.wind_speed_10m) + ' ' + (cur.wind_direction_10m != null ? Math.round(cur.wind_direction_10m) + '°' : '')],
+      ['Rafales', fmtWind(cur.wind_gusts_10m)],
+      ['Humidité', cur.relative_humidity_2m != null ? cur.relative_humidity_2m + ' %' : '—'],
+      ['Pression', cur.pressure_msl != null ? Math.round(cur.pressure_msl) + ' hPa' : '—'],
+      ['Nuages', cur.cloud_cover != null ? cur.cloud_cover + ' %' : '—'],
+      ['Précip. 24 h', (state.meteo.daily?.precipitation_sum?.[0] ?? 0) + ' mm'],
+    ].map(([k, v]) => `<div><span>${k}</span><strong>${v}</strong></div>`).join('');
   }
-  // Disque sombre
-  const darkGrad = ctx.createRadialGradient(cx - r * .3, cy - r * .3, r * .1, cx, cy, r);
-  darkGrad.addColorStop(0, '#2a3648'); darkGrad.addColorStop(1, '#161f2c');
-  ctx.fillStyle = darkGrad;
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-  // Partie éclairée
-  const k = ph.illum, cosI = 1 - 2 * k;
-  const waxing = ph.waxing;
-  const rx = Math.abs(cosI) * r;
-  const lightGrad = ctx.createRadialGradient(cx + (waxing ? -r * .25 : r * .25), cy - r * .25, r * .1, cx, cy, r * 1.25);
-  lightGrad.addColorStop(0, '#fbf7ea'); lightGrad.addColorStop(.55, '#ddd8c8'); lightGrad.addColorStop(1, '#b9b4a4');
-  ctx.fillStyle = lightGrad;
-  ctx.save();
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
-  // Moitié de base du côté éclairé
-  ctx.beginPath();
-  if (waxing) ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2); else ctx.arc(cx, cy, r, Math.PI / 2, Math.PI * 1.5);
-  ctx.fill();
-  // Ellipse terminateur
-  ctx.beginPath();
-  if (k < 0.5) {
-    // croissant : retirer une demi-ellipse du côté éclairé
-    ctx.fillStyle = darkGrad;
-    if (waxing) ctx.ellipse(cx, cy, rx, r, 0, -Math.PI / 2, Math.PI / 2);
-    else ctx.ellipse(cx, cy, rx, r, 0, Math.PI / 2, Math.PI * 1.5);
-    ctx.fill();
-  } else {
-    // gibbeuse : ajouter une demi-ellipse du côté opposé
-    ctx.fillStyle = lightGrad;
-    if (waxing) ctx.ellipse(cx, cy, rx, r, 0, Math.PI / 2, Math.PI * 1.5);
-    else ctx.ellipse(cx, cy, rx, r, 0, -Math.PI / 2, Math.PI / 2);
-    ctx.fill();
-  }
-  // "Mers" lunaires (subtil)
-  ctx.fillStyle = 'rgba(90,95,110,.35)';
-  const maria = [[-0.32, -0.15, .16], [0.05, 0.1, .12], [-0.1, 0.38, .09], [0.28, -0.35, .07]];
-  for (const [mx, my, mr] of maria) { ctx.beginPath(); ctx.ellipse(cx + mx * r, cy + my * r, mr * r * 1.4, mr * r, 0.4, 0, Math.PI * 2); ctx.fill(); }
-  ctx.restore();
-  // Limb
-  ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 1.2;
-  ctx.beginPath(); ctx.arc(cx, cy, r - 0.6, 0, Math.PI * 2); ctx.stroke();
 }
-
-function renderMoonCard(date, dayData) {
-  drawMoonOn($('#moonCanvas'), date, true);
-  const ph = Astro.phaseInfo(date);
-  $('#moonPhaseName').textContent = ph.name;
-  $('#moonWaxChip').textContent = ph.waxing ? 'Croissante ↗' : 'Décroissante ↘';
-  $('#moonIllum').textContent = Math.round(ph.illum * 100);
-  $('#moonAge').textContent = `${ph.age.toFixed(1)} j`;
-  $('#moonElong').textContent = `${Math.round(ph.elong)}°`;
-  const md = Astro.moonDay(date, CONFIG.lat, CONFIG.lon);
-  const rise = md.events.find(e => e.dir === 'rise');
-  const set = [...md.events].reverse().find(e => e.dir === 'set');
-  $('#moonRise').textContent = rise ? fmtTime(rise.time) : '—';
-  $('#moonSet').textContent = set ? fmtTime(set.time) : '—';
-  $('#moonTransit').textContent = fmtTime(md.maxAlt);
-  const coef = Math.round(45 + 50 * Math.pow(Math.abs(Math.cos(ph.elong * Math.PI / 180)), 1.3));
-  $('#tideCoef').textContent = `≈ ${coef}`;
-  const next = Astro.nextSyzygy(date);
-  $('#moonNext').innerHTML = `Prochain : <strong>${next.label}</strong> dans <strong>${Math.max(0, Math.round(next.days * 10) / 10)} j</strong>${next.time ? ` · ${next.time.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', timeZone: CONFIG.tz })} à ${fmtTime(next.time)}` : ''}`;
-}
-
-/* ─────────── Rendu : météo ─────────── */
-function renderMeteo(dm) {
-  const m = state.meteo, cur = m?.current;
-  const today = dm[dayKey(new Date())];
-  const isDay = cur?.is_day !== 0;
-  $('#wxDesc').textContent = cur ? wmoDesc(cur.weather_code) : 'Données indisponibles';
-  $('#wxIcon').innerHTML = `<use href="#${cur ? wmoIcon(cur.weather_code, isDay) : 'i-cloud'}"/>`;
-  $('#wxTemp').textContent = cur ? toTemp(cur.temperature_2m) : '–';
-  $('#wxUnit').textContent = tempUnit();
-  $('#wxFeel').textContent = cur ? `${toTemp(cur.apparent_temperature)}${tempUnit()}` : '–';
-  $('#wxMinMax').textContent = today ? `${toTemp(today.tMin)}° / ${toTemp(today.tMax)}°` : '';
-  $('#wxWind').textContent = cur ? fmtWind(cur.wind_speed_10m) : '–';
-  $('#wxWindDir').textContent = cur ? degToCompass(cur.wind_direction_10m) : '';
-  $('#windArrow').textContent = '↑';
-  $('#windArrow').style.transform = cur ? `rotate(${(cur.wind_direction_10m + 180) % 360}deg)` : 'none';
-  $('#wxGusts').textContent = cur ? fmtWind(cur.wind_gusts_10m) : '–';
-  $('#wxHumidity').textContent = cur ? `${Math.round(cur.relative_humidity_2m)} %` : '–';
-  $('#wxPressure').textContent = cur ? `${Math.round(cur.pressure_msl)} hPa` : '–';
-  const dP = pressureTrendNow();
-  const trend = dP > 0.8 ? '↗ hausse' : dP < -0.8 ? '↘ baisse' : '→ stable';
-  $('#wxPressureTrend').textContent = trend;
-  $('#wxClouds').textContent = cur ? `${Math.round(cur.cloud_cover)} %` : '–';
-  $('#wxPrecip').textContent = today?.precip != null ? `${today.precip.toFixed(1)} mm` : '–';
-}
-
-/* ─────────── Rendu : mer ─────────── */
-function renderMer() {
-  const cur = state.marine?.current;
-  if (!cur) {
-    $('#waveHeight').textContent = '–';
-    $('#seaNote').textContent = 'Données marines indisponibles (hors ligne ?) — Indice calculé sur lune + saison.';
-    return;
-  }
-  $('#waveHeight').textContent = cur.wave_height.toFixed(2);
-  $('#waveDir').textContent = `${degToCompass(cur.wave_direction)} ${Math.round(cur.wave_direction)}°`;
-  $('#waveArrow').textContent = '↑';
-  $('#waveArrow').style.transform = `rotate(${(cur.wave_direction + 180) % 360}deg)`;
-  $('#wavePeriod').textContent = `${cur.wave_period.toFixed(1)} s`;
-  $('#swellHeight').textContent = `${cur.swell_wave_height.toFixed(2)} m`;
-  $('#waveBar').style.left = `${clamp(cur.wave_height / 1.5, 0, 1) * 100}%`;
-  const sst = cur.sea_surface_temperature;
-  $('#sstValue').textContent = sst.toFixed(1);
-  const spW = SP().water, [w0, w1] = spW;
-  const verdict = sst < w0 ? 'Eau froide' : sst <= w1 ? `Optimum ${SP().name}` : 'Un peu chaude';
-  $('#sstVerdict').textContent = verdict;
-  $('#sstVerdict').className = 'chip ' + (sst < w0 || sst > w1 + 0.5 ? 'chip-ghost' : 'chip-sea');
-  const note = cur.wave_height < 0.3 ? 'Mer belle à légère — conditions idéales pour la turlutte comme pour le lamparo.'
-    : cur.wave_height < 0.6 ? 'Petite agitation — agréable en dérive, lamparo déconseillé si le vent forcit.'
-    : cur.wave_height < 1.0 ? 'Mer agitée — sorties en barque sportives ; privilégiez la jetée sous le vent.'
-    : 'Mer formée — restez à quai. La sécurité prime sur la pêche.';
-  $('#seaNote').textContent = note;
-}
-
-/* ─────────── Rendu : solunaire ─────────── */
-function renderSolunaire(date, periods, rating) {
-  $('#solRating').textContent = `Solunaire ${rating}/100`;
-  const items = periods.map(p => {
-    const major = p.type === 'major';
-    const tag = p.nightMin > 0 ? `<span class="sol-tag sol-tag-night">Nuit · ${p.nightMin} min</span>` : `<span class="sol-tag sol-tag-day">Jour</span>`;
-    return `<li class="sol-item ${major ? 'sol-item-major' : ''}">
-      <span class="sol-badge ${major ? 'sol-badge-major' : 'sol-badge-minor'}">${major ? 'MAJEURE' : 'MINEURE'}</span>
-      <span class="sol-time">${fmtTime(p.start)} – ${fmtTime(p.end)}</span>
-      ${tag}</li>`;
-  });
-  $('#solList').innerHTML = items.join('') || '<li class="sol-item is-skeleton">Aucune période</li>';
-}
-
-/* ─────────── Rendu : recommandations ─────────── */
-function renderReco(date, score, dm) {
-  const sp = SP();
-  const ph = Astro.phaseInfo(date);
-  const today = dm[dayKey(date)];
-  const cur = state.meteo?.current;
-  const wave = state.marine?.current?.wave_height;
-  const recos = [];
+function renderReco(score) {
+  const now = new Date();
+  const ph = score.phase;
+  const cur = state.meteo?.current, m = state.marine?.current;
+  const out = [];
   const bw = bestWindowFor(score.periods);
-  if (bw && bw.night > 0) {
-    recos.push({ cls: 'reco-gold', icon: sp.icon, html: `<strong>Sortez ${bw.type === 'major' ? 'ce soir' : 'pour la mineure'} :</strong> fenêtre ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'}, ${bw.night} min de nuit).` });
-  } else {
-    recos.push({ cls: '', icon: 'i-clock', html: `<strong>Pas de période majeure dans la nuit</strong> — tentez l'aube ou reportez-vous sur les périodes du calendrier.` });
-  }
-  // Lune
+  if (bw) out.push({ cls: 'reco-gold', icon: 'i-clock', html: `<strong>Fenêtre à retenir :</strong> ${bw.start} → ${bw.end} (${bw.night} min de nuit effective).` });
+  else out.push({ cls: '', icon: 'i-clock', html: '<strong>Pas de majeure nocturne</strong> — tentez l’aube ou reportez-vous au calendrier.' });
   const cosAbs = Math.abs(Math.cos(ph.elong * Math.PI / 180));
-  if (cosAbs > 0.85) recos.push({ cls: 'reco-gold', icon: 'i-moon', html: `<strong>${ph.name}</strong> — forte attraction solunaire (coefficient max). ${sp.plural.charAt(0).toUpperCase() + sp.plural.slice(1)} chassent activement.` });
-  else if (cosAbs > 0.5) recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (${Math.round(ph.illum * 100)} % éclairée) — activité intermédiaire.` });
-  else recos.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (quadrature) — activité réduite ; misez sur les heures de culmination.` });
-  // Météo / mer
-  if (cur && wmoStorm(cur.weather_code)) recos.push({ cls: 'reco-warn', icon: 'i-alert', html: `<strong>Orage en cours</strong> — n'allez pas en mer. La pêche attendra.` });
-  else if (today && today.code >= 95) recos.push({ cls: 'reco-warn', icon: 'i-alert', html: `<strong>Orages annoncés aujourd'hui</strong> — surveillez le bulletin ONM avant de partir.` });
-  else if (wave != null && wave >= 0.6) recos.push({ cls: 'reco-warn', icon: 'i-waves', html: `<strong>Houle ${wave.toFixed(2)} m</strong> — préférez la digue abritée ou reportez la sortie en barque.` });
-  else if (cur && cur.wind_speed_10m > 25) recos.push({ cls: 'reco-warn', icon: 'i-wind', html: `<strong>Vent ${fmtWind(cur.wind_speed_10m)}</strong> — dérive difficile, lin­gue lourde conseillée.` });
-  // Saison / eau — d'après le barème de saison de l'espèce
-  const m = date.getMonth();
-  if (sp.season[m] >= 16) recos.push({ cls: '', icon: 'i-check', html: `<strong>Bonne période pour ${sp.nom}</strong> — ${sp.bestTxt}` });
-  else if (sp.season[m] <= 10) recos.push({ cls: '', icon: 'i-info', html: `<strong>Creux de saison</strong> — ${sp.summerTxt}` });
-  // Lumière
-  if (ph.illum < 0.35) recos.push({ cls: '', icon: 'i-sun', html: `<strong>Nuit noire</strong> — ${sp.darkTxt}` });
-  $('#recoList').innerHTML = recos.slice(0, 5).map(r => `<li class="reco-item ${r.cls}"><svg class="ic"><use href="#${r.icon}"/></svg><span>${r.html}</span></li>`).join('');
+  if (cosAbs > 0.85) out.push({ cls: 'reco-gold', icon: 'i-moon', html: `<strong>${ph.name}</strong> — forte attraction solunaire ; coefficient maximal, les calamars chassent activement.` });
+  else if (cosAbs > 0.5) out.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (${Math.round(ph.illum * 100)} % éclairée) — activité intermédiaire.` });
+  else out.push({ cls: '', icon: 'i-moon', html: `<strong>${ph.name}</strong> (quadrature) — activité réduite ; misez sur les heures de culmination.` });
+  if (cur && cur.weather_code >= 95) out.push({ cls: 'reco-warn', icon: 'i-alert', html: '<strong>Orage en cours</strong> — n’allez pas en mer. La pêche attendra.' });
+  else if (m?.wave_height != null && m.wave_height >= 0.6) out.push({ cls: 'reco-warn', icon: 'i-waves', html: `<strong>Houle ${m.wave_height.toFixed(2)} m</strong> — préférez la digue abritée ou reportez la sortie en barque.` });
+  else if (cur?.wind_speed_10m > 30) out.push({ cls: 'reco-warn', icon: 'i-wind', html: `<strong>Vent ${fmtWind(cur.wind_speed_10m)}</strong> — dérive difficile (Baléares 2012 : vent fort = CPUE faibles).` });
+  if (score.parts.meteo >= 18) out.push({ cls: 'reco-gold', icon: 'i-thermo', html: '<strong>Mer favorable</strong> — houle faible et eau fraîche : combo associé aux meilleures prises (étude Baléares).' });
+  if (ph.illum < 0.35) out.push({ cls: '', icon: 'i-sun', html: '<strong>Nuit noire</strong> — lamparo décisif (nouvelle lune) ; LED bleue > blanche (Indonésie 2021).' });
+  $('#recoList').innerHTML = out.slice(0, 5).map(r => `<li class="reco-item ${r.cls}"><svg class="ic"><use href="#${r.icon}"/></svg><span>${r.html}</span></li>`).join('');
 }
-
-/* ─────────── Rendu : alerte orage ─────────── */
-function renderStormAlert(dm) {
+function renderStorm(dm) {
   const codes = [];
   if (state.meteo?.current) codes.push(state.meteo.current.weather_code);
-  for (const k of Object.keys(dm)) codes.push(dm[k].code);
-  const storm = codes.find(c => c >= 95);
+  Object.values(dm).forEach(d => codes.push(d.code));
   const gust = state.meteo?.current?.wind_gusts_10m;
+  const storm = codes.some(c => c >= 95);
   const strip = $('#stormAlert');
   if (storm) {
     strip.classList.remove('is-hidden');
-    $('#stormAlertText').textContent = 'Alerte orage — mer dangereuse. Sortie en mer déconseillée ; restez à l’abri et sécurisez le matériel.';
+    $('#stormAlertText').textContent = 'Alerte orage — mer dangereuse. Restez à quai et sécurisez le matériel.';
   } else if (gust != null && gust > 60) {
     strip.classList.remove('is-hidden');
     $('#stormAlertText').textContent = `Rafales ${fmtWind(gust)} — navigation délicate. Évitez la digue exposée nord-ouest.`;
-  } else {
-    strip.classList.add('is-hidden');
-  }
+  } else strip.classList.add('is-hidden');
 }
 
-/* ─────────── Rendu : courbe d'activité 24 h ─────────── */
-function renderActivityChart(date, periods, today) {
-  const canvas = $('#activityChart');
-  const wrap = canvas.parentElement;
-  const dpr = window.devicePixelRatio || 1;
-  const W = wrap.clientWidth, H = wrap.clientHeight;
-  canvas.width = W * dpr; canvas.height = H * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  ctx.clearRect(0, 0, W, H);
-
-  const sr = today?.sunrise, ss = today?.sunset;
-  const srMin = sr ? nearestMinutes(sr) : 460, ssMin = ss ? nearestMinutes(ss) : 1080;
-  const xOf = min => (min / 1440) * (W - 44) + 34;
-  const yOf = v => H - 30 - v * (H - 62);
-
-  // Zones de nuit
-  ctx.fillStyle = 'rgba(110,130,255,.09)';
-  ctx.fillRect(xOf(0), 8, xOf(srMin) - xOf(0), H - 38);
-  ctx.fillRect(xOf(ssMin), 8, xOf(1440) - xOf(ssMin), H - 38);
-
-  // Grille horizontale
-  ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
-  ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.font = '9px JetBrains Mono, monospace';
-  for (const g of [0.25, 0.5, 0.75]) {
-    ctx.beginPath(); ctx.moveTo(xOf(0), yOf(g)); ctx.lineTo(xOf(1440), yOf(g)); ctx.stroke();
-    ctx.fillText(String(Math.round(g * 100)), 4, yOf(g) + 3);
-  }
-  // Axe X
-  ctx.fillStyle = 'rgba(255,255,255,.4)';
-  for (let h = 0; h <= 24; h += 4) ctx.fillText(`${pad2(h)}h`, xOf(h * 60) - 8, H - 12);
-
-  // Lever / coucher (pointillés)
-  ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4;
-  ctx.strokeStyle = 'rgba(255,217,112,.55)';
-  ctx.beginPath(); ctx.moveTo(xOf(srMin), 8); ctx.lineTo(xOf(srMin), H - 30); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(xOf(ssMin), 8); ctx.lineTo(xOf(ssMin), H - 30); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(255,217,112,.85)'; ctx.font = '8px JetBrains Mono, monospace';
-  if (sr) ctx.fillText(`↑ ${fmtTime(sr)}`, xOf(srMin) + 4, 18);
-  if (ss) ctx.fillText(`↓ ${fmtTime(ss)}`, xOf(ssMin) + 4, 18);
-
-  // Courbe d'activité (facteur nuit plus fort)
-  const nightFactor = min => (min < srMin || min >= ssMin) ? 1 : 0.42;
-  const pts = [];
-  for (let min = 0; min <= 1440; min += 6) {
-    let a = 0.14;
-    for (const p of periods) {
-      const cMin = nearestMinutes(p.center);
-      const sigma = p.type === 'major' ? 58 : 46;
-      const amp = p.type === 'major' ? 1.0 : 0.55;
-      a += amp * Math.exp(-((min - cMin) ** 2) / (2 * sigma * sigma));
-    }
-    pts.push({ min, v: clamp(a * nightFactor(min), 0, 1.15) / 1.15 });
-  }
-  // Remplissage
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  const seaRgb = themeColors().seaRgb;
-  grad.addColorStop(0, `rgba(${seaRgb},.45)`); grad.addColorStop(1, `rgba(${seaRgb},.02)`);
-  ctx.beginPath(); ctx.moveTo(xOf(0), yOf(0));
-  for (const p of pts) ctx.lineTo(xOf(p.min), yOf(p.v));
-  ctx.lineTo(xOf(1440), yOf(0)); ctx.closePath();
-  ctx.fillStyle = grad; ctx.fill();
-  // Ligne
-  ctx.beginPath();
-  pts.forEach((p, i) => i ? ctx.lineTo(xOf(p.min), yOf(p.v)) : ctx.moveTo(xOf(p.min), yOf(p.v)));
-  ctx.strokeStyle = themeColors().sea2; ctx.lineWidth = 2.2;
-  ctx.shadowColor = `rgba(${seaRgb},.6)`; ctx.shadowBlur = 8; ctx.stroke(); ctx.shadowBlur = 0;
-
-  // Marqueur "maintenant"
-  const now = new Date();
-  if (dayKey(now) === dayKey(date)) {
-    const m = nearestMinutes(now);
-    const nowCol = themeColors().gold;
-    ctx.setLineDash([5, 4]); ctx.strokeStyle = nowCol; ctx.lineWidth = 1.6;
-    ctx.beginPath(); ctx.moveTo(xOf(m), 8); ctx.lineTo(xOf(m), H - 30); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = nowCol; ctx.font = 'bold 8px JetBrains Mono, monospace';
-    ctx.fillText('MAINTENANT', clamp(xOf(m) + 4, 4, W - 70), H - 34);
-  }
-  // Pied : meilleure fenêtre
-  const bw = bestWindowFor(periods);
-  $('#chartFoot').innerHTML = bw
-    ? `<span>Fenêtre idéale : <b>${bw.start} → ${bw.end}</b></span><span>· type : <b>${bw.type === 'major' ? 'MAJEURE' : 'MINEURE'}</b></span><span>· obscurité : <b>${bw.night} min</b></span>`
-    : '<span>Aucune fenêtre de nuit — voir le calendrier pour les prochains jours.</span>';
-}
-
-/* ─────────── Rendu : grille 14 jours ─────────── */
-const bandOf = GCLEngine.bandOf;
-const scoreColor = GCLEngine.scoreColor;
-
+/* ─────────── Prévisions / fiche du jour ─────────── */
 function renderForecast(dm) {
-  const grid = $('#forecastGrid');
-  const today = new Date();
-  const cards = [];
-  for (let i = 0; i < 14; i++) {
-    const d = new Date(today); d.setDate(d.getDate() + i);
-    const sc = scoreFor(d, dm);
-    const day = dm[dayKey(d)];
-    const bw = bestWindowFor(sc.periods);
-    cards.push({ d, sc, day, bw, wave: day?.waveMax ?? null });
-  }
-  grid.innerHTML = cards.map(({ d, sc, day, bw, wave }, i) => {
-    const todayTag = i === 0 ? '<span class="f-tag">AUJ.</span>' : '';
-    const tMax = day ? `${toTemp(day.tMax)}°` : '–';
-    const tMin = day ? `${toTemp(day.tMin)}°` : '–';
-    const waveTxt = wave != null ? `vagues ${wave.toFixed(2)} m` : 'vagues –';
-    const windTxt = day?.windMax != null ? fmtWind(day.windMax) : '';
-    const gustoTxt = day?.gustMax != null ? `raf. ${fmtWind(day.gustMax)}` : '';
-    const win = bw ? `<span>${bw.start} → ${bw.end}</span>` : '<em>Pas de fenêtre de nuit</em>';
-    return `<button class="f-card ${i === 0 ? 'is-today' : ''} ${state.selectedDayISO === dayKey(d) ? 'is-selected' : ''}" data-day="${dayKey(d)}">
-      ${todayTag}
-      <div class="f-day"><b>${d.toLocaleDateString('fr-FR', { weekday: 'short' })}</b><span>${d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span></div>
-      <div class="f-moon-row"><canvas width="88" height="88" data-moon="${d.toISOString()}"></canvas>
-        <div class="f-moon-meta"><small>${sc.phase.name}</small><span>${Math.round(sc.phase.illum * 100)}% éclairée</span></div>
-      </div>
-      <div class="f-score"><b style="color:${scoreColor(sc.total)}">${sc.total}</b><small>/100 · ${ratingOf(sc.total).label}</small></div>
-      <div class="f-bar"><i style="width:${sc.total}%"></i></div>
-      <div class="f-rows"><div><svg class="ic"><use href="#i-thermo"/></svg>${tMin} / ${tMax}</div><div><svg class="ic"><use href="#i-waves"/></svg>${waveTxt}</div><div><svg class="ic"><use href="#i-wind"/></svg>${windTxt} ${gustoTxt}</div></div>
-      <div class="f-window">${bw ? 'Fenêtre : ' : ''}${win}</div>
+  const keys = Object.keys(dm).slice(0, 16);
+  const todayKey = dayKey(new Date());
+  $('#forecastStrip').innerHTML = keys.map(k => {
+    const d = fromKey(k), sc = scoreFor(d, dm), r = GCLEngine.ratingOf(sc.total);
+    const info = wmoInfo(dm[k].code);
+    const moon = Astro.phaseInfo(d);
+    return `<button class="f-card ${k === todayKey ? 'is-today' : ''} ${k === state.selectedDayISO ? 'is-selected' : ''}" data-day="${k}">
+      <span class="f-day">${k === todayKey ? 'AUJ.' : d.toLocaleDateString('fr-FR', { weekday: 'short', timeZone: CONFIG.tz }).replace('.', '').toUpperCase()}</span>
+      <span class="f-score">${sc.total}</span><span class="f-tag">${r.label}</span>
+      <div class="f-bar"><i style="width:${sc.total}%;background:var(--band-${r.level})"></i></div>
+      <div class="f-moon-row"><svg class="ic"><use href="#${info[1]}"/></svg><span>${Math.round(moon.illum * 100)} %</span></div>
     </button>`;
   }).join('');
-  $$('canvas[data-moon]', grid).forEach(cv => drawMoonOn(cv, new Date(cv.dataset.moon), false));
-  $$('.f-card', grid).forEach(card => card.addEventListener('click', () => {
-    state.selectedDayISO = card.dataset.day;
-    renderForecast(dm);
-    renderDayDetail(dm);
+  $$('.f-card[data-day]').forEach(b => b.addEventListener('click', () => {
+    state.selectedDayISO = b.dataset.day; renderForecast(dm); renderDayDetail(dm);
   }));
 }
-
 function renderDayDetail(dm) {
+  const key = state.selectedDayISO || dayKey(new Date());
+  const d = fromKey(key), day = dm[key];
   const box = $('#dayDetail');
-  const iso = state.selectedDayISO;
-  if (!iso) { box.classList.add('is-hidden'); return; }
-  const d = new Date(iso + 'T12:00:00+01:00');
-  const sc = scoreFor(d, dm);
-  const day = dm[iso];
-  const rating = ratingOf(sc.total);
-  const max = { moon: 35, sol: 25, season: 20, meteo: 12, pres: 8 };
-  const labels = { moon: 'Lune', sol: 'Périodes solunaires', season: 'Saison', meteo: 'Mer & vent', pres: 'Pression' };
-  const rows = Object.keys(max).map(k => `
-    <div class="factor" style="grid-template-columns:130px 1fr 44px"><small>${labels[k]}</small>
-      <div class="factor-track"><div class="factor-fill" style="width:${(sc.parts[k] / max[k]) * 100}%"></div></div>
-      <span class="factor-val">${sc.parts[k]}/${max[k]}</span></div>`).join('');
-  const periodsHtml = sc.periods.map(p => `
-    <li class="sol-item ${p.type === 'major' ? 'sol-item-major' : ''}">
-      <span class="sol-badge ${p.type === 'major' ? 'sol-badge-major' : 'sol-badge-minor'}">${p.type === 'major' ? 'MAJEURE' : 'MINEURE'}</span>
-      <span class="sol-time">${fmtTime(p.start)} – ${fmtTime(p.end)}</span>
-      ${p.nightMin > 0 ? `<span class="sol-tag sol-tag-night">Nuit · ${p.nightMin} min</span>` : '<span class="sol-tag sol-tag-day">Jour</span>'}
-    </li>`).join('');
-  const bw = bestWindowFor(sc.periods);
-  box.classList.remove('is-hidden');
-  box.innerHTML = `
-    <div class="day-detail-head">
-      <div>
-        <span class="card-kicker">Fiche journée</span>
-        <h3>${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: CONFIG.tz })}</h3>
-        <p class="view-sub" style="margin-top:4px">${sc.phase.name} · ${Math.round(sc.phase.illum * 100)} % éclairée · âge ${sc.phase.age.toFixed(1)} j</p>
-      </div>
-      <div class="rating-pill" data-level="${rating.level}" style="font-size:20px;padding:12px 20px">${sc.total}<small style="font-size:12px;opacity:.7">/100</small> · ${rating.label}</div>
+  if (!day) { box.innerHTML = '<h3>—</h3><p class="note">Données indisponibles.</p>'; return; }
+  const sc = scoreFor(d, dm), bw = bestWindowFor(sc.periods);
+  box.innerHTML = `<h3>${esc(fmtDateLong(d))}</h3>
+    <div class="dd-block">
+      <span>Indice <strong>${sc.total}/100</strong> — ${GCLEngine.ratingOf(sc.total).label}</span>
+      <span>Météo : ${wmoInfo(day.code)[0]} · ${fmtTemp(day.tMax)} / ${fmtTemp(day.tMin)} · vent ${fmtWind(day.windMax)}</span>
+      <span>Lune : ${sc.phase.name} · ${Math.round(sc.phase.illum * 100)} % éclairée</span>
+      ${bw ? `<span>Fenêtre : ${bw.start} → ${bw.end} (${bw.night} min de nuit)</span>` : '<span>Pas de fenêtre majeure nocturne.</span>'}
     </div>
-    <div class="day-detail-grid">
-      <div class="dd-block"><h4>Décomposition</h4><div class="factors">${rows}</div></div>
-      <div class="dd-block"><h4>Périodes de la journée</h4><ol class="sol-list" style="margin-top:2px">${periodsHtml}</ol></div>
-      <div class="dd-block"><h4>Conditions prévues</h4>
-        <ul class="f-rows" style="font-size:11px;gap:7px;list-style:none;padding:0">
-          <li><svg class="ic"><use href="#i-thermo"/></svg> Min / max : <strong style="color:#fff">${day ? `${toTemp(day.tMin)} / ${toTemp(day.tMax)} ${tempUnit()}` : '—'}</strong></li>
-          <li><svg class="ic"><use href="#i-waves"/></svg> Vagues max : <strong style="color:#fff">${day?.waveMax != null ? day.waveMax.toFixed(2) + ' m' : '—'}</strong></li>
-          <li><svg class="ic"><use href="#i-wind"/></svg> Vent max : <strong style="color:#fff">${day?.windMax != null ? fmtWind(day.windMax) : '—'}</strong> · raf. ${day?.gustMax != null ? fmtWind(day.gustMax) : '—'}</li>
-          <li><svg class="ic"><use href="#i-rain"/></svg> Précipitations : <strong style="color:#fff">${day?.precip != null ? day.precip.toFixed(1) + ' mm' : '—'}</strong></li>
-          <li><svg class="ic"><use href="#i-sunrise"/></svg> Lever ${day?.sunrise ? fmtTime(day.sunrise) : '—'} · Coucher ${day?.sunset ? fmtTime(day.sunset) : '—'}</li>
-        </ul>
-      </div>
-    </div>
-    <div class="dd-actions">
-      <button class="btn btn-gold" id="btnCopyFiche"><svg class="ic"><use href="#i-copy"/></svg> Copier la fiche texte</button>
-      <button class="btn btn-ghost" id="btnCloseDetail"><svg class="ic"><use href="#i-x"/></svg> Fermer</button>
-    </div>`;
-  $('#btnCloseDetail').addEventListener('click', () => { state.selectedDayISO = null; box.classList.add('is-hidden'); renderForecast(dm); });
-  $('#btnCopyFiche').addEventListener('click', async () => {
-    const txt = [
-      `GHAZAOUET CALAMAR LIVE — ${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: CONFIG.tz })}`,
-      `Indice Calamar : ${sc.total}/100 (${rating.label})`,
-      `Lune : ${sc.phase.name}, ${Math.round(sc.phase.illum * 100)} % éclairée`,
-      bw ? `Fenêtre de nuit : ${bw.start} → ${bw.end} (${bw.type === 'major' ? 'majeure' : 'mineure'})` : 'Pas de fenêtre de nuit',
-      day ? `Météo : ${toTemp(day.tMin)}/${toTemp(day.tMax)} °C · pluie ${day.precip?.toFixed(1) ?? 0} mm · vent max ${day.windMax ?? '?'} km/h` : '',
-      'Port de Ghazaouet · 35.096°N 1.860°W'
-    ].join('\n');
-    try {
-      await navigator.clipboard.writeText(txt);
-      const b = $('#btnCopyFiche');
-      b.innerHTML = '<svg class="ic"><use href="#i-check"/></svg> Copié !';
-      setTimeout(() => { b.innerHTML = '<svg class="ic"><use href="#i-copy"/></svg> Copier la fiche texte'; }, 1800);
-    } catch { /* presse-papier indisponible */ }
-  });
+    <div class="dd-actions"><button class="btn-ghost" id="ddToday">Revenir à aujourd’hui</button></div>`;
+  const btn = $('#ddToday');
+  if (btn) btn.addEventListener('click', () => { state.selectedDayISO = dayKey(new Date()); renderDayDetail(dm); });
 }
 
-/* ─────────── Rendu : calendrier du mois ─────────── */
-function syzygiesOfMonth(year, month) {
-  const out = [];
-  const days = new Date(year, month + 1, 0).getDate();
-  let prevIllum = null, prevAge = null;
-  for (let d = 1; d <= days; d++) {
-    const date = new Date(year, month, d, 12, 0, 0);
-    const ph = Astro.phaseInfo(date);
-    if (ph.illum > 0.985 && prevIllum !== null && prevIllum <= ph.illum) out.push({ type: 'Pleine lune', date });
-    if (ph.age < 1.1 && prevAge !== null && prevAge > ph.age) out.push({ type: 'Nouvelle lune', date });
-    prevIllum = ph.illum; prevAge = ph.age;
-  }
-  return out;
+/* ─────────── Lune / calendrier ─────────── */
+function renderMoon(now, score) {
+  const ph = score.phase;
+  drawMoon(now);
+  $('#moonPhaseName').textContent = ph.name;
+  $('#moonDate').textContent = esc(fmtDateLong(now));
+  $('#moonIllum').textContent = Math.round(ph.illum * 100);
+  $('#moonAge').textContent = ph.age.toFixed(1) + ' j';
+  $('#moonElong').textContent = Math.round(ph.elong) + '°';
+  const nx = Astro.nextSyzygy(now);
+  $('#moonNext').textContent = `Prochaine ${nx.label.toLowerCase()} dans ${nx.days.toFixed(1)} j.`;
+  const md = Astro.moonDay(now, CONFIG.lat, CONFIG.lon);
+  const sd = Astro.sunDay(now, CONFIG.lat, CONFIG.lon);
+  const rise = md.events.find(e => e.dir === 'rise'), set = md.events.find(e => e.dir === 'set');
+  const transit = md.maxAlt;
+  $('#moonRise').textContent = fmtTime(rise?.time);
+  $('#moonSet').textContent = fmtTime(set?.time);
+  $('#moonTransit').textContent = fmtTime(transit);
+  $('#solunarRating').textContent = Astro.solunarRating(now) + ' %';
+  $('#seasonBanner').textContent = SEASON_INFO[now.getMonth()] + ' Calcul : lune 40 · solunaire 25 · mer 25 · pression 10.';
 }
-
 function renderCalendar(dm) {
   const cursor = state.calCursor;
   const year = cursor.getFullYear(), month = cursor.getMonth();
-  $('#calMonthTitle').textContent = MONTH_FR[month].charAt(0).toUpperCase() + MONTH_FR[month].slice(1) + ' ' + year;
+  $('#calMonthTitle').textContent = MONTH_FR[month] + ' ' + year;
   const grid = $('#calGrid');
-  const offset = (new Date(year, month, 1).getDay() + 6) % 7; // lundi = 0
+  const offset = (new Date(year, month, 1).getDay() + 6) % 7;
   const daysIn = new Date(year, month + 1, 0).getDate();
-  const cells = [];
-  const todayKey = dayKey(new Date());
+  const today = dayKey(new Date());
+  let html = '';
+  for (let i = 0; i < offset; i++) html += '<div class="cal-cell is-out"></div>';
   const scores = [];
-  for (let i = 0; i < 42; i++) {
-    const dayNum = i - offset + 1;
-    if (dayNum < 1 || dayNum > daysIn) { cells.push('<div class="cal-cell is-out" aria-hidden="true"></div>'); continue; }
-    const d = new Date(year, month, dayNum, 12, 0, 0);
-    const iso = dayKey(d);
-    const inForecast = dm[iso] !== undefined;
+  for (let day = 1; day <= daysIn; day++) {
+    const d = new Date(year, month, day), k = dayKey(d);
     const sc = scoreFor(d, dm);
-    scores.push({ d, sc, inForecast });
-    const band = bandOf(sc.total);
-    cells.push(`<div class="cal-cell ${iso === todayKey ? 'is-today' : ''}" data-band="${band}" role="button" tabindex="0" data-day="${iso}">
-      <div class="cal-daynum"><span>${dayNum}</span>${inForecast ? '' : '<em>*</em>'}</div>
-      <canvas width="68" height="68" data-moon="${d.toISOString()}"></canvas>
-      <div class="cal-score" style="color:${scoreColor(sc.total)}">${sc.total}<small>${ratingOf(sc.total).label}</small></div>
-    </div>`);
+    if (dm[k]) scores.push({ day, total: sc.total });
+    html += `<div class="cal-cell ${k === today ? 'is-today' : ''}" data-level="${GCLEngine.bandOf(sc.total)}" title="${k} : ${sc.total}/100">
+      <span class="cal-daynum">${day}</span><span class="cal-score">${sc.total}</span></div>`;
   }
-  grid.innerHTML = cells.join('');
-  $$('canvas[data-moon]', grid).forEach(cv => drawMoonOn(cv, new Date(cv.dataset.moon), false));
-  $$('.cal-cell[data-day]', grid).forEach(cell => {
-    const open = () => {
-      state.selectedDayISO = cell.dataset.day;
-      activateView('previsions');
-      renderForecast(dm);
-      renderDayDetail(dm);
-      $('#dayDetail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    };
-    cell.addEventListener('click', open);
-    cell.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
-  });
-  const top = [...scores].sort((a, b) => b.sc.total - a.sc.total).slice(0, 5);
-  $('#topDaysList').innerHTML = top.map(({ d, sc, inForecast }, i) => `<li><span class="rank">${i + 1}.</span><span>${d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })}${inForecast ? '' : ' *'}</span><b>${sc.total}</b></li>`).join('');
-  const syz = syzygiesOfMonth(year, month);
-  $('#syzygyList').innerHTML = syz.length
-    ? syz.map(s => `<li><svg class="ic"><use href="#i-moon"/></svg><span><strong>${s.type}</strong><small>${s.date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</small></span></li>`).join('')
-    : '<li>Aucune syzygie détectée ce mois-ci.</li>';
+  grid.innerHTML = html;
+  const top = scores.sort((a, b) => b.total - a.total).slice(0, 5);
+  $('#topDaysList').innerHTML = top.length ? top.map(t => `<li><span>${t.day} ${MONTH_SHORT[month]}</span><b>${t.total}</b></li>`).join('') : '<li>—</li>';
+  const sz = [];
+  for (let day = 1; day <= daysIn; day++) {
+    const nx = Astro.nextSyzygy(new Date(year, month, day, 12));
+    if (nx.time && nx.time.getMonth() === month && nx.days <= 16) sz.push({ day, label: nx.label });
+  }
+  $('#syzygyList').innerHTML = sz.length ? sz.slice(0, 4).map(s => `<li><span>${s.day} ${MONTH_SHORT[month]}</span><b>${esc(s.label)}</b></li>`).join('') : '<li>—</li>';
 }
-
-/* ─────────── Rendu : barres saisonnières ─────────── */
 function renderSeasonBars() {
-  const max = Math.max(...GCLEngine.SEASON_20);
-  const topMonths = [9, 10, 0, 1, 11]; // oct, nov, jan, fév, déc
-  $('#seasonBars').innerHTML = SP().season.map((v, i) => {
-    const top = topMonths.includes(i);
-    return `<div class="season-row ${top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span><div class="season-track"><div class="season-fill" style="width:0%" data-w="${(v / max) * 100}"></div></div><b>${Math.round(v / max * 100)}</b></div>`;
-  }).join('');
-  // Largeurs peintes immédiatement (transition CSS si visible) — rAF parfois gelé en onglet caché
-  $$('.season-fill').forEach(el => { el.style.width = el.dataset.w + '%'; });
+  const SEASON = [17, 18.5, 16, 12.5, 9.5, 8, 11, 13, 18, 20, 20, 18.5]; // information seulement
+  const max = 20;
+  const top = Math.max(...SEASON);
+  $('#seasonBars').innerHTML = SEASON.map((v, i) => `
+    <div class="season-row ${v === top ? 'is-top' : ''}"><span>${MONTH_SHORT[i]}</span>
+      <div class="season-track"><div class="season-fill" style="width:${v / max * 100}%"></div></div>
+      <b>${Math.round(v / max * 100)}</b></div>`).join('');
 }
 
-/* ─────────── Rendu : FAQ (par espèce) ─────────── */
+/* ─────────── FAQ / méthode (statiques, textes v3) ─────────── */
+const FAQ = [
+  { q: 'Pourquoi la saison ne compte plus dans l’indice ?', a: 'Parce qu’elle est connue : migration jan–fév, pontes échelonnées, recrutement. Elle sert de contexte (bandeau et calendrier mensuel) mais elle n’est plus convertie en points. L’indice mesure les conditions du moment : lune 40, solunaire 25, mer 25, pression 10.' },
+  { q: 'Sur quoi repose le calcul ?', a: 'Sur trois études publiées sur le calamar : Baléares 2012 (eau fraîche, vent faible, houle faible, basse pression, syzygie), Égée 2011 (turluttes rouges, pleine lune) et Indonésie 2021 (LED bleue, 3e quartier). Les études mesurent le sens et la significativité des effets ; la répartition exacte des 100 points est un choix de conception documenté.' },
+  { q: 'Quelles heures privilégier ?', a: 'Le créneau du coucher du soleil jusqu’à ~3 h après la nuit tombe (fenêtre optimale affichée). Deuxième créneau : 02 h – 04 h. En journée, le calamar redescend. Les majeures solunaires recouvrant la nuit sont mises en avant — avec la réserve d’honnêteté du paragraphe suivant.' },
+  { q: 'Le solunaire est-il scientifique ?', a: 'Non. L’hypothèse de Knight (1926) n’a jamais été validée en général. Elle est conservée ici comme descripteur horaire et dans le score (25 pts) par choix explicite ; l’effet lunaire, lui, est démontré chez le calamar par les études 01–03.' },
+  { q: 'Quelle eau et quelle houle ?', a: 'L’étude des Baléares associe les meilleures captures à une eau fraîche (≤16 °C = 10 pts), une houle < 0,3 m (10 pts) et un vent ≤30 km/h. Au-delà, le score mer décroît (vent >30 km/h : −4 pts).' },
+  { q: 'Faut-il un bateau ?', a: 'Non : la digue et la jetée ouest fonctionnent sous les lampes du port par nuit calme. La barque ouvre le large (30–80 m) et les chasses. Gilet, téléphone chargé, quelqu’un prévenu — jamais seul de nuit.' },
+  { q: 'Quelle réglementation ?', a: 'Pêche récréative encadrée en Algérie : tailles minimales, repos biologique, zones classées. Renseignez-vous auprès de la Direction de la Pêche et de l’Aquaculture de la wilaya de Tlemcen.' },
+];
 function renderFAQ() {
-  const sp = SP();
-  $('#faqList').innerHTML = GUIDE().faq.map((f, i) => `
+  $('#faqList').innerHTML = FAQ.map((f, i) => `
     <div class="faq-item ${i === 0 ? 'is-open' : ''}">
-      <button class="faq-q" aria-expanded="${i === 0}"><span>${f.q}</span><svg class="ic"><use href="#${sp.icon}"/></svg></button>
+      <button class="faq-q" aria-expanded="${i === 0}"><span>${esc(f.q)}</span><svg class="ic"><use href="#i-squid"/></svg></button>
       <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
     </div>`).join('');
   $$('.faq-q').forEach(btn => btn.addEventListener('click', () => {
@@ -1017,250 +604,77 @@ function renderFAQ() {
     btn.setAttribute('aria-expanded', item.classList.contains('is-open'));
   }));
 }
-
-/* ─────────── Rendu : méthode (par espèce) ─────────── */
+const METHOD = [
+  { h: 'Lune — 40 points', p: 'Proximité de la syzygie (nouvelle OU pleine lune) : 40 × (0,30 + 0,70 × |cos élongation|^1,8), plancher à 12 pts. Effet lunaire démontré chez le calamar : Égée 2011 (p<0.01), Indonésie 2021 (p<0.05), Baléares 2012. Nouvelle lune = lamparo ; pleine lune = turlutte sans lampe ; l’indice les traite à égalité.', w: '40 pts' },
+  { h: 'Périodes solunaires — 25 points', p: 'Majeure = min(8, minutes de nuit / 15), mineure = min(2, /30), bonus +5 si une majeure culmine entre 20 h et 02 h ; plafond 25. Hypothèse de Knight (1926) non validée : conservée ici par choix, comme descripteur horaire — pas comme preuve.', w: '25 pts' },
+  { h: 'Mer — 25 points', p: 'Houle ≤10 pts (null 7 · <0,3 m 10 · <0,6 m 8 · <1 m 6 · <1,5 m 3 · ≥1,5 m 0) + eau ≤10 pts (null 6 · <12 °C 4 · ≤16 °C 10 · ≤19 °C 8 · ≤21 °C 6 · >21 °C 2). Vent >30 km/h : −4 pts. Paliers transcrits de Cabanellas-Reboredo 2012 (Baléares).', w: '25 pts' },
+  { h: 'Pression — 10 points', p: 'Baisse nette sur 3 h (< −0,7 hPa) = 10 pts ; hausse nette = 5 ; donnée manquante = 6 ; basse stable ≤1012 hPa = 9 ; neutre ≤1018 = 6 ; haute = 5. La basse pression est associée à de meilleures CPUE dans l’étude des Baléares.', w: '10 pts' },
+];
 function renderMethod() {
-  const sp = SP();
-  const items = [
-    { h: 'Lune — 35 points', p: GUIDE().moonTxt, w: '35 pts' },
-    { h: 'Périodes solunaires — 25 points', p: 'Chaque majeure recouvrant la nuit rapporte jusqu’à 8 pts, chaque mineure jusqu’à 2 ; bonus +5 si une majeure tombe entre 20 h et 02 h. Honnêteté : Knight (1926) est une hypothèse folklorique non validée en général (revues : effet modeste, ~5 % sur trophées) ; elle reste le meilleur descripteur horaire disponible, croisé ici avec la preuve lunaire.', w: '25 pts' },
-    { h: `Saison — 20 points (${sp.name})`, p: GUIDE().saisonTxt, w: '20 pts' },
-    { h: `Mer — 12 points (${sp.name})`, p: GUIDE().meteoTxt, w: '12 pts' },
-    { h: 'Pression — 8 points', p: 'En baisse nette (3 h, Δ<−0,7 hPa) = 8 pts ; basse stable ≤1012 hPa = 7 ; neutre 1012–1018 = 5 ; haute ou en hausse = 4. Les régimes dépressionnaires stimulent la chasse (démontré pour le calamar — Baléares 2012 ; prudentiel pour les autres).', w: '8 pts' },
-  ];
-  $('#methodList').innerHTML = items.map(m => `
+  $('#methodList').innerHTML = METHOD.map(m => `
     <li class="method-item"><div><h4>${m.h}</h4><p>${m.p}</p></div><div class="method-weight">${m.w}<small>poids</small></div></li>`).join('');
 }
 
-/* ─────────── Rendu : Guide espèce (fiche · nuit · techniques · spots · matériel) ─────────── */
-function renderGuide() {
-  const g = GUIDE();
-  const gt = $('#guideTitle'); if (gt) gt.textContent = g.title;
-  const gs = $('#guideSub'); if (gs) gs.innerHTML = g.sub;
-  $('#factStrip').innerHTML = g.facts.map(([k, v]) => `<div class="fact"><small>${k}</small><strong>${v}</strong></div>`).join('');
-  $('#moisNote').innerHTML = g.moisNote;
-  $('#hourSlots').innerHTML = g.slots.map(([t, w, cls, n]) => `<li><span class="hs-time">${t}</span><div class="hs-bar ${cls}"><div style="width:${w}%"></div></div><span class="hs-note">${n}</span></li>`).join('');
-  $('#preuveNote').innerHTML = g.preuveNote;
-  $('#techGrid').innerHTML = g.tech.map(([num, name, desc, pro]) => `<div class="tech"><div class="tech-num">${num}</div><h4>${name}</h4><p>${desc}</p><p class="tech-pro">${pro}</p></div>`).join('');
-  $('#spotList').innerHTML = g.spots.map(([rank, name, detail]) => `<li><div class="spot-rank">${rank}</div><div class="spot-body"><strong>${name}</strong><span>${detail}</span></div></li>`).join('');
-  $('#gearRows').innerHTML = g.gear.map(([el, reco, budget]) => `<tr><td>${el}</td><td>${reco}</td><td>${budget}</td></tr>`).join('');
-}
-
-/* ─────────── Navigation — story verticale : scroll + scroll-spy ─────────── */
-const VIEW_IDS = ['dashboard', 'previsions', 'calendrier', 'guide', 'methode'];
-let spyPiloting = false; // vrai pendant un défilement déclenché par le dock
-let spyArmed = false;
-function setDockActive(name) {
-  $$('.dock-btn[data-nav]').forEach(b => b.classList.toggle('is-active', b.dataset.nav === name));
-  try { history.replaceState(null, '', '#' + name); } catch { /* file:// */ }
-}
-function activateView(name) {
-  if (!VIEW_IDS.includes(name)) name = 'dashboard';
-  const target = document.getElementById('s-' + name);
-  setDockActive(name);
-  spyPiloting = true; // on pilote le scroll : le spy reprend la main une fois arrivé
-  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  const disarm = () => { spyPiloting = false; };
-  if ('onscrollend' in window) document.addEventListener('scrollend', disarm, { once: true, capture: true });
-  setTimeout(disarm, 1300);
-  $('#sidebar').classList.remove('is-open');
-  $('#sidebarOverlay').classList.remove('is-on');
-}
-let spyTickPending = false;
-function spyTick() {
-  spyTickPending = false;
-  if (spyPiloting) return;
-  /* ligne de focus : ~35 % de la hauteur visible, sous la topbar */
-  const focus = window.innerHeight * 0.35;
-  let current = null;
-  for (const s of $$('section[data-sec]')) {
-    const top = s.getBoundingClientRect().top;
-    if (top <= focus) current = s.dataset.sec;
-    else break;
-  }
-  if (!current) current = 'dashboard';
-  if (current !== (document.querySelector('.dock-btn.is-active') || {}).dataset?.nav) setDockActive(current);
-}
-function bindNav() {
-  $$('[data-nav]').forEach(el => el.addEventListener('click', () => activateView(el.dataset.nav)));
-  $('#btnMenu').addEventListener('click', () => { $('#sidebar').classList.add('is-open'); $('#sidebarOverlay').classList.add('is-on'); });
-  $('#sidebarOverlay').addEventListener('click', () => { $('#sidebar').classList.remove('is-open'); $('#sidebarOverlay').classList.remove('is-on'); });
-  window.addEventListener('hashchange', () => activateView(location.hash.replace('#', '')));
-  /* Scroll-spy : la section qui couvre la ligne de focus allume son icône du dock */
-  spyArmed = true;
-  document.addEventListener('scroll', () => {
-    if (!spyArmed || spyTickPending) return;
-    spyTickPending = true;
-    requestAnimationFrame(spyTick);
-  }, { passive: true, capture: true });
-  spyTick();
-}
-
-/* ─────────── Thèmes (Mer Azur par défaut, tous sombres) ─────────── */
-const THEME_NAMES = { azur: 'Mer Azur', abyssal: 'Abyssal', clair: 'Jour Mer (clair)', nuit: 'Nuit Noire', phare: 'Phare Bleu', terre: 'Terre & Sel' };
-const THEME_META = { azur: '#050E13', abyssal: '#050e1a', clair: '#dbe7ed', nuit: '#000000', phare: '#0a1220', terre: '#160f07' };
-function bindTheme() {
-  let t = 'azur';
-  try { t = localStorage.getItem('gcl-theme') || 'azur'; } catch { /* privé */ }
-  applyTheme(THEME_META[t] ? t : 'azur');
-  $$('#themePicker .tp-btn').forEach(b => {
-    b.addEventListener('click', () => applyTheme(b.dataset.themeSet));
-  });
-}
-function applyTheme(t) {
-  if (!THEME_META[t]) t = 'azur';
-  document.documentElement.dataset.theme = t;
-  try { localStorage.setItem('gcl-theme', t); } catch { /* privé */ }
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', THEME_META[t]);
-  const nameEl = $('#tpName');
-  if (nameEl) nameEl.textContent = THEME_NAMES[t];
-  $$('#themePicker .tp-btn').forEach(b => b.classList.toggle('is-on', b.dataset.themeSet === t));
-  // Les canvas (jauge, 24 h) lisent les couleurs au dessin → on redessine si les données sont là
-  if (state.meteo) {
-    try {
-      const dm0 = dailyMap(), now0 = new Date();
-      const sc0 = scoreFor(now0, dm0);
-      if (sc0) { drawGauge(sc0.total); renderActivityChart(now0, sc0.periods, dm0[dayKey(now0)]); }
-    } catch { /* vue pas encore prête */ }
-  }
-}
-function bindUnits() {
-  try {
-    const w = localStorage.getItem('gcl-unit-wind'); if (w) state.units.wind = w;
-    const t = localStorage.getItem('gcl-unit-temp'); if (t) state.units.temp = t;
-  } catch { /* privé */ }
-  const syncSeg = () => {
-    $$('.seg-btn[data-unit-wind]').forEach(b => b.classList.toggle('is-active', b.dataset.unitWind === state.units.wind));
-    $$('.seg-btn[data-unit-temp]').forEach(b => b.classList.toggle('is-active', b.dataset.unitTemp === state.units.temp));
-  };
-  syncSeg();
-  $$('.seg-btn[data-unit-wind]').forEach(b => b.addEventListener('click', () => { state.units.wind = b.dataset.unitWind; try { localStorage.setItem('gcl-unit-wind', state.units.wind); } catch {} syncSeg(); refreshAll(false); }));
-  $$('.seg-btn[data-unit-temp]').forEach(b => b.addEventListener('click', () => { state.units.temp = b.dataset.unitTemp; try { localStorage.setItem('gcl-unit-temp', state.units.temp); } catch {} syncSeg(); refreshAll(false); }));
-}
-
-/* ─────────── Espèce ciblée (Calamar · Loup · Dorade · Sar) ─────────── */
-function bindSpecies() {
-  try {
-    const s = localStorage.getItem('gcl-species');
-    if (s && SPECIES[s]) state.species = s;
-  } catch { /* privé */ }
-  syncSpecies();
-  $$('.sp-btn[data-sp]').forEach(b => b.addEventListener('click', () => {
-    state.species = SPECIES[b.dataset.sp] ? b.dataset.sp : 'calamar';
-    try { localStorage.setItem('gcl-species', state.species); } catch { /* privé */ }
-    syncSpecies();
-    refreshAll(false);
-  }));
-}
-function syncSpecies() {
-  const sp = SP();
-  $$('.sp-btn[data-sp]').forEach(b => b.classList.toggle('is-active', b.dataset.sp === state.species));
-  const n = $('#spName'); if (n) n.textContent = sp.name;
-  const k = $('#gaugeKicker'); if (k) k.textContent = `Indice ${sp.name}™`;
-  const ic = $('#speciesIcon'); if (ic) ic.innerHTML = `<use href="#${sp.icon}"/>`;
-  const set = (id, txt) => { const el = $(id); if (el) el.textContent = txt; };
-  set('#luneSub', `Phase réelle + Indice ${sp.name}™ jour par jour. Les cases dorées : vos meilleures sorties. * au-delà de 16 jours.`);
-  set('#methodKicker', `L'Indice ${sp.name}™`);
-  set('#methodeSub', `Comment l'Indice ${sp.name}™ est calculé, d'où viennent les données, pourquoi rien ne garantit une capture.`);
-  set('#footTag', 'La météo de la pêche, en direct du port.');
-  renderSeasonBars(); renderFAQ(); renderMethod(); renderGuide();
-}
-
-/* ─────────── Orchestration des données ─────────── */
-async function fetchJSON(url) {
-  const r = await fetch(url, { cache: 'no-store' });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  return r.json();
-}
-
-async function loadData(force = false) {
-  if (!force) {
-    const cached = cacheRead();
-    if (cached && !cached.stale && cached.meteo && cached.marine) {
-      state.meteo = cached.meteo; state.marine = cached.marine; state.online = true; state.lastUpdate = new Date(cached.ts);
-      return;
-    }
-  }
-  try {
-    const [meteo, marine] = await Promise.all([fetchJSON(METEO_URL), fetchJSON(MARINE_URL)]);
-    state.meteo = meteo; state.marine = marine; state.online = true; state.lastUpdate = new Date();
-    cacheWrite(meteo, marine);
-  } catch (err) {
-    console.warn('[GCL] Hors ligne ou API injoignable :', err);
-    const cached = cacheRead();
-    if (cached && cached.meteo) {
-      state.meteo = cached.meteo; state.marine = cached.marine ?? null; state.online = false; state.lastUpdate = new Date(cached.ts);
-    } else {
-      state.meteo = null; state.marine = null; state.online = false; state.lastUpdate = null;
-    }
-  }
-}
-
+/* ─────────── Orchestration ─────────── */
 function renderAll() {
-  const dm = dailyMap();
+  if (!state.meteo || !state.marine) return;
+  markIcons();
   const now = new Date();
-  // Horloge & entête
-  renderClock();
-  $('#topbarSub').textContent = `Tlemcen · Algérie · ${state.online ? 'données en direct' : 'données en cache (hors ligne)'}`;
-  $('#lastUpdate').textContent = state.lastUpdate ? fmtTime(state.lastUpdate) : '—';
-  $('#gaugeDateChip').textContent = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', timeZone: CONFIG.tz });
-
-  // Score du jour
-  const todayISO = dayKey(now);
-  const today = dm[todayISO];
+  const dm = dailyMap();
   const score = scoreFor(now, dm);
-  animateGauge(score.total);
-  const rating = ratingOf(score.total);
+  $('#lastUpdate').textContent = 'MAJ ' + fmtTime(new Date(state.lastUpdate || now));
+  $('#todayChip').textContent = esc(fmtDateLong(now));
+  $('#gaugeKicker').textContent = 'Indice Calamar™';
+  renderGauge(score.total);
+  const rating = GCLEngine.ratingOf(score.total);
   const pill = $('#ratingPill');
-  pill.textContent = rating.label;
-  pill.dataset.level = rating.level;
-  renderFactors(score.parts);
+  pill.textContent = rating.label; pill.dataset.level = rating.level;
   const bw = bestWindowFor(score.periods);
   $('#bestWindow').textContent = bw ? `${bw.start} → ${bw.end}` : '—';
-  $('#bestWindowSub').textContent = bw ? `${bw.type === 'major' ? 'Majeure' : 'Mineure'} · ${bw.night} min de nuit · culmination ${fmtTime(bw.center)}` : 'Aucune période de nuit aujourd’hui';
-
-  // Cartes
-  renderMoonCard(now, today);
-  renderMeteo(dm);
-  renderMer();
-  const solRating = Astro.solunarRating(now);
-  renderSolunaire(now, score.periods, solRating);
-  renderReco(now, score, dm);
-  renderStormAlert(dm);
-  renderActivityChart(now, score.periods, today);
-
-  // Vues secondaires
+  $('#bestWindowMeta').textContent = bw ? `${bw.type === 'major' ? 'Majeure' : 'Mineure'} · ${bw.night} min de nuit` : 'Aucune fenêtre majeure nocturne';
+  renderFactors(score.parts);
+  renderStorm(dm);
+  renderReco(score);
+  renderSea();
+  renderActivity(now, score.periods, dm[dayKey(now)]);
   renderForecast(dm);
   renderDayDetail(dm);
+  renderMoon(now, score);
   renderCalendar(dm);
+  const clock = $('#sideClock');
+  if (clock) clock.textContent = new Date().toLocaleTimeString('fr-FR', { timeZone: CONFIG.tz, hour12: false });
+  const dateEl = $('#sideDate');
+  if (dateEl) dateEl.textContent = fmtDateLong(now);
 }
-
-async function refreshAll(force = true) {
-  const btn = $('#btnRefresh');
-  btn.classList.add('is-spinning');
-  try {
-    await loadData(force);
-    renderAll();
-  } finally {
-    btn.classList.remove('is-spinning');
-  }
+function startClock() {
+  const tick = () => {
+    const c = $('#sideClock'); if (c) c.textContent = new Date().toLocaleTimeString('fr-FR', { timeZone: CONFIG.tz, hour12: false });
+  };
+  tick(); setInterval(tick, 1000);
 }
 
 /* ─────────── Démarrage ─────────── */
 function init() {
-  bindNav(); bindTheme(); bindUnits(); bindSpecies();
   bootSplash();
-  renderSeasonBars(); renderFAQ(); renderMethod();
-  $('#btnRefresh').addEventListener('click', () => refreshAll(true));
-  $('#btnRefresh2').addEventListener('click', () => refreshAll(true));
-  $('#btnPrint').addEventListener('click', () => window.print());
-  $('#calPrev').addEventListener('click', () => { state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() - 1, 1); renderAll(); });
-  $('#calNext').addEventListener('click', () => { state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() + 1, 1); renderAll(); });
-  $('#calToday').addEventListener('click', () => { state.calCursor = new Date(); renderAll(); });
-  window.addEventListener('resize', () => { /* redessiner le graphique */ const dm = dailyMap(); const now = new Date(); const today = dm[dayKey(now)]; const score = scoreFor(now, dm); renderActivityChart(now, score.periods, today); });
-  setInterval(renderClock, 1000);
-  activateView(location.hash.replace('#', '') || 'dashboard');
-  refreshAll(false).then(() => { state.refreshTimer = setInterval(() => refreshAll(false), CONFIG.refreshMs); });
+  bindNav();
+  bindSettings();
+  renderSeasonBars();
+  renderFAQ();
+  renderMethod();
+  markIcons();
+  $('#calPrev').addEventListener('click', () => {
+    state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() - 1, 1);
+    if (state.meteo) renderCalendar(dailyMap());
+  });
+  $('#calNext').addEventListener('click', () => {
+    state.calCursor = new Date(state.calCursor.getFullYear(), state.calCursor.getMonth() + 1, 1);
+    if (state.meteo) renderCalendar(dailyMap());
+  });
+  startClock();
+  loadData().then(() => {
+    renderAll();
+    state.refreshTimer = setInterval(() => refreshAll(false), CONFIG.refreshMs);
+  }).catch(e => console.warn('Chargement initial impossible', e));
 }
-init();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();

@@ -3,453 +3,289 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Ghazaouet Calamar Live — Meilleurs jours &amp; heures pour pêcher à Ghazaouet (calamar, loup, dorade, sar)</title>
-<meta name="description" content="App pro en direct pour la pêche à Ghazaouet (Tlemcen, Algérie) : Indice pêche sur 100 pour le calamar, le loup bar, la dorade et le sar ; phases lunaires, périodes solunaires, météo et état de la mer temps réel, calendrier des meilleures journées.">
+<title>Ghazaouet Calamar Live — Meilleures heures pour pêcher le calamar à Ghazaouet</title>
+<meta name="description" content="Indice Calamar live à Ghazaouet (Tlemcen, Algérie) : lune, solunaire, mer et pression calculés à partir des études scientifiques sur Loligo vulgaris. Données Open-Meteo en direct.">
 <meta name="theme-color" content="#050E13">
 <meta name="author" content="Ghazaouet Calamar Live">
-<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/icon.svg?v=20261119a" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261106d">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261119a">
 </head>
 <body>
 
-<!-- ═══════════ SPLASH (3 s, logo animé) ═══════════ -->
+<a class="skip-link" href="#s-dashboard">Aller au contenu</a>
+
+<!-- ═══════════ SPLASH — logo animé, 3 secondes ═══════════ -->
 <div class="splash" id="splash" aria-hidden="true">
   <div class="splash-glow"></div>
-  <img class="splash-logo" src="assets/icon.svg" alt="" width="112" height="112">
+  <img class="splash-logo" src="assets/icon.svg?v=20261119a" alt="" width="112" height="112">
   <div class="splash-name">Ghazaouet <strong>Calamar Live</strong></div>
-  <div class="splash-tag">La météo de la pêche, en direct du port</div>
+  <div class="splash-tag">La science de la pêche, en direct du port</div>
   <div class="splash-bar"><i></i></div>
 </div>
 
-<!-- ═══════════ SPRITE D'ICÔNES (SVG, stroke = currentColor) ═══════════ -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></symbol>
-    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.2"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.2 13.6A8.5 8.5 0 1 1 10.4 3.8a7 7 0 0 0 9.8 9.8z"/></symbol>
-    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M20 17v4H6.5A2.5 2.5 0 0 1 4 18.5"/><path d="M9 7.5h6M9 11h4"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.2h.01"/></symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 3v6h-6"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-    <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4.6 4.6 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
-    <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.2h8.5a2.6 2.6 0 1 0-2.6-2.6M3 12.4h13a2.8 2.8 0 1 1-2.8 2.8M3 16.6h7a2.2 2.2 0 1 1-2.2 2.2"/></symbol>
-    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6.2 6.7 6.2 11.1a6.2 6.2 0 0 1-12.4 0C5.8 9.7 12 3 12 3z"/></symbol>
-    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 14.5a8 8 0 1 1 16 0"/><path d="M12 14.5l4.2-4.2"/><circle cx="12" cy="14.5" r="1.4"/></symbol>
-    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.8 18.5a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/></symbol>
-    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M6.8 15a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/><path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2"/></symbol>
-    <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 3v5M8.8 6.6l1.4 1.4M15.2 6.6 13.8 8"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/><path d="M12 8.5l-2-2M12 8.5l2-2"/></symbol>
-    <symbol id="i-sunset" viewBox="0 0 24 24"><path d="M12 9V4M8.8 5.6l1.4 1.4M15.2 5.6 13.8 7"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/><path d="M12 3.5l-2 2M12 3.5l2-2"/></symbol>
-    <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 8.5q2.5-2.4 5 0t5 0 5 0 5 0M2 13q2.5-2.4 5 0t5 0 5 0 5 0M2 17.5q2.5-2.4 5 0t5 0 5 0 5 0"/></symbol>
-    <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4V21M8.5 11h7M4 14.5c0 4 3.6 6.5 8 6.5s8-2.5 8-6.5M2 15h3M19 15h3"/></symbol>
-    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6 7-11.4A7 7 0 1 0 5 10.1c0 5.4 7 11.4 7 11.4z"/><circle cx="12" cy="10" r="2.6"/></symbol>
-    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19L12 3.5z"/><path d="M12 9.5V14M12 17h.01"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></symbol>
-    <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
-    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
-    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M4.8 4.8l1.8 1.8M17.4 17.4l1.8 1.8M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></symbol>
-    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 8V3.5h10V8M7 17.5H4.5a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H17"/><path d="M7 14h10v6.5H7z"/></symbol>
-    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4.5h5.5V10M19.5 4.5 11 13"/><path d="M10 6H5.5a1 1 0 0 0-1 1v12.5a1 1 0 0 0 1 1H18a1 1 0 0 0 1-1V14"/></symbol>
-    <symbol id="i-fish" viewBox="0 0 24 24"><path d="M3 12c2.3-3.9 5.4-6 9.2-6 3.5 0 6.3 2.2 8.3 6-2 3.8-4.8 6-8.3 6-3.8 0-6.9-2.1-9.2-6z"/><path d="M3 12 1.2 9M3 12 1.2 15"/><circle cx="6.8" cy="11" r=".5"/></symbol>
-    <symbol id="i-bream" viewBox="0 0 24 24"><path d="M2.8 12c2-4.6 5.2-7 9.2-7 3.6 0 6.4 2.5 8.4 7-2 4.5-4.8 7-8.4 7-4 0-7.2-2.4-9.2-7z"/><path d="M9.2 5.4 10 3.6M12.4 5l0-1.9M15.6 5.4l-.8-1.8"/><path d="M2.8 12 1 9.4M2.8 12 1 14.6"/><circle cx="6.6" cy="10.6" r=".5"/></symbol>
-    <symbol id="i-squid" viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 4.4 2.1 4.4 5L15 12H9l-1.4-4.8C7.6 4.3 9.3 2.2 12 2.2z"/><path d="M9.3 12v5.4M12 12v6.2M14.7 12v5.4M8 12.2C6.4 14.4 6.2 16.6 8 19M16 12.2c1.6 2.2 1.8 4.4 0 6.8"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 4.5 6v6c0 4.6 3 8.4 7.5 10 4.5-1.6 7.5-5.4 7.5-10V6L12 2.8z"/><path d="m9.5 12 2 2 3.5-4"/></symbol>
-    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v3M12 18.2v3M4.1 7l2.6 1.5M17.3 15.5l2.6 1.5M4.1 17l2.6-1.5M17.3 8.5l2.6-1.5" stroke-linecap="round"/></symbol>
-    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
-  </defs>
+<!-- ═══════════ SPRITE D'ICÔNES ═══════════ -->
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.8 18.5a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/></symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24"><path d="M6.8 15a4.3 4.3 0 0 1 .4-8.58 5.3 5.3 0 0 1 10.3 1.2 3.6 3.6 0 0 1 .4 7.38H6.8z"/><path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.2 13.6A8.5 8.5 0 1 1 10.4 3.8a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-squid" viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 4.4 2.1 4.4 5L15 12H9l-1.4-4.8C7.6 4.3 9.3 2.2 12 2.2z"/><path d="M9.3 12v5.4M12 12v6.2M14.7 12v5.4M8 12.2C6.4 14.4 6.2 16.6 8 19M16 12.2c1.6 2.2 1.8 4.4 0 6.8"/></symbol>
+  <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 8.5q2.5-2.4 5 0t5 0 5 0 5 0M2 13q2.5-2.4 5 0t5 0 5 0 5 0M2 17.5q2.5-2.4 5 0t5 0 5 0 5 0"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 8.2h8.5a2.6 2.6 0 1 0-2.6-2.6M3 12.4h13a2.8 2.8 0 1 1-2.8 2.8M3 16.6h7a2.2 2.2 0 1 1-2.2 2.2"/></symbol>
+  <symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4.6 4.6 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 14.5a8 8 0 1 1 16 0"/><path d="M12 14.5l4.2-4.2"/><circle cx="12" cy="14.5" r="1.4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="2.2"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M20 17v4H6.5A2.5 2.5 0 0 1 4 18.5"/><path d="M9 7.5h6M9 11h4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.2h.01"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.3M21 3v6h-6"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.96 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.04H3v-4h.08A1.7 1.7 0 0 0 4.6 8.96a1.7 1.7 0 0 0-.34-1.87l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.96 4.6a1.7 1.7 0 0 0 1.04-1.56V3h4v.08a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.87A1.7 1.7 0 0 0 21.04 10H21v4h-.08A1.7 1.7 0 0 0 19.4 15z"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3z"/><path d="M12 9v5M12 17h.01"/></symbol>
+  <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 3v5M8.8 6.6l1.4 1.4M15.2 6.6l-1.4 1.4"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/></symbol>
+  <symbol id="i-sunset" viewBox="0 0 24 24"><path d="M12 9V4M8.8 5.6l1.4 1.4M15.2 5.6l-1.4 1.4"/><path d="M4 17h16M6.5 21h11"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/></symbol>
+  <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4V21M8.5 11h7M4 14.5c0 4 3.6 6.5 8 6.5s8-2.5 8-6.5M2 15h3M19 15h3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6 7-11.4A7 7 0 1 0 5 10.1c0 5.4 7 11.4 7 11.4z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.5 20 6v6c0 5-3.4 8.2-8 9.5C7.4 20.2 4 17 4 12V6l8-3.5z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
 </svg>
 
-<!-- ═══════════ TOPBAR (fine, stripline) ═══════════ -->
+<!-- ═══════════ TOPBAR ═══════════ -->
 <header class="topbar">
   <button class="icon-btn" id="btnMenu" aria-label="Réglages"><svg class="ic"><use href="#i-settings"/></svg></button>
-  <div class="topbar-loc">
-    <svg class="ic ic-sea"><use href="#i-anchor"/></svg>
-    <div class="topbar-loc-text">
-      <strong>Port de Ghazaouet</strong>
-      <span id="topbarSub">Tlemcen · Algérie · chargement…</span>
-    </div>
+  <div class="brand">
+    <svg class="ic brand-anchor"><use href="#i-anchor"/></svg>
+    <div><strong>Port de Ghazaouet</strong><span>Tlemcen · Algérie · données en direct</span></div>
   </div>
-  <div class="topbar-right">
-    <div class="live-pill"><span class="live-dot"></span><span class="live-pill-txt">DIRECT</span><span class="live-pill-sep">·</span>MAJ <span id="lastUpdate">--:--</span></div>
-    <button class="icon-btn" id="btnRefresh" aria-label="Actualiser"><svg class="ic" id="refreshIcon"><use href="#i-refresh"/></svg></button>
-  </div>
+  <div class="live-pill"><span class="live-dot"></span>DIRECT<span class="live-sep">·</span><span id="lastUpdate" aria-live="polite">MAJ --:--</span></div>
+  <button class="icon-btn" id="btnRefresh" aria-label="Actualiser"><svg class="ic"><use href="#i-refresh"/></svg></button>
 </header>
 
-<!-- ═══════════ FEUILLE RÉGLAGES (bottom-sheet, ancien tiroir) ═══════════ -->
-<aside class="sidebar" id="sidebar" aria-label="Réglages">
-  <div class="sheet-grab" aria-hidden="true"><i></i></div>
+<!-- ═══════════ FEUILLE RÉGLAGES ═══════════ -->
+<div class="overlay" id="sidebarOverlay"></div>
+<aside class="sheet" id="sidebar" aria-label="Réglages">
+  <div class="sheet-grab"></div>
   <div class="sheet-head">
-    <img class="sheet-logo" src="assets/icon.svg" alt="" width="44" height="44">
-    <div>
-      <h2 class="sheet-title">Réglages</h2>
-      <p class="sheet-sub">الغزوات · Tlemcen · Algérie</p>
-    </div>
+    <img class="sheet-logo" src="assets/icon.svg?v=20261119a" alt="" width="44" height="44">
+    <div><h2>Réglages</h2><p>الغزوات · Tlemcen · Algérie</p></div>
+    <button class="icon-btn sheet-close" id="btnClose" aria-label="Fermer"><svg class="ic"><use href="#i-x"/></svg></button>
   </div>
-
   <div class="sheet-block">
-    <div class="side-clock-head"><span class="live-dot"></span><span>Heure locale — port</span></div>
-    <div class="side-clock-time" id="sideClock">--:--:--</div>
-    <div class="side-clock-date" id="sideDate">—</div>
-    <div class="side-clock-meta"><span class="chip chip-sea">UTC+1 · Africa/Algiers</span><span class="chip chip-ghost" id="mzCoord">35.096°N · 1.860°W</span></div>
+    <div class="tp-head"><span class="tp-label">Heure locale — port</span></div>
+    <div class="side-clock" id="sideClock">--:--:--</div>
+    <div class="side-date" id="sideDate">—</div>
+    <div class="side-clock-meta"><span class="chip chip-sea">UTC+1 · Africa/Algiers</span><span class="chip chip-ghost">35.096°N · 1.860°W</span></div>
   </div>
-
-  <div class="sheet-block">
-    <div class="tp-head"><span class="tp-label">Espèce visée</span><span class="tp-name" id="spName">Calamar</span></div>
-    <div class="sp-picker" id="speciesPicker" role="group" aria-label="Espèce de pêche">
-      <button class="sp-btn is-active" data-sp="calamar"><svg class="ic"><use href="#i-squid"/></svg><span>Calamar</span></button>
-      <button class="sp-btn" data-sp="loup"><svg class="ic"><use href="#i-fish"/></svg><span>Loup bar</span></button>
-      <button class="sp-btn" data-sp="dorade"><svg class="ic"><use href="#i-bream"/></svg><span>Dorade</span></button>
-      <button class="sp-btn" data-sp="sar"><svg class="ic"><use href="#i-bream"/></svg><span>Sar</span></button>
-    </div>
-    <p class="sheet-mini" id="spHint">L'indice s'adapte : barèmes de saison et d'eau propres à chaque espèce.</p>
-  </div>
-
   <div class="sheet-block">
     <div class="tp-head"><span class="tp-label">Thème</span><span class="tp-name" id="tpName">Mer Azur</span></div>
-    <div class="tp-row" id="themePicker" role="group" aria-label="Thème de l'interface">
-      <button class="tp-btn" data-theme-set="azur" aria-label="Mer Azur" title="Mer Azur"><i></i></button>
-      <button class="tp-btn" data-theme-set="abyssal" aria-label="Abyssal" title="Abyssal"><i></i></button>
-      <button class="tp-btn" data-theme-set="clair" aria-label="Jour Mer (clair)" title="Jour Mer (clair)"><i></i></button>
-      <button class="tp-btn" data-theme-set="nuit" aria-label="Nuit Noire (OLED)" title="Nuit Noire (OLED)"><i></i></button>
-      <button class="tp-btn" data-theme-set="phare" aria-label="Phare Bleu" title="Phare Bleu"><i></i></button>
-      <button class="tp-btn" data-theme-set="terre" aria-label="Terre &amp; Sel" title="Terre &amp; Sel"><i></i></button>
+    <div class="tp-row" id="themePicker">
+      <button class="tp-btn" data-theme-set="azur" aria-label="Mer Azur"><i style="background:linear-gradient(135deg,#48E3C6 50%,#FFB629 50%)"></i></button>
+      <button class="tp-btn" data-theme-set="abyssal" aria-label="Abyssal"><i style="background:linear-gradient(135deg,#34c6dd 50%,#f0b429 50%)"></i></button>
+      <button class="tp-btn" data-theme-set="clair" aria-label="Jour Mer"><i style="background:linear-gradient(135deg,#7fbfd0 50%,#e8a020 50%)"></i></button>
+      <button class="tp-btn" data-theme-set="nuit" aria-label="Nuit Noire"><i style="background:linear-gradient(135deg,#17171c 50%,#f6c33c 50%)"></i></button>
+      <button class="tp-btn" data-theme-set="phare" aria-label="Phare Bleu"><i style="background:linear-gradient(135deg,#3fc9ff 50%,#f0b429 50%)"></i></button>
+      <button class="tp-btn" data-theme-set="terre" aria-label="Terre & Sel"><i style="background:linear-gradient(135deg,#7fc5a6 50%,#e0955a 50%)"></i></button>
     </div>
   </div>
-
   <div class="sheet-block">
-    <div class="set-row"><span class="tp-label">Vent</span>
-      <div class="segmented" role="group" aria-label="Unité de vent"><button class="seg-btn is-active" data-unit-wind="kmh">km/h</button><button class="seg-btn" data-unit-wind="kn">nœuds</button></div>
-    </div>
-    <div class="set-row"><span class="tp-label">Température</span>
-      <div class="segmented" role="group" aria-label="Unité de température"><button class="seg-btn is-active" data-unit-temp="c">°C</button><button class="seg-btn" data-unit-temp="f">°F</button></div>
-    </div>
-    <button class="btn btn-ghost sheet-ghost" id="btnRefresh2"><svg class="ic"><use href="#i-refresh"/></svg> Actualiser les données</button>
+    <div class="set-row"><span class="tp-label">Vent</span><div class="seg"><button class="seg-btn is-active" data-unit-wind="kmh">km/h</button><button class="seg-btn" data-unit-wind="kts">nœuds</button></div></div>
+    <div class="set-row"><span class="tp-label">Température</span><div class="seg"><button class="seg-btn is-active" data-unit-temp="c">°C</button><button class="seg-btn" data-unit-temp="f">°F</button></div></div>
   </div>
-
-  <p class="sheet-foot">Indice Ghazaouet™ v2.0 — outil d'aide à la décision. La mer reste imprévisible&nbsp;; naviguez avec prudence.</p>
+  <div class="sheet-block sheet-actions">
+    <button class="btn-gold" id="btnRefresh2"><svg class="ic"><use href="#i-refresh"/></svg> Actualiser les données</button>
+    <button class="btn-ghost" id="btnPrint">Imprimer la fiche du jour</button>
+  </div>
+  <p class="sheet-foot">Indice Calamar v3 — outil d'aide à la décision. La mer reste imprévisible ; naviguez avec prudence.</p>
 </aside>
-<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
 <main class="story">
+  <h1 class="sr-only">Ghazaouet Calamar Live — indice de pêche au calamar à Ghazaouet</h1>
+  <!-- ═══════════ 1 · AUJOURD'HUI ═══════════ -->
+  <section class="sec" id="s-dashboard" data-sec="dashboard">
+    <header class="sec-head">
+      <div><span class="card-kicker" id="gaugeKicker">Indice Calamar™</span><h2 class="sec-title">Aujourd'hui au port</h2></div>
+      <span class="chip chip-ghost" id="todayChip">—</span>
+    </header>
 
-  <div class="alert-strip is-hidden" id="stormAlert" role="alert">
-    <svg class="ic"><use href="#i-alert"/></svg>
-    <span id="stormAlertText">Alerte</span>
-  </div>
-
-  <!-- ════════ 1 · AUJOURD'UI — jauge héros ════════ -->
-  <section class="sec" id="s-dashboard" data-sec="dashboard" aria-label="Aujourd'hui au port">
-    <div class="hero card">
-      <header class="hero-head">
-        <div>
-          <span class="card-kicker" id="gaugeKicker">Indice Calamar™</span>
-          <h1 class="hero-title">Aujourd'hui au port</h1>
-        </div>
-        <span class="chip chip-gold" id="gaugeDateChip">—</span>
-      </header>
-      <div class="hero-body">
-        <div class="gauge-canvas-wrap">
-          <canvas id="gaugeCanvas" width="300" height="212" role="img" aria-label="Jauge de l'indice"></canvas>
-          <div class="gauge-center">
-            <div class="gauge-value" id="gaugeValue">--</div>
-            <div class="gauge-max">/ 100</div>
-          </div>
+    <article class="card pad hero">
+      <div class="hero-grid">
+        <div class="gauge-wrap">
+          <canvas id="gaugeCanvas" width="300" height="212" role="img" aria-label="Jauge de l'indice calamar"></canvas>
+          <div class="gauge-center"><span class="gauge-value" id="gaugeValue">—</span><span class="gauge-max">/ 100</span></div>
         </div>
         <div class="hero-side">
-          <div class="rating-pill" id="ratingPill" data-level="mid">—</div>
+          <span class="rating-pill" id="ratingPill" data-level="low">—</span>
           <div class="best-window">
-            <span class="best-window-label"><svg class="ic ic-xs"><use href="#i-squid"/></svg> Fenêtre optimale</span>
-            <strong id="bestWindow">—</strong>
-            <span class="best-window-sub" id="bestWindowSub">Calcul en cours…</span>
+            <svg class="ic"><use href="#i-clock"/></svg>
+            <div><span class="card-kicker">Fenêtre optimale</span><strong id="bestWindow">—</strong><small id="bestWindowMeta">—</small></div>
           </div>
-          <ul class="factors" id="factorList" aria-label="Décomposition de l'indice"></ul>
         </div>
       </div>
-      <footer class="hero-foot">
-        <span>Indice composite : lune 35 · solunaire 25 · saison 20 · mer 12 · pression 8.</span>
-        <button class="link-btn" data-nav="methode">Comment c'est calculé ? <svg class="ic ic-xs"><use href="#i-arrow-r"/></svg></button>
-      </footer>
-    </div>
-
-    <article class="card pad" aria-label="Solunaire du jour">
-      <header class="card-head"><div><span class="card-kicker">Solunaire — aujourd'hui</span><h2 class="card-title">Quand ça mord</h2></div><span class="chip chip-gold" id="solRating">–</span></header>
-      <ol class="sol-list" id="solList"><li class="sol-item is-skeleton">Calcul des passages de la lune…</li></ol>
-      <footer class="card-foot"><span>Majeures = lune au zénith/nadir · Mineures = mi-chemin. Nuit = enjeu n°1.</span><button class="link-btn" data-nav="calendrier">Tout le mois <svg class="ic ic-xs"><use href="#i-arrow-r"/></svg></button></footer>
+      <div class="season-banner"><svg class="ic"><use href="#i-cal"/></svg><span id="seasonBanner">Saison : période connue — non notée dans l'indice.</span></div>
+      <div class="factor-block">
+        <div class="factor-head"><span class="card-kicker">Les 4 facteurs</span><span class="factor-total">lune 40 · solunaire 25 · mer 25 · pression 10</span></div>
+        <ul class="factor-list" id="factorList"></ul>
+      </div>
+      <div class="card-foot"><span>Indice composite : lune 40 · solunaire 25 · mer 25 · pression 10.</span><a href="#s-methode" class="link-btn">Comment c'est calculé ? →</a></div>
     </article>
 
-    <article class="card pad" aria-label="Recommandations">
-      <header class="card-head"><div><span class="card-kicker">Recommandation live</span><h2 class="card-title">Le plan de pêche</h2></div><svg class="ic ic-gold wx-icon" id="speciesIcon"><use href="#i-squid"/></svg></header>
-      <ol class="reco-list" id="recoList"><li class="reco-item is-skeleton">Analyse croisée lune × météo × mer…</li></ol>
-    </article>
-
-    <div class="duo">
-      <article class="card pad" aria-label="Météo actuelle">
-        <header class="card-head"><div><span class="card-kicker">Météo — maintenant</span><h2 class="card-title" id="wxDesc">—</h2></div><svg class="wx-icon ic" id="wxIcon"><use href="#i-cloud"/></svg></header>
-        <div class="wx-now"><div class="wx-temp"><span id="wxTemp">–</span><span class="wx-unit" id="wxUnit">°C</span></div><div class="wx-feel">Ressenti <strong id="wxFeel">–</strong> · <span id="wxMinMax">– / –</span></div></div>
-        <ul class="wx-grid">
-          <li><svg class="ic"><use href="#i-wind"/></svg><div><small>Vent</small><strong><span id="wxWind">–</span> <em id="wxWindDir">–</em></strong></div><span class="wind-arrow" id="windArrow" aria-hidden="true">↑</span></li>
-          <li><svg class="ic"><use href="#i-wind"/></svg><div><small>Rafales</small><strong id="wxGusts">–</strong></div></li>
-          <li><svg class="ic"><use href="#i-drop"/></svg><div><small>Humidité</small><strong id="wxHumidity">–</strong></div></li>
-          <li><svg class="ic"><use href="#i-gauge"/></svg><div><small>Pression</small><strong><span id="wxPressure">–</span> <em id="wxPressureTrend">–</em></strong></div></li>
-          <li><svg class="ic"><use href="#i-cloud"/></svg><div><small>Nuages</small><strong id="wxClouds">–</strong></div></li>
-          <li><svg class="ic"><use href="#i-rain"/></svg><div><small>Précip. 24 h</small><strong id="wxPrecip">–</strong></div></li>
-        </ul>
-      </article>
-
-      <article class="card pad" aria-label="État de la mer">
-        <header class="card-head"><div><span class="card-kicker">état de la mer</span><h2 class="card-title">Vagues &amp; eau</h2></div><svg class="ic ic-sea wx-icon"><use href="#i-waves"/></svg></header>
-        <div class="sea-hero"><div class="sea-big"><span id="waveHeight">–</span><small>m de vagues</small></div><div class="sea-meta"><div><small>Direction</small><strong><span id="waveDir">–</span> <span class="wind-arrow" id="waveArrow">↑</span></strong></div><div><small>Période</small><strong id="wavePeriod">–</strong></div><div><small>Houle</small><strong id="swellHeight">–</strong></div></div></div>
-        <div class="sea-bar" aria-hidden="true"><div class="sea-bar-fill" id="waveBar"></div><span class="sea-bar-mark" style="left:33.3%"></span><span class="sea-bar-mark" style="left:66.6%"></span></div>
-        <div class="sea-scale"><span>0 m</span><span>0,5</span><span>1,0</span><span>1,5 m +</span></div>
-        <div class="sea-sst"><svg class="ic"><use href="#i-thermo"/></svg><div><small>Température de l'eau</small><strong><span id="sstValue">–</span>°C</strong></div><span class="chip chip-sea" id="sstVerdict">—</span></div>
-        <p class="sea-note" id="seaNote">Chargement des données marines…</p>
-      </article>
-    </div>
-
-    <article class="card pad" aria-label="Activité sur 24 heures">
-      <header class="card-head"><div><span class="card-kicker">Courbe d'activité — 24 h</span><h2 class="card-title">La nuit en détail</h2></div><div class="chart-legend"><span class="lg lg-activity">Activité</span><span class="lg lg-night">Nuit</span><span class="lg lg-now">Maintenant</span></div></header>
-      <div class="chart-wrap"><canvas id="activityChart" role="img" aria-label="Probabilité de touche par heure"></canvas></div>
-      <div class="chart-foot" id="chartFoot">—</div>
-    </article>
-  </section>
-
-  <!-- ════════ 2 · PRÉVISIONS 14 JOURS ════════ -->
-  <section class="sec" id="s-previsions" data-sec="previsions" aria-label="Prévisions sur 14 jours">
-    <header class="sec-head">
-      <div>
-        <span class="card-kicker">Prévisions</span>
-        <h2 class="sec-title">Les 14 prochains jours</h2>
-        <p class="view-sub">Balayez les cartes : touchez-en une pour la fiche complète. Au-delà de 16 jours, l'indice devient « lune + saison ».</p>
-      </div>
-      <div class="legend-scale" aria-label="Échelle"><span>Faible</span><div class="legend-bar"></div><span>Exceptionnel</span></div>
-    </header>
-    <div class="forecast-grid" id="forecastGrid"></div>
-    <article class="day-detail is-hidden" id="dayDetail" aria-live="polite"></article>
-  </section>
-
-  <!-- ════════ 3 · LUNE & CALENDRIER ════════ -->
-  <section class="sec" id="s-calendrier" data-sec="calendrier" aria-label="Lune et calendrier lunaire">
-    <header class="sec-head">
-      <div>
-        <span class="card-kicker">Lune</span>
-        <h2 class="sec-title" id="calMonthTitle">—</h2>
-        <p class="view-sub" id="luneSub">Phase réelle + Indice Calamar™ jour par jour. Les cases dorées : vos meilleures sorties. * au-delà de 16 jours.</p>
-      </div>
-      <div class="cal-nav">
-        <button class="icon-btn" id="calPrev" aria-label="Mois précédent"><svg class="ic"><use href="#i-chev-l"/></svg></button>
-        <button class="btn btn-ghost" id="calToday">Aujourd'hui</button>
-        <button class="icon-btn" id="calNext" aria-label="Mois suivant"><svg class="ic"><use href="#i-chev-r"/></svg></button>
-      </div>
-    </header>
-
-    <article class="card pad moon-card" aria-label="Lune actuelle">
-      <div class="moon-body">
-        <canvas id="moonCanvas" width="150" height="150" role="img" aria-label="Phase lunaire"></canvas>
-        <div class="moon-side">
-          <h3 class="card-title" id="moonPhaseName">—</h3>
-          <span class="chip chip-ghost" id="moonWaxChip">—</span>
-          <div class="moon-illum"><span id="moonIllum">–</span><small>% éclairée</small></div>
-          <div class="moon-age">Âge : <strong id="moonAge">–</strong> · Élongation <strong id="moonElong">–</strong></div>
-          <p class="moon-next" id="moonNext">—</p>
-        </div>
-      </div>
-      <div class="moon-grid">
-        <div class="moon-cell"><svg class="ic"><use href="#i-sunrise"/></svg><div><small>Lever</small><strong id="moonRise">–</strong></div></div>
-        <div class="moon-cell"><svg class="ic"><use href="#i-sunset"/></svg><div><small>Coucher</small><strong id="moonSet">–</strong></div></div>
-        <div class="moon-cell"><svg class="ic"><use href="#i-clock"/></svg><div><small>Culmination</small><strong id="moonTransit">–</strong></div></div>
-        <div class="moon-cell"><svg class="ic"><use href="#i-gauge"/></svg><div><small>Coef. marée *</small><strong id="tideCoef">–</strong></div></div>
-      </div>
-      <p class="moon-note">* Coefficient estimé (syzygie ≈ 95–100 · quadrature ≈ 45–55). Méditerranée : amplitude &lt; 0,4 m — la lune agit via courants + solunaire, pas via la hauteur d'eau.</p>
-    </article>
-
-    <div class="cal-board card pad">
-      <div class="cal-weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
-      <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-legend"><span class="cal-legend-dot d-low"></span>&lt;40 faible <span class="cal-legend-dot d-mid"></span>40–59 correct <span class="cal-legend-dot d-good"></span>60–74 bon <span class="cal-legend-dot d-great"></span>75–89 excellent <span class="cal-legend-dot d-epic"></span>90+ exceptionnel</div>
-    </div>
-
-    <div class="duo">
-      <div class="mini-card"><span class="mini-card-kicker">Top du mois</span><ol class="top-days" id="topDaysList"><li>—</li></ol></div>
-      <div class="mini-card"><span class="mini-card-kicker">Syzygies (lune forte)</span><ul class="syzygy-list" id="syzygyList"><li>—</li></ul></div>
-      <div class="mini-card mini-card-note"><span class="mini-card-kicker">Lecture rapide</span><p>Les nuits de <strong>nouvelle</strong> et <strong>pleine lune</strong> (± 2 jours) concentrent l'activité. Les quartiers sont plus calmes : privilégiez les heures encadrant la culmination lunaire.</p></div>
-    </div>
-  </section>
-
-  <!-- ════════ 4 · GUIDE (accordéons) ════════ -->
-  <section class="sec" id="s-guide" data-sec="guide" aria-label="Guide du pêcheur">
-    <header class="sec-head">
-      <div>
-        <span class="card-kicker">Guide expert</span>
-        <h2 class="sec-title" id="guideTitle">Pêcher le calamar ici</h2>
-        <p class="view-sub" id="guideSub">Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.</p>
-      </div>
-    </header>
-
-    <div class="fact-strip" id="factStrip" aria-label="Fiche espèce"></div>
-
-    <details class="fold" open>
-      <summary class="fold-q"><span>Quand sortir, mois par mois</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a">
-        <div class="season-bars" id="seasonBars" aria-label="Qualité par mois"></div>
-        <p class="note" id="moisNote"></p>
-      </div>
-    </details>
-
-    <details class="fold">
-      <summary class="fold-q"><span>Les rythmes d'une nuit</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a">
-        <ul class="hour-slots" id="hourSlots"></ul>
-        <p class="note" id="preuveNote"></p>
-      </div>
-    </details>
-
-    <details class="fold">
-      <summary class="fold-q"><span>4 façons de le prendre</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a">
-        <div class="tech-grid" id="techGrid"></div>
-      </div>
-    </details>
-
-    <details class="fold">
-      <summary class="fold-q"><span>Spots autour de Ghazaouet</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a">
-        <ul class="spot-list" id="spotList"></ul>
-        <div class="safety-box"><svg class="ic"><use href="#i-shield"/></svg><div><strong>Sécurité avant tout</strong><ul><li>Gilet + 2 moyens de communication (téléphone chargé / VHF) ; prévenez un proche de l'heure de retour.</li><li>Jamais de sortie par alerte orage / mer formée (bandeau du tableau de bord).</li><li>Bulletin météo marine ONM / Météo Algérie avant de prendre la mer.</li><li>Nuit = plus de risque : feux de navigation obligatoires en barque.</li></ul></div></div>
-      </div>
-    </details>
-
-    <details class="fold">
-      <summary class="fold-q"><span>La caisse du pêcheur</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a">
-        <div class="table-wrap">
-          <table class="gear-table">
-            <thead><tr><th>Élément</th><th>Recommandation</th><th>Budget</th></tr></thead>
-            <tbody id="gearRows"></tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-
-    <details class="fold">
-      <summary class="fold-q"><span>FAQ — les questions des habitués</span><svg class="ic"><use href="#i-chev-r"/></svg></summary>
-      <div class="fold-a"><div class="faq" id="faqList"></div></div>
-    </details>
-  </section>
-
-  <!-- ════════ 5 · MÉTHODE & SOURCES ════════ -->
-  <section class="sec" id="s-methode" data-sec="methode" aria-label="Méthode et sources">
-    <header class="sec-head">
-      <div>
-        <span class="card-kicker">Transparence</span>
-        <h2 class="sec-title">Méthode, données &amp; limites</h2>
-        <p class="view-sub" id="methodeSub">Comment l'Indice est calculé, d'où viennent les données, pourquoi rien ne garantit une capture.</p>
-      </div>
-      <button class="btn btn-gold" id="btnPrint"><svg class="ic"><use href="#i-printer"/></svg> Imprimer la fiche du jour</button>
-    </header>
+    <div class="storm-alert is-hidden" id="stormAlert"><svg class="ic"><use href="#i-alert"/></svg><span id="stormAlertText"></span></div>
 
     <article class="card pad">
-      <header class="card-head"><div><span class="card-kicker" id="methodKicker">L'Indice Calamar™</span><h3 class="card-title">5 facteurs, 100 points</h3></div></header>
-      <ol class="method-list" id="methodList"></ol>
-      <p class="note">Le solunaire est pondéré par la présence des périodes majeures/mineures dans la nuit locale (coucher → lever). Conditions « mer » : chute dès 0,6 m de houle ; barème « pression » privilégiant <strong>baisses nettes et basses pressions</strong> (Baléares 2012). Pour le loup bar, la dorade et le sar, les seuils (saison, eau, houle) suivent la <strong>biologie de l'espèce</strong> et se calibreront avec le retour des pêcheurs — voir le niveau de preuve ci-dessous. L'indice est recalculé à chaque actualisation (toutes les 10 min). Calcul lunaire : élongation réelle soleil–lune (solveur Newton–Raphson), âge précis à la minute près. Météo &amp; mer : Open-Meteo (ECMWF/ICON, CC BY 4.0), données brutes non modifiées.</p>
+      <header class="card-head"><div><span class="card-kicker">Recommandation live</span><h3 class="card-title">Le plan de pêche</h3></div><svg class="ic ic-gold"><use href="#i-squid"/></svg></header>
+      <ul class="reco-list" id="recoList"></ul>
     </article>
 
+    <div class="duo">
+      <article class="card pad wx-card">
+        <header class="card-head"><div><span class="card-kicker">Météo — maintenant</span><h3 class="card-title" id="wxDesc">—</h3></div><svg class="ic" id="wxIcon"><use href="#i-cloud"/></svg></header>
+        <div class="wx-temp"><strong id="wxTemp">—</strong><span>°C</span><small id="wxFeels">—</small></div>
+        <div class="wx-grid" id="wxGrid"></div>
+      </article>
+      <article class="card pad sea-card">
+        <header class="card-head"><div><span class="card-kicker">État de la mer</span><h3 class="card-title">Vagues &amp; eau</h3></div><svg class="ic"><use href="#i-waves"/></svg></header>
+        <div class="sea-main"><strong id="waveHeight">—</strong><span>m de vagues</span></div>
+        <div class="wave-bar"><i id="waveBar"></i></div>
+        <div class="sea-detail" id="seaDetail">—</div>
+        <div class="sst-row"><svg class="ic"><use href="#i-thermo"/></svg><span>Température de l'eau</span><strong id="sstValue">—</strong><span class="chip chip-sea" id="sstVerdict">—</span></div>
+        <p class="note" id="seaNote">—</p>
+      </article>
+    </div>
+
+    <article class="card pad">
+      <header class="card-head"><div><span class="card-kicker">Courbe d'activité — 24 h</span><h3 class="card-title">La nuit en détail</h3></div><div class="chart-legend"><span>Activité</span><span>Nuit</span><span>Maintenant</span></div></header>
+      <canvas id="activityChart" width="700" height="220" role="img" aria-label="Courbe d'activité sur 24 heures"></canvas>
+    </article>
+  </section>
+
+  <!-- ═══════════ 2 · PRÉVISIONS ═══════════ -->
+  <section class="sec" id="s-previsions" data-sec="previsions">
+    <header class="sec-head"><div><span class="card-kicker">Prévisions</span><h2 class="sec-title">Les 14 prochains jours</h2><p class="view-sub">Touchez une carte pour ouvrir sa fiche complète.</p></div></header>
+    <div class="forecast-strip" id="forecastStrip"></div>
+    <article class="card pad day-detail" id="dayDetail"></article>
+  </section>
+
+  <!-- ═══════════ 3 · LUNE ═══════════ -->
+  <section class="sec" id="s-calendrier" data-sec="calendrier">
+    <header class="sec-head"><div><span class="card-kicker">Lune</span><h2 class="sec-title">Le rythme lunaire</h2><p class="view-sub">Phase réelle + Indice Calamar™ jour par jour. Cases dorées : meilleures sorties.</p></div></header>
+    <article class="card pad moon-card">
+      <canvas id="moonCanvas" width="120" height="120" role="img" aria-label="Phase de la lune"></canvas>
+      <div class="moon-info"><span class="card-kicker" id="moonPhaseName">—</span><h3 class="card-title" id="moonDate">—</h3><div class="moon-illum"><span id="moonIllum">—</span><small>% éclairée</small></div><div class="moon-age">Âge : <strong id="moonAge">—</strong> · Élongation <strong id="moonElong">—</strong></div><p id="moonNext">—</p></div>
+    </article>
+    <div class="moon-grid">
+      <div class="moon-cell"><svg class="ic"><use href="#i-sunrise"/></svg><div><small>Lever</small><strong id="moonRise">—</strong></div></div>
+      <div class="moon-cell"><svg class="ic"><use href="#i-sunset"/></svg><div><small>Coucher</small><strong id="moonSet">—</strong></div></div>
+      <div class="moon-cell"><svg class="ic"><use href="#i-clock"/></svg><div><small>Culmination</small><strong id="moonTransit">—</strong></div></div>
+      <div class="moon-cell"><svg class="ic"><use href="#i-gauge"/></svg><div><small>Indice solunaire *</small><strong id="solunarRating">—</strong></div></div>
+    </div>
+    <p class="note">* L'indice solunaire est un repère horaire issu de l'hypothèse de Knight (1926), non validée scientifiquement.</p>
+    <div class="cal-board card pad">
+      <div class="cal-head"><button class="icon-btn" id="calPrev" aria-label="Mois précédent">‹</button><strong id="calMonthTitle">—</strong><button class="icon-btn" id="calNext" aria-label="Mois suivant">›</button></div>
+      <div class="cal-weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend"><span class="d-low"></span>&lt;40 <span class="d-mid"></span>40–57 <span class="d-good"></span>58–69 <span class="d-great"></span>70–84 <span class="d-epic"></span>85+</div>
+    </div>
+    <div class="duo">
+      <div class="mini-card"><span class="mini-card-kicker">Top du mois</span><ol class="top-days" id="topDaysList"></ol></div>
+      <div class="mini-card"><span class="mini-card-kicker">Syzygies</span><ul class="syzygy-list" id="syzygyList"></ul></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4 · GUIDE ═══════════ -->
+  <section class="sec" id="s-guide" data-sec="guide">
+    <header class="sec-head"><div><span class="card-kicker">Guide expert</span><h2 class="sec-title">Pêcher le calamar ici</h2><p class="view-sub">Tout sur <em>Loligo vulgaris</em> : saisons, heures, techniques, spots, matériel, sécurité.</p></div></header>
+    <div class="fact-strip">
+      <div class="fact"><small>Espèce</small><strong>Loligo vulgaris</strong></div>
+      <div class="fact"><small>Profondeur</small><strong>20 – 250 m</strong></div>
+      <div class="fact"><small>Eau idéale</small><strong>13 – 21 °C</strong></div>
+      <div class="fact"><small>Moment</small><strong>Nuit</strong></div>
+      <div class="fact"><small>Fonds</small><strong>Sable &amp; vase</strong></div>
+      <div class="fact"><small>Activité</small><strong>Crépuscule → aube</strong></div>
+    </div>
+    <details class="fold" open><summary class="fold-q"><span>Quand sortir, mois par mois</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a">
+      <div class="season-bars" id="seasonBars" aria-label="Période de présence par mois"></div>
+      <p class="note">La saison est <strong>connue</strong> (migration côtière jan–fév, pontes échelonnées, recrutement) : elle n'entre <strong>pas</strong> dans le calcul de l'indice. Ce graphique est informatif. Sources : Rocha &amp; Guerra 1996 ; FAO / AdriaMed ; SeaLifeBase.</p>
+    </div></details>
+    <details class="fold"><summary class="fold-q"><span>Les rythmes d'une nuit</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a">
+      <ul class="hour-slots">
+        <li><span class="hs-time">17h – 19h</span><div class="hs-bar is-good"><div style="width:72%"></div></div><span class="hs-note">Crépuscule — créneau mesuré par l'étude des Baléares</span></li>
+        <li><span class="hs-time">19h – 22h</span><div class="hs-bar is-peak"><div style="width:96%"></div></div><span class="hs-note">Prime time — turlutte &amp; lumière</span></li>
+        <li><span class="hs-time">22h – 02h</span><div class="hs-bar is-good"><div style="width:78%"></div></div><span class="hs-note">Pleine nuit — activité soutenue</span></li>
+        <li><span class="hs-time">02h – 04h</span><div class="hs-bar is-good"><div style="width:60%"></div></div><span class="hs-note">Second souffle — calme plat souvent</span></li>
+        <li><span class="hs-time">04h – 07h</span><div class="hs-bar"><div style="width:30%"></div></div><span class="hs-note">Aube — touches sporadiques</span></li>
+        <li><span class="hs-time">07h – 17h</span><div class="hs-bar is-low"><div style="width:8%"></div></div><span class="hs-note">Journée — le calamar redescend</span></li>
+      </ul>
+      <p class="note"><strong>Preuve scientifique</strong> — Cabanellas-Reboredo et al. (2012, <em>ICES J. Mar. Sci.</em>, Baléares) : CPUE maximale autour du <strong>coucher du soleil</strong>, meilleure en mois froids, favorisée par eau fraîche + vent faible + basse pression. Ulas &amp; Aydin (2011, Égée) : turluttes <strong>rouges</strong> supérieures (p&lt;0.01). Palawe et al. (2021, Indonésie) : LED bleue &gt; blanche (p&lt;0.05).</p>
+    </div></details>
+    <details class="fold"><summary class="fold-q"><span>4 façons de le prendre</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a">
+      <div class="tech-grid">
+        <div class="tech"><div class="tech-num">01</div><h4>Turlutte de nuit</h4><p>Leurre sans ardillon, lancer–ramener saccadé, pauses longues. Du bord ou en barque lente.</p><p class="tech-pro">N° 2.0–3.5 · rouge d'abord (Égée 2011, p&lt;0.01) · phospho en nuit noire · fond sableux 20–60 m.</p></div>
+        <div class="tech"><div class="tech-num">02</div><h4>Pêche au lamparo</h4><p>Projecteur blanc/bleu : le calamar monte dans le halo. Ligne fine + petit turlutte.</p><p class="tech-pro">Nouvelle lune &gt; pleine lune (contraste) · LED bleue &gt; blanche (Indonésie 2021, p&lt;0.05) · 3e quartier productif sous LED.</p></div>
+        <div class="tech"><div class="tech-num">03</div><h4>Dérive sur les chasses</h4><p>Chasses de thons/dorades ou courants (cassures, pointes) : dérive lente, turlutte profonde.</p><p class="tech-pro">Eau 13–20 °C, houle &lt; 0,5 m = activité maximale (Baléares 2012).</p></div>
+        <div class="tech"><div class="tech-num">04</div><h4>Du bord (digue/jetée)</h4><p>Lampes du port, petits leurres, fil fin, épuisette longue.</p><p class="tech-pro">Évitez les soirs de grosse houle d'ouest — le port est exposé nord-ouest.</p></div>
+      </div>
+    </div></details>
+    <details class="fold"><summary class="fold-q"><span>Spots autour de Ghazaouet</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a">
+      <ul class="spot-list">
+        <li><div class="spot-rank">A</div><div class="spot-body"><strong>Jetée ouest &amp; digue du phare « Les Deux Frères »</strong><span>À pied · 5–15 m · lampes du port · lamparo par nuit calme. Attention aux glissades.</span></div></li>
+        <li><div class="spot-rank">B</div><div class="spot-body"><strong>Le large du port (cassure 30 → 80 m)</strong><span>En barque · pente du plateau · dérive sur chasses · meilleur secteur automne–hiver.</span></div></li>
+        <li><div class="spot-rank">C</div><div class="spot-body"><strong>Baie de Honaïne (10 km à l'ouest)</strong><span>Fonds sableux 15–40 m · abritée de la houle d'ouest · densité octobre–décembre.</span></div></li>
+        <li><div class="spot-rank">D</div><div class="spot-body"><strong>Marsa Ben M'Hidi (à l'est, frontière)</strong><span>Spot historique · vérifier zones autorisées et réglementation locale.</span></div></li>
+      </ul>
+      <div class="safety-box"><svg class="ic"><use href="#i-shield"/></svg><div><strong>Sécurité avant tout</strong><ul><li>Gilet + 2 moyens de communication ; prévenez un proche de l'heure de retour.</li><li>Jamais de sortie par alerte orage / mer formée.</li><li>Bulletin ONM / Météo Algérie avant de prendre la mer.</li><li>Nuit = plus de risque : feux de navigation obligatoires en barque.</li></ul></div></div>
+    </div></details>
+    <details class="fold"><summary class="fold-q"><span>La caisse du pêcheur</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a">
+      <div class="table-wrap"><table class="gear-table"><thead><tr><th>Élément</th><th>Recommandation</th><th>Budget</th></tr></thead><tbody>
+        <tr><td>Canne</td><td>Turlutte / spinning 2,4–3,0 m · médium-fast · 80–150 g</td><td>€€</td></tr>
+        <tr><td>Moulinet</td><td>4000–5000 · frein fin · 200 m tresse PE 0.8–1.2</td><td>€€</td></tr>
+        <tr><td>Leader</td><td>Fluorocarbone 0,25–0,35 mm · discret en eau claire</td><td>€</td></tr>
+        <tr><td>Turluttes</td><td>N° 2.0–3.5 · rose, orange, blanc, phospho</td><td>€</td></tr>
+        <tr><td>Émerillons</td><td>Agrafe + baril (change rapide)</td><td>€</td></tr>
+        <tr><td>Lampe</td><td>Frontale rouge + projecteur 12 V</td><td>€–€€</td></tr>
+        <tr><td>Divers</td><td>Épuisette longue · seau · couteau · eau douce</td><td>€</td></tr>
+      </tbody></table></div>
+    </div></details>
+    <details class="fold"><summary class="fold-q"><span>FAQ — les questions des habitués</span><svg class="ic"><use href="#i-chev-r"/></svg></summary><div class="fold-a"><div class="faq-list" id="faqList"></div></div></details>
+  </section>
+
+  <!-- ═══════════ 5 · MÉTHODE ═══════════ -->
+  <section class="sec" id="s-methode" data-sec="methode">
+    <header class="sec-head"><div><span class="card-kicker">Transparence</span><h2 class="sec-title">Méthode, données &amp; limites</h2><p class="view-sub">4 facteurs, 100 points, zéro point de saison.</p></div></header>
+    <article class="card pad">
+      <header class="card-head"><div><span class="card-kicker">L'Indice Calamar™</span><h3 class="card-title">4 facteurs, 100 points</h3></div></header>
+      <ol class="method-list" id="methodList"></ol>
+      <p class="note">La saison est <strong>connue</strong> et affichée comme information : elle ne rapporte aucun point. Les études mesurent le <strong>sens et la significativité</strong> des effets (p&lt;0.01 / p&lt;0.05) ; la <strong>répartition exacte des poids</strong> est un choix de conception documenté, pas un résultat publié. Le solunaire reste un descripteur horaire non validé (Knight 1926), conservé par choix.</p>
+    </article>
     <article class="card pad">
       <header class="card-head"><div><span class="card-kicker">Sources</span><h3 class="card-title">D'où viennent les chiffres</h3></div></header>
       <ul class="source-list">
-        <li><strong>Étude Baléares 2012 — la référence méditerranéenne</strong><span>Cabanellas-Reboredo M, Alós J, Palmer M, Morales-Nin B. « Environmental effects on recreational squid jigging fishery catches », <em>ICES J. Mar. Sci.</em>, 69(10):1823–1830. DOI 10.1093/icesjms/fss159. (Mer fraîche, vent faible, basse pression, nouvelle lune, créneau autour du coucher.)</span></li>
-        <li><strong>Étude Égée 2011 — couleur &amp; pleine lune</strong><span>Ulas A, Aydin I. « The effects of jig color and lunar bright on coastal squid jigging », <em>African Journal of Biotechnology</em>, 10(9):1721–1726. DOI 10.4314/ajb.v10i9. (Turluttes rouges p&lt;0.01 ; pleine lune positive p&lt;0.01.)</span></li>
-        <li><strong>Étude Indonésie 2021 — LEDs &amp; phase lunaire</strong><span>Palawe HJ et al. « The Effect of Lunar Phase on Squid Catches Using Flashing LED Lights », <em>Jurnal IPTEKS PSP</em>, 8(2):58–69. DOI 10.20956/jipsp.v8i2.18495. (ANOVA p&lt;0.05 ; 3e quartier ; LED bleue &gt; blanche.)</span></li>
-        <li><strong>Ponte échelonnée (biologie)</strong><span>Rocha F, Guerra A. « Signs of an extended and intermittent terminal spawning in the squids <em>Loligo vulgaris</em> and <em>Loligo forbesi</em> », <em>J. Exp. Mar. Biol. Ecol.</em>, 207:177–189 (1996).</span></li>
-        <li><strong>Frayères littorales 2022</strong><span><em>ICES Journal of Marine Science</em>, 79(6):1918 — frayères printanières/automnales sur fonds côtiers sableux/vaseux.</span></li>
-        <li><strong>Biologie de l'espèce &amp; pêche méditerranéenne</strong><span>FAO — fiche espèce <em>Loligo vulgaris</em> (n° 918) ; AdriaMed ; SeaLifeBase ; FAO/GFCM — <em>The State of Mediterranean and Black Sea Fisheries 2025</em> (SoMFi 2025 ; <em>L. vulgaris</em> non évalué en Algérie ; stocks sous pression).</span></li>
-        <li><strong>Barèmes loup / dorade / sar — niveau de preuve</strong><span>Fondés sur la <strong>biologie documentée</strong>. Loup : <em>Kara 1997</em> (cycle sexuel &amp; fécondité, golfe d'Annaba, Algérie — fêtards hivernaux), <em>Doyle et al. 2017</em> (Sci Rep 8:45841 — littoral l'été, large pour frayer/hiver ; home range ≤ 3 km, fidélité 93 %), <em>Rodríguez-García et al. 2024</em> (Fishes 9:173 — zone de surf : mysidacés &amp; poissons ; comportement diurne variable selon l'heure, abondance variant avec la saison), <em>Dufour et al. 2009</em> (J. Mar. Biol. Assoc. U.K. 89:1367 — nurseries du golfe du Lion). Dorade : <em>Chaoui &amp; Kara 2006</em> (Sci. Mar. 70(3):545–552 — Mellah, Algérie ; frai oct.–janv., pic déc. ; maturité 32,6 cm ; inversion sexuelle à 44 cm ; gonochorie proterandrique). Sar : biologie classique (encyclopédies taxonomiques IUCN / Ionian Sea Encyclopedia, Springer 2022 ; frai estival avril–juillet). <strong>Aucune étude CPUE dédiée</strong> pour ces trois espèces (vérifié 2026 : PubMed, Crossref — ICES J. Mar. Sci., Fisheries Research, Fishes) ; la littérature recommande donc la prudence : l'indice est un repère et se calibrera avec votre retour.</span></li>
-        <li><strong>Météo &amp; mer temps réel</strong><span>Open-Meteo Forecast &amp; Marine API (ECMWF / ICON, CC BY 4.0) — données brutes.</span></li>
-        <li><strong>Astronomie locale</strong><span>Calculs dans votre navigateur (algorithmes inspirés de Meeus) : élongation réelle, illumination (1−cos θ)/2, levers/couchers (± 5 min), culminations vraies, âge lunaire par solveur Newton–Raphson (± 1 min).</span></li>
-        <li><strong>Théorie solunaire — honnêteté</strong><span>John Alden Knight (1926). Hypothèse folklorique <strong>jamais validée scientifiquement</strong> en général (revues : effet modeste ~5 % sur poissons-trophées, résultats inconsistants). Conservée comme descripteur horaire ; l'effet lunaire sur le <em>calamar</em> est, lui, <strong>démontré</strong> (études 01–03).</span></li>
-        <li><strong>Port de Ghazaouet</strong><span>35.096° N · 1.860° W · UTC+1 · ouverture nord-ouest sur la Méditerranée — bulletins ONM / Météo Algérie avant toute sortie.</span></li>
+        <li><strong>Étude Baléares 2012 — référence CPUE</strong><span>Cabanellas-Reboredo M, Alós J, Palmer M, Morales-Nin B. « Environmental effects on recreational squid jigging fishery catches », <em>ICES J. Mar. Sci.</em> 69(10):1823–1830. DOI 10.1093/icesjms/fss159 — eau fraîche, vent faible, houle faible, basse pression, syzygie.</span></li>
+        <li><strong>Étude Égée 2011 — couleur &amp; pleine lune</strong><span>Ulas A, Aydin I. « The effects of jig color and lunar bright on coastal squid jigging », <em>Afr. J. Biotechnol.</em> 10(9):1721–1726. DOI 10.4314/ajb.v10i9 — turluttes rouges supérieures (p&lt;0.01), pleine lune positive (p&lt;0.01).</span></li>
+        <li><strong>Étude Indonésie 2021 — LED &amp; phase lunaire</strong><span>Palawe HJ et al. « The Effect of Lunar Phase on Squid Catches Using Flashing LED Lights », <em>Jurnal IPTEKS PSP</em> 8(2):58–69. DOI 10.20956/jipsp.v8i2.18495 — LED bleue &gt; blanche, 3e quartier (p&lt;0.05).</span></li>
+        <li><strong>Biologie (contexte, non noté)</strong><span>Rocha F, Guerra A (1996) — pontes étalées, <em>J. Exp. Mar. Biol. Ecol.</em> 207:177–189 ; FAO / AdriaMed / SeaLifeBase ; SoMFi 2025 (FAO/GFCM).</span></li>
+        <li><strong>Théorie solunaire — honnêteté</strong><span>John Alden Knight (1926) : hypothèse folklorique non validée en général. Conservée ici comme descripteur horaire et dans le score par choix explicite ; l'effet lunaire, lui, est démontré pour le calamar (études 01–03).</span></li>
+        <li><strong>Météo &amp; mer</strong><span>Open-Meteo Forecast &amp; Marine API (ECMWF/ICON, CC BY 4.0) — données brutes.</span></li>
+        <li><strong>Astronomie</strong><span>Calculs locaux inspirés de Meeus : élongation réelle, illumination (1−cos θ)/2, levers/couchers, âge lunaire par solveur Newton–Raphson.</span></li>
       </ul>
-      <p class="note"><strong>Honnêteté scientifique</strong> — la « théorie solunaire » reste une hypothèse folklorique non validée de façon générale ; l'effet lunaire sur le calamar est, lui, statistiquement démontré — sens variable selon la technique (nouvelle lune pour le lamparo, pleine lune pour la turlutte côtière). L'Indice Calamar™ intègre ces nuances ; il ne garantit rien.</p>
     </article>
-
-    <article class="card pad" id="s-science">
-      <header class="card-head"><div><span class="card-kicker">Bibliographie vérifiée</span><h3 class="card-title">Indices scientifiques — les trois espèces</h3></div><svg class="ic ic-gold wx-icon"><use href="#i-book"/></svg></header>
-      <p class="note">Ce que la science mesure — pas ce qu'on devine. Trois fiches : biologie, frai, habitat, meilleure fenêtre.</p>
-      <div class="sci-grid">
-        <section class="sci-block">
-          <div class="sci-head">
-            <svg class="ic sci-ic"><use href="#i-fish"/></svg>
-            <div><h4>Loup bar</h4><span class="sci-latin">Dicentrarchus labrax</span></div>
-          </div>
-          <dl class="sci-rows">
-            <div><dt>Frai</dt><dd>Décembre–mars, pic février. Juvéniles : lagunes/estuaires, surf zone &amp; nurseries.</dd></div>
-            <div><dt>Mouvement</dt><dd>Littoral en été, large l’hiver pour frayer/hiverner ; home range ≤ 3 km, fidélité ~93 %.</dd></div>
-            <div><dt>Régime</dt><dd>Mysidacés + petits poissons ; actif à l’aube et au crépuscule ; eau brassée idéale.</dd></div>
-            <div><dt>Meilleure mer</dt><dd><strong>Octobre–mars</strong> ; rochers/digues, 5–25 m ; leurres de surface la nuit.</dd></div>
-          </dl>
-          <p class="sci-ref">Kara MH (1997) Cah. Biol. Mar. 38 — golfe d’Annaba · Doyle TK et al. (2017) Sci Rep 8:45841 · Rodríguez-García C et al. (2024) Fishes 9(5):173 · Dufour V et al. (2009) J. Mar. Biol. Assoc. U.K. 89:1367 · Zarauz L et al. (2015) ICES J. Mar. Sci. DOI 10.1093/icesjms/fsv054</p>
-        </section>
-        <section class="sci-block">
-          <div class="sci-head">
-            <svg class="ic sci-ic"><use href="#i-bream"/></svg>
-            <div><h4>Dorade royale</h4><span class="sci-latin">Sparus aurata</span></div>
-          </div>
-          <dl class="sci-rows">
-            <div><dt>Frai</dt><dd><strong>Octobre–janvier, pic décembre</strong> (Mellah, Algérie) — pré-frai et frai précoce.</dd></div>
-            <div><dt>Maturité</dt><dd>32,6 cm TL ; proterandrie : inversion sexuelle à 44 cm — grosses femelles, à préserver.</dd></div>
-            <div><dt>Habitat</dt><dd>Platiers sablo-vaseux et lagunes ; 10–40 m ; appâts chinchard &amp; crabe ; aube.</dd></div>
-            <div><dt>Meilleure mer</dt><dd><strong>Novembre–décembre</strong> (pré-frai) ; août = creux ; eau 16–23 °C, mer calme.</dd></div>
-          </dl>
-          <p class="sci-ref">Chaoui L, Kara MH (2006) Sci. Mar. 70(3):545–552 — Mellah (Alger). DOI 10.3989/scimar.2006.70n3545 · Frid O et al. (2023) Fishes 8(2):69 — Israël. DOI 10.3390/fishes8020069</p>
-        </section>
-        <section class="sci-block">
-          <div class="sci-head">
-            <svg class="ic sci-ic"><use href="#i-bream"/></svg>
-            <div><h4>Sar commun</h4><span class="sci-latin">Diplodus sargus</span></div>
-          </div>
-          <dl class="sci-rows">
-            <div><dt>Frai</dt><dd>Avril–juillet ; juvéniles gagnent les rochers dès le printemps.</dd></div>
-            <div><dt>Habitat</dt><dd><strong>Rochers battus 1–15 m</strong> ; mer calme et claire ; coquillages &amp; crustacés ; aube.</dd></div>
-            <div><dt>Régime</dt><dd>Coquillages/mollusques + crustacés ; très sensible à la turbidité.</dd></div>
-            <div><dt>Meilleure mer</dt><dd><strong>Juin–septembre</strong> ; houle &lt; 0,8 m, étale ; pêche à pied 1–10 m.</dd></div>
-          </dl>
-          <p class="sci-ref">Quignard JP &amp; Farrugio H (1981) Les poissons de Méditerranée · Ionian Sea Encyclopedia (Springer 2022) — Diplodus sargus sargus. DOI 10.1007/978-3-031-08206-1_210001</p>
-        </section>
-      </div>
-    </article>
-
     <article class="card pad">
       <header class="card-head"><div><span class="card-kicker">Limites</span><h3 class="card-title">À lire avant de sortir</h3></div></header>
-      <div class="warn-box">
-        <svg class="ic"><use href="#i-alert"/></svg>
-        <ul>
-          <li>Aucune application ne « garantit » une touche : l'indice hiérarchise des <em>probabilités</em>, pas des certitudes.</li>
-          <li>Houle d'ouest, orages et grains soudains sont la règle en Méditerranée d'automne — quand le bandeau s'affiche, restez à quai.</li>
-          <li>Réglementation : <strong>Direction de la Pêche &amp; de l'Aquaculture de Tlemcen</strong> (tailles minimales, repos biologique estival, zones autorisées, permis).</li>
-          <li>SoMFi 2025 (FAO/GFCM) : stocks largement <strong>surexploités</strong> — relâchez les reproducteurs et juvéniles, respectez les fermetures.</li>
-          <li>Ne naviguez jamais seul la nuit ; signalez votre sortie ; VHF canal 16 en détresse.</li>
-        </ul>
-      </div>
-      <div class="version-box">
-        <span class="mini-card-kicker">Version</span>
-        <p>Ghazaouet Calamar Live v2.0 · Novembre 2026 · Conçu pour les pêcheurs du port de Ghazaouet.<br>Données © Open-Meteo (CC BY 4.0). Icônes : sprite interne. Police : Bricolage Grotesque / Instrument Sans / JetBrains Mono.</p>
-      </div>
-      <p class="source-links"><a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.fao.org/fishery/species/918/en" target="_blank" rel="noopener">FAO — Loligo vulgaris <svg class="ic ic-xs"><use href="#i-external"/></svg></a><a href="https://www.meteo.dz" target="_blank" rel="noopener">Météo Algérie (ONM) <svg class="ic ic-xs"><use href="#i-external"/></svg></a></p>
+      <p class="note">Aucun indice ne garantit une touche : il hiérarchise des probabilités. Houle d'ouest, orages et grains soudains sont la règle en Méditerranée d'automne — si le bandeau s'affiche, restez à quai. Réglementation : Direction de la Pêche &amp; de l'Aquaculture de Tlemcen (tailles minimales, repos biologique, zones autorisées). Ne naviguez jamais seul la nuit ; VHF canal 16 en détresse.</p>
     </article>
   </section>
 
-  <footer class="footer">
-    <img src="assets/icon.svg" alt="" width="34" height="34">
-    <div><strong>Ghazaouet Calamar Live</strong><span id="footTag">La météo de la pêche, en direct du port.</span></div>
+  <footer class="site-foot">
+    <div><strong>Ghazaouet Calamar Live</strong><span>La science de la pêche, en direct du port.</span></div>
+    <p>Ghazaouet Calamar Live v3 · Novembre 2026 · 35.096° N · 1.860° W<br>Données © Open-Meteo (CC BY 4.0) · Icônes : sprite interne.</p>
   </footer>
 </main>
 
-<!-- ═══════════ DOCK (5 sections) ═══════════ -->
+<!-- ═══════════ DOCK ═══════════ -->
 <nav class="dock" id="dock" aria-label="Navigation">
   <button class="dock-btn is-active" data-nav="dashboard"><svg class="ic"><use href="#i-squid"/></svg><span>Aujourd'hui</span></button>
   <button class="dock-btn" data-nav="previsions"><svg class="ic"><use href="#i-cal"/></svg><span>14 jours</span></button>
@@ -458,8 +294,8 @@
   <button class="dock-btn" data-nav="methode"><svg class="ic"><use href="#i-info"/></svg><span>Méthode</span></button>
 </nav>
 
-<script src="assets/js/engine.js?v=20261106d"></script>
-<script src="assets/js/astro.js?v=20261106d"></script>
-<script src="assets/js/app.js?v=20261106d"></script>
+<script src="assets/js/engine.js?v=20261119a"></script>
+<script src="assets/js/astro.js?v=20261119a"></script>
+<script src="assets/js/app.js?v=20261119a"></script>
 </body>
 </html>
